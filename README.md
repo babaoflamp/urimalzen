@@ -54,12 +54,40 @@ GPU를 활용한 로컬 LLM 서비스 구축 프로젝트입니다. Ollama와 Op
 
 ## 작업 진행 상황
 
-- [ ] Docker 및 Docker Compose 설치
-- [ ] NVIDIA Container Toolkit 설치
-- [ ] docker-compose.yml 생성
+- [x] Docker 및 Docker Compose 설치 (완료)
+  - Docker 26.1.3
+  - Docker Compose v2.40.3
+- [x] NVIDIA Container Toolkit 설치 (완료)
+  - v1.18.0
+  - GPU Docker 테스트 성공
+- [x] docker-compose.yml 생성 (완료)
 - [ ] Ollama + Open WebUI 서비스 실행
 - [ ] LLM 모델 다운로드
 - [ ] 서비스 테스트 및 확인
+
+## 사용 방법
+
+### 서비스 시작
+```bash
+cd open-webui-ollama
+docker-compose up -d
+```
+
+### 서비스 중지
+```bash
+docker-compose down
+```
+
+### 로그 확인
+```bash
+docker-compose logs -f
+```
+
+### Open WebUI 접속
+브라우저에서 http://localhost:3000 접속
+
+### Ollama API 엔드포인트
+http://localhost:11434
 
 ## 라이선스
 
