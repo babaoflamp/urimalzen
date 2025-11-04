@@ -61,8 +61,16 @@ GPU를 활용한 로컬 LLM 서비스 구축 프로젝트입니다. Ollama와 Op
   - v1.18.0
   - GPU Docker 테스트 성공
 - [x] docker-compose.yml 생성 (완료)
-- [ ] Ollama + Open WebUI 서비스 실행
-- [ ] LLM 모델 다운로드
+- [x] Ollama + Open WebUI 서비스 실행 (완료)
+  - Ollama 컨테이너: 포트 11434
+  - Open WebUI 컨테이너: 포트 3000 (healthy)
+- [x] MCP (Model Context Protocol) 설정 (완료)
+  - Filesystem MCP: /home/scottk 접근
+  - GitHub MCP: GitHub API 통합
+- [ ] LLM 모델 다운로드 (진행 중)
+  - Qwen 2.5 7B
+  - Mistral 7B
+  - Gemma 2 9B
 - [ ] 서비스 테스트 및 확인
 
 ## 사용 방법
@@ -88,6 +96,38 @@ docker-compose logs -f
 
 ### Ollama API 엔드포인트
 http://localhost:11434
+
+### LLM 모델 다운로드
+```bash
+# Qwen 2.5 7B
+docker exec ollama ollama pull qwen2.5:7b
+
+# Mistral 7B
+docker exec ollama ollama pull mistral:7b
+
+# Gemma 2 9B
+docker exec ollama ollama pull gemma2:9b
+
+# 다운로드된 모델 확인
+docker exec ollama ollama list
+```
+
+## MCP (Model Context Protocol) 설정
+
+Claude Code에서 MCP를 통해 외부 서비스와 통합할 수 있습니다.
+
+### 설정된 MCP 서버
+
+1. **Filesystem MCP**: 로컬 파일시스템 접근
+   - 경로: /home/scottk
+
+2. **GitHub MCP**: GitHub API 통합
+   - 저장소, 이슈, PR 관리 가능
+
+### MCP 서버 확인
+```bash
+claude mcp list
+```
 
 ## 라이선스
 
