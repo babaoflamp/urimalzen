@@ -67,11 +67,15 @@ GPU를 활용한 로컬 LLM 서비스 구축 프로젝트입니다. Ollama와 Op
 - [x] MCP (Model Context Protocol) 설정 (완료)
   - Filesystem MCP: /home/scottk 접근
   - GitHub MCP: GitHub API 통합
-- [ ] LLM 모델 다운로드 (진행 중)
-  - Qwen 2.5 7B
-  - Mistral 7B
-  - Gemma 2 9B
-- [ ] 서비스 테스트 및 확인
+- [x] LLM 모델 다운로드 (완료)
+  - Qwen 2.5 7B (4.7 GB)
+  - Mistral 7B (4.4 GB)
+  - Gemma 2 9B (5.4 GB)
+  - 총 용량: 14.5 GB
+- [x] 서비스 테스트 및 확인 (완료)
+  - 모든 컨테이너 정상 실행
+  - 모델 다운로드 완료
+  - Open WebUI http://localhost:3000 접속 가능
 
 ## 사용 방법
 
