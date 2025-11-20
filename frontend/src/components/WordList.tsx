@@ -59,7 +59,7 @@ const WordList = () => {
                   color: 'white',
                 }}
               >
-                {word.level?.kiip ?? word.order}
+                {word.order}
               </div>
               <div style={styles.wordContent}>
                 <div style={styles.wordName}>{word.koreanWord}</div>
