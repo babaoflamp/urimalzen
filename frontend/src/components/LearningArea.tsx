@@ -1,12 +1,48 @@
+import { useState } from "react";
 import { useLearningStore } from "../store/useLearningStore";
 import { useLanguageStore } from "../store/useLanguageStore";
 import { translations } from "../utils/translations";
+import { ttsAPI } from "../services/api";
 import RecordingControls from "./RecordingControls";
 
 const LearningArea = () => {
   const { currentWord } = useLearningStore();
   const { language } = useLanguageStore();
   const t = translations[language];
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioError, setAudioError] = useState<string | null>(null);
+
+  const handlePlayAudio = async () => {
+    if (!currentWord || isPlaying) return;
+
+    setIsPlaying(true);
+    setAudioError(null);
+
+    try {
+      // Get audio from TTS API
+      const response = await ttsAPI.getWordAudio(currentWord._id);
+
+      if (response.success && response.data.audioUrl) {
+        // Create audio element and play
+        const audio = new Audio(`${import.meta.env.VITE_API_URL?.replace('/api', '')}${response.data.audioUrl}`);
+
+        audio.onended = () => setIsPlaying(false);
+        audio.onerror = () => {
+          setIsPlaying(false);
+          setAudioError('오디오 재생 실패');
+        };
+
+        await audio.play();
+      } else {
+        setAudioError('오디오를 찾을 수 없습니다');
+        setIsPlaying(false);
+      }
+    } catch (error: any) {
+      console.error('Audio playback error:', error);
+      setAudioError(error.response?.data?.message || '오디오 재생 중 오류 발생');
+      setIsPlaying(false);
+    }
+  };
 
   if (!currentWord) {
     return (
@@ -20,8 +56,21 @@ const LearningArea = () => {
     <div style={styles.container}>
       <div style={styles.titleBar}>
         <div style={styles.wordTitle}>{currentWord.koreanWord}</div>
-        <button style={styles.playButton}>▶</button>
+        <button
+          style={{
+            ...styles.playButton,
+            ...(isPlaying ? styles.playButtonActive : {}),
+          }}
+          onClick={handlePlayAudio}
+          disabled={isPlaying}
+        >
+          {isPlaying ? '🔊' : '▶'}
+        </button>
       </div>
+
+      {audioError && (
+        <div style={styles.errorMessage}>{audioError}</div>
+      )}
 
       <div style={styles.mongolianText}>[{currentWord.mongolianWord}]</div>
 
@@ -105,6 +154,21 @@ const styles: { [key: string]: React.CSSProperties } = {
     alignItems: "center",
     transition: "all 0.3s ease",
     boxShadow: "0 4px 16px rgba(0, 0, 0, 0.15)",
+  },
+  playButtonActive: {
+    background: "rgba(251, 191, 36, 0.7)",
+    transform: "scale(0.95)",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+  },
+  errorMessage: {
+    background: "rgba(239, 68, 68, 0.2)",
+    border: "1px solid rgba(239, 68, 68, 0.4)",
+    color: "white",
+    padding: "12px",
+    borderRadius: "12px",
+    textAlign: "center",
+    marginBottom: "16px",
+    fontSize: "14px",
   },
   mongolianText: {
     background: "rgba(251, 191, 36, 0.3)",

@@ -60,6 +60,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* 통계 카드 */}
+      <div style={styles.sectionTitle}>📊 통계 현황</div>
       <div style={styles.statsGrid}>
         {loading ? (
           <div style={styles.loading}>{t.loading}</div>
@@ -93,6 +94,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* 메뉴 섹션 */}
+      <div style={styles.sectionTitle}>⚙️ 관리 메뉴</div>
       <div style={styles.menuGrid}>
         <div
           style={styles.menuCard}
@@ -186,75 +188,80 @@ const styles: { [key: string]: React.CSSProperties } = {
     background:
       "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%)",
     backgroundAttachment: "fixed",
-    padding: "32px",
+    padding: "24px",
   },
   header: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: "32px",
+    marginBottom: "24px",
     background: "rgba(255, 255, 255, 0.15)",
     backdropFilter: "blur(20px)",
     WebkitBackdropFilter: "blur(20px)",
     border: "1px solid rgba(255, 255, 255, 0.2)",
-    padding: "24px 32px",
-    borderRadius: "24px",
+    padding: "16px 24px",
+    borderRadius: "16px",
     boxShadow: "0 8px 32px rgba(31, 38, 135, 0.2)",
   },
   title: {
     color: "white",
-    fontSize: "32px",
+    fontSize: "24px",
     fontWeight: "bold",
-    margin: "0 0 8px 0",
+    margin: "0 0 4px 0",
     textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
   },
   subtitle: {
     color: "rgba(255, 255, 255, 0.9)",
-    fontSize: "16px",
+    fontSize: "14px",
     margin: 0,
   },
   logoutButton: {
-    padding: "12px 24px",
+    padding: "8px 16px",
     background: "rgba(239, 68, 68, 0.5)",
     backdropFilter: "blur(10px)",
     WebkitBackdropFilter: "blur(10px)",
     border: "1px solid rgba(255, 255, 255, 0.3)",
-    borderRadius: "12px",
+    borderRadius: "8px",
     color: "white",
     cursor: "pointer",
     fontWeight: "bold",
-    fontSize: "16px",
+    fontSize: "14px",
     transition: "all 0.3s ease",
   },
   statsGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-    gap: "24px",
-    marginBottom: "32px",
+    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+    gap: "16px",
+    marginBottom: "24px",
   },
   statCard: {
-    background: "rgba(255, 255, 255, 0.15)",
+    background: "rgba(255, 255, 255, 0.2)",
     backdropFilter: "blur(20px)",
     WebkitBackdropFilter: "blur(20px)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    padding: "32px",
-    borderRadius: "24px",
+    border: "2px solid rgba(255, 255, 255, 0.3)",
+    padding: "20px",
+    borderRadius: "16px",
     textAlign: "center",
-    boxShadow: "0 8px 32px rgba(31, 38, 135, 0.2)",
+    boxShadow: "0 8px 32px rgba(31, 38, 135, 0.3)",
+    minHeight: "140px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
   statIcon: {
-    fontSize: "48px",
-    marginBottom: "16px",
+    fontSize: "32px",
+    marginBottom: "8px",
   },
   statNumber: {
-    fontSize: "36px",
+    fontSize: "28px",
     fontWeight: "bold",
     color: "white",
-    marginBottom: "8px",
+    marginBottom: "4px",
     textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
   },
   statLabel: {
-    fontSize: "16px",
+    fontSize: "14px",
     color: "rgba(255, 255, 255, 0.9)",
   },
   loading: {
@@ -264,35 +271,49 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: "18px",
     padding: "40px",
   },
+  sectionTitle: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: "12px",
+    marginTop: "12px",
+    textShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
+  },
   menuGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: "24px",
+    gap: "16px",
   },
   menuCard: {
-    background: "rgba(255, 255, 255, 0.15)",
+    background: "rgba(255, 255, 255, 0.1)",
     backdropFilter: "blur(20px)",
     WebkitBackdropFilter: "blur(20px)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    padding: "32px",
-    borderRadius: "24px",
+    border: "1px solid rgba(255, 255, 255, 0.15)",
+    padding: "20px",
+    borderRadius: "16px",
     cursor: "pointer",
     transition: "all 0.3s ease",
-    boxShadow: "0 8px 32px rgba(31, 38, 135, 0.2)",
+    boxShadow: "0 8px 32px rgba(31, 38, 135, 0.15)",
+    minHeight: "140px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
   },
   menuIcon: {
-    fontSize: "48px",
-    marginBottom: "16px",
+    fontSize: "32px",
+    marginBottom: "8px",
   },
   menuTitle: {
-    fontSize: "20px",
+    fontSize: "16px",
     fontWeight: "bold",
     color: "white",
-    marginBottom: "8px",
+    marginBottom: "4px",
     textShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
   },
   menuDescription: {
-    fontSize: "14px",
+    fontSize: "12px",
     color: "rgba(255, 255, 255, 0.8)",
   },
 };
