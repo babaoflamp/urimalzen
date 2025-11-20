@@ -14,6 +14,11 @@ import adminRoutes from './routes/adminRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import pronunciationRoutes from './routes/pronunciationRoutes';
 import unitRoutes from './routes/unitRoutes';
+import adminAIRoutes from './routes/adminAI';
+import adminTTSRoutes from './routes/adminTTS';
+import adminSTTRoutes from './routes/adminSTT';
+import userTTSRoutes from './routes/userTTS';
+import userSTTRoutes from './routes/userSTT';
 
 // Load environment variables
 dotenv.config();
@@ -64,6 +69,15 @@ app.use('/api/recordings', recordingRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/rankings', rankingRoutes);
 app.use('/api/admin', adminRoutes);
+
+// Admin AI/TTS/STT routes
+app.use('/api/admin/ai', adminAIRoutes);
+app.use('/api/admin/tts', adminTTSRoutes);
+app.use('/api/admin/stt', adminSTTRoutes);
+
+// User TTS/STT routes
+app.use('/api/tts', userTTSRoutes);
+app.use('/api/stt', userSTTRoutes);
 
 // Start server
 const startServer = async () => {
