@@ -406,4 +406,168 @@ export const adminAPI = {
   },
 };
 
+// Admin AI API
+export const adminAIAPI = {
+  generateDescription: async (wordId: string, language?: string) => {
+    const response = await api.post('/admin/ai/generate-description', { wordId, language });
+    return response.data;
+  },
+
+  generateExamples: async (wordId: string, count = 3) => {
+    const response = await api.post('/admin/ai/generate-examples', { wordId, count });
+    return response.data;
+  },
+
+  generatePronunciationTips: async (wordId: string) => {
+    const response = await api.post('/admin/ai/generate-pronunciation-tips', { wordId });
+    return response.data;
+  },
+
+  generateFullContent: async (wordId: string) => {
+    const response = await api.post('/admin/ai/generate-full-content', { wordId });
+    return response.data;
+  },
+
+  generateLessonContent: async (unitId: string, lessonNumber: number) => {
+    const response = await api.post('/admin/ai/generate-lesson-content', { unitId, lessonNumber });
+    return response.data;
+  },
+
+  batchGenerate: async (wordIds: string[], contentType = 'full') => {
+    const response = await api.post('/admin/ai/batch-generate', { wordIds, contentType });
+    return response.data;
+  },
+
+  testConnection: async () => {
+    const response = await api.get('/admin/ai/test-connection');
+    return response.data;
+  },
+};
+
+// Admin TTS API
+export const adminTTSAPI = {
+  generateWordAudio: async (wordId: string, options?: { voice?: string; speed?: number; pitch?: number }) => {
+    const response = await api.post('/admin/tts/generate-word-audio', { wordId, ...options });
+    return response.data;
+  },
+
+  generateExampleAudio: async (wordId: string, exampleIndex: number, options?: { voice?: string; speed?: number; pitch?: number }) => {
+    const response = await api.post('/admin/tts/generate-example-audio', { wordId, exampleIndex, ...options });
+    return response.data;
+  },
+
+  generatePhonemeAudio: async (ruleId: string, exampleIndex: number, options?: { voice?: string; speed?: number; pitch?: number }) => {
+    const response = await api.post('/admin/tts/generate-phoneme-audio', { ruleId, exampleIndex, ...options });
+    return response.data;
+  },
+
+  batchGenerate: async (wordIds: string[], audioType = 'word', options?: { voice?: string; speed?: number; pitch?: number }) => {
+    const response = await api.post('/admin/tts/batch-generate', { wordIds, audioType, ...options });
+    return response.data;
+  },
+
+  getAllAudio: async (page = 1, limit = 20, audioType?: string) => {
+    const response = await api.get('/admin/tts/audio', { params: { page, limit, audioType } });
+    return response.data;
+  },
+
+  getWordAudio: async (wordId: string) => {
+    const response = await api.get(`/admin/tts/word-audio/${wordId}`);
+    return response.data;
+  },
+
+  deleteAudio: async (audioId: string) => {
+    const response = await api.delete(`/admin/tts/audio/${audioId}`);
+    return response.data;
+  },
+
+  testConnection: async () => {
+    const response = await api.get('/admin/tts/test-connection');
+    return response.data;
+  },
+};
+
+// Admin STT API
+export const adminSTTAPI = {
+  getAllEvaluations: async (page = 1, limit = 20, userId?: string, wordId?: string) => {
+    const response = await api.get('/admin/stt/evaluations', { params: { page, limit, userId, wordId } });
+    return response.data;
+  },
+
+  getEvaluationById: async (id: string) => {
+    const response = await api.get(`/admin/stt/evaluations/${id}`);
+    return response.data;
+  },
+
+  getStats: async (userId?: string, wordId?: string) => {
+    const response = await api.get('/admin/stt/stats', { params: { userId, wordId } });
+    return response.data;
+  },
+
+  reEvaluate: async (recordingId: string) => {
+    const response = await api.post('/admin/stt/re-evaluate', { recordingId });
+    return response.data;
+  },
+
+  deleteEvaluation: async (id: string) => {
+    const response = await api.delete(`/admin/stt/evaluations/${id}`);
+    return response.data;
+  },
+
+  testConnection: async () => {
+    const response = await api.get('/admin/stt/test-connection');
+    return response.data;
+  },
+};
+
+// User TTS API
+export const ttsAPI = {
+  getWordAudio: async (wordId: string) => {
+    const response = await api.get(`/tts/word/${wordId}`);
+    return response.data;
+  },
+
+  getExampleAudio: async (wordId: string, exampleIndex: number) => {
+    const response = await api.get(`/tts/example/${wordId}/${exampleIndex}`);
+    return response.data;
+  },
+
+  getAllWordAudio: async (wordId: string) => {
+    const response = await api.get(`/tts/word-all/${wordId}`);
+    return response.data;
+  },
+
+  generateRealTime: async (text: string, options?: { voice?: string; speed?: number; pitch?: number }) => {
+    const response = await api.post('/tts/generate', { text, ...options });
+    return response.data;
+  },
+};
+
+// User STT API
+export const sttAPI = {
+  evaluatePronunciation: async (formData: FormData) => {
+    const response = await api.post('/stt/evaluate', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  },
+
+  transcribeAudio: async (formData: FormData) => {
+    const response = await api.post('/stt/transcribe', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  },
+
+  getMyEvaluations: async (page = 1, limit = 20, wordId?: string) => {
+    const response = await api.get('/stt/my-evaluations', { params: { page, limit, wordId } });
+    return response.data;
+  },
+
+  getMyStats: async () => {
+    const response = await api.get('/stt/my-stats');
+    return response.data;
+  },
+};
+
 export default api;

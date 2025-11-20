@@ -142,7 +142,7 @@ const AdminDashboard = () => {
         {/* AI/TTS/STT 메뉴 */}
         <div
           style={styles.menuCard}
-          onClick={() => alert(t.comingSoon)}
+          onClick={() => navigate('/admin/ai-content')}
         >
           <div style={styles.menuIcon}>🤖</div>
           <div style={styles.menuTitle}>{t.aiContentManagement}</div>
@@ -151,7 +151,7 @@ const AdminDashboard = () => {
 
         <div
           style={styles.menuCard}
-          onClick={() => alert(t.comingSoon)}
+          onClick={() => navigate('/admin/tts')}
         >
           <div style={styles.menuIcon}>🔊</div>
           <div style={styles.menuTitle}>{t.ttsSettings}</div>
@@ -160,7 +160,7 @@ const AdminDashboard = () => {
 
         <div
           style={styles.menuCard}
-          onClick={() => alert(t.comingSoon)}
+          onClick={() => navigate('/admin/stt')}
         >
           <div style={styles.menuIcon}>🎙️</div>
           <div style={styles.menuTitle}>{t.sttSettings}</div>

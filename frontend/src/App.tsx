@@ -9,6 +9,9 @@ import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminAIContent from "./pages/AdminAIContent";
+import AdminTTS from "./pages/AdminTTS";
+import AdminSTT from "./pages/AdminSTT";
 import Learning from "./pages/Learning";
 import Categories from "./pages/Categories";
 import Levels from "./pages/Levels";
@@ -57,6 +60,30 @@ function App() {
           element={
             <ProtectedAdminRoute>
               <AdminDashboard />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/ai-content"
+          element={
+            <ProtectedAdminRoute>
+              <AdminAIContent />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/tts"
+          element={
+            <ProtectedAdminRoute>
+              <AdminTTS />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/stt"
+          element={
+            <ProtectedAdminRoute>
+              <AdminSTT />
             </ProtectedAdminRoute>
           }
         />
