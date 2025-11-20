@@ -4,7 +4,7 @@ export interface User {
   email: string;
   level: {
     cefr: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
-    kiip: 1 | 2 | 3 | 4 | 5;
+    kiip: 0 | 1 | 2 | 3 | 4 | 5;
   };
   totalScore: number;
   region: string;
@@ -18,7 +18,7 @@ export interface Word {
   imageUrl: string;
   description: string;
   pronunciation: string;
-  category: string;
+  category: string; // Legacy field
   order: number;
   examples: Array<{
     korean: string;
@@ -27,6 +27,25 @@ export interface Word {
   synonyms: string[];
   videoUrl?: string;
   readingContent?: string;
+  // New KIIP fields
+  level: {
+    kiip: 0 | 1 | 2 | 3 | 4 | 5;
+    cefr: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+  };
+  mainCategory: string;
+  subCategory: string;
+  phonemeRules: string[];
+  standardPronunciation: string;
+  antonyms: string[];
+  collocations: string[];
+  relatedWords: string[];
+  difficultyScore: number;
+  frequencyRank?: number;
+  wordType: 'noun' | 'verb' | 'adjective' | 'adverb' | 'particle' | 'other';
+  formalityLevel: 'informal' | 'neutral' | 'formal';
+  culturalNote?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface UserProgress {
@@ -69,4 +88,119 @@ export interface AuthResponse {
   message: string;
   token: string;
   user: User;
+}
+
+// Category types
+export interface Category {
+  _id: string;
+  name: string;
+  nameEn: string;
+  nameMn: string;
+  order: number;
+  icon: string;
+  description: string;
+  descriptionMn: string;
+  subCategories: string[];
+  color: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CategoryStats {
+  category: string;
+  totalWords: number;
+  wordsByLevel: Array<{
+    _id: number;
+    count: number;
+  }>;
+  wordsBySubCategory: Array<{
+    _id: string;
+    count: number;
+  }>;
+}
+
+// Pronunciation types
+export interface PhonemeRule {
+  _id: string;
+  ruleName: string;
+  ruleNameEn: string;
+  ruleNameMn: string;
+  description: string;
+  descriptionMn: string;
+  pattern: string;
+  examples: Array<{
+    word: string;
+    written: string;
+    pronounced: string;
+    writtenMn: string;
+    pronouncedMn: string;
+  }>;
+  kiipLevel: number;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PronunciationAnalysis {
+  word: string;
+  rulesFound: number;
+  rules: Array<{
+    ruleId: string;
+    ruleName: string;
+    ruleNameMn: string;
+    description: string;
+    descriptionMn: string;
+    examples: PhonemeRule['examples'];
+  }>;
+}
+
+// Unit and Lesson types
+export interface Exercise {
+  exerciseType: 'vocabulary' | 'listening' | 'pronunciation' | 'reading' | 'writing';
+  wordIds: string[];
+  instructions: string;
+  instructionsMn: string;
+}
+
+export interface Lesson {
+  lessonNumber: number;
+  title: string;
+  titleMn: string;
+  exercises: Exercise[];
+  learningObjective: string;
+  learningObjectiveMn: string;
+}
+
+export interface Challenge {
+  challengeType: 'mixed' | 'speed' | 'accuracy';
+  wordIds: string[];
+  timeLimit?: number;
+  passingScore: number;
+  instructions: string;
+  instructionsMn: string;
+}
+
+export interface Unit {
+  _id: string;
+  unitNumber: number;
+  title: string;
+  titleMn: string;
+  kiipLevel: number;
+  mainCategory: string;
+  lessons: Lesson[];
+  challenge: Challenge;
+  order: number;
+  description: string;
+  descriptionMn: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// API Response types
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  count?: number;
+  message?: string;
+  error?: string;
 }

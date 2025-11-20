@@ -7,7 +7,7 @@ export interface IUser extends Document {
   password: string;
   level: {
     cefr: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
-    kiip: 1 | 2 | 3 | 4 | 5;
+    kiip: 0 | 1 | 2 | 3 | 4 | 5;
   };
   totalScore: number;
   region: string;
@@ -49,7 +49,7 @@ const userSchema = new Schema<IUser>(
       },
       kiip: {
         type: Number,
-        enum: [1, 2, 3, 4, 5],
+        enum: [0, 1, 2, 3, 4, 5],
         default: 1,
       },
     },

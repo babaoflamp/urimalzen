@@ -4,6 +4,9 @@ import { useAuthStore } from '../store/useAuthStore';
 import { useLearningStore } from '../store/useLearningStore';
 import { wordAPI, progressAPI, rankingAPI } from '../services/api';
 import Header from '../components/Header';
+import MainNav from '../components/MainNav';
+import SearchBar from '../components/SearchBar';
+import FilterPanel from '../components/FilterPanel';
 import WordList from '../components/WordList';
 import LearningArea from '../components/LearningArea';
 import SelfStudy from '../components/SelfStudy';
@@ -50,9 +53,14 @@ const Learning = () => {
   return (
     <div style={styles.container}>
       <Header />
+      <MainNav />
 
       <div style={styles.mainContent}>
-        <WordList />
+        <div style={styles.leftPanel}>
+          <SearchBar />
+          <FilterPanel />
+          <WordList />
+        </div>
 
         <div style={styles.centerArea}>
           <LearningArea />
@@ -77,11 +85,16 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   mainContent: {
     display: 'grid',
-    gridTemplateColumns: '300px 1fr 300px',
+    gridTemplateColumns: '350px 1fr 300px',
     gap: '24px',
     padding: '24px',
     maxWidth: '1600px',
     margin: '0 auto',
+  },
+  leftPanel: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
   },
   centerArea: {
     display: 'flex',

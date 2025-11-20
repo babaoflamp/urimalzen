@@ -1,20 +1,47 @@
 import { useLearningStore } from '../store/useLearningStore';
 
 const WordList = () => {
-  const { words, currentWordIndex, setCurrentWordIndex, userProgress } = useLearningStore();
+  const { filteredWords, currentWordIndex, setCurrentWordIndex, userProgress } =
+    useLearningStore();
 
   const getWordProgress = (wordId: string) => {
     return userProgress.find((p) => p.wordId === wordId);
   };
 
+  const getLevelColor = (kiipLevel?: number) => {
+    const colors: { [key: number]: string } = {
+      0: '#94a3b8',
+      1: '#60a5fa',
+      2: '#34d399',
+      3: '#fbbf24',
+      4: '#fb923c',
+      5: '#f87171',
+    };
+    return kiipLevel !== undefined ? colors[kiipLevel] || '#667eea' : '#667eea';
+  };
+
+  if (filteredWords.length === 0) {
+    return (
+      <div style={styles.container}>
+        <h2 style={styles.title}>학습 단어 목록</h2>
+        <div style={styles.empty}>
+          <div style={styles.emptyIcon}>📝</div>
+          <div style={styles.emptyText}>단어가 없습니다</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>학습 단어 순위</h2>
+      <h2 style={styles.title}>학습 단어 목록</h2>
+      <div style={styles.count}>{filteredWords.length}개 단어</div>
 
       <div style={styles.list}>
-        {words.map((word, index) => {
+        {filteredWords.map((word, index) => {
           const progress = getWordProgress(word._id);
           const isActive = index === currentWordIndex;
+          const levelColor = getLevelColor(word.level?.kiip);
 
           return (
             <div
@@ -25,18 +52,32 @@ const WordList = () => {
               }}
               onClick={() => setCurrentWordIndex(index)}
             >
-              <div style={styles.wordNumber}>{word.order}</div>
-              <div style={styles.wordName}>{word.koreanWord}</div>
-              <div style={styles.wordAttempts}>
-                {progress?.attempts || 0}
+              <div
+                style={{
+                  ...styles.wordNumber,
+                  background: levelColor,
+                  color: 'white',
+                }}
+              >
+                {word.level?.kiip ?? word.order}
               </div>
+              <div style={styles.wordContent}>
+                <div style={styles.wordName}>{word.koreanWord}</div>
+                <div style={styles.wordMongolian}>{word.mongolianWord}</div>
+                {word.mainCategory && (
+                  <div style={styles.wordCategory}>{word.mainCategory}</div>
+                )}
+              </div>
+              <div style={styles.wordAttempts}>{progress?.attempts || 0}</div>
               <button style={styles.playButton}>▶</button>
             </div>
           );
         })}
       </div>
 
-      <div style={styles.footer}>기타 정보</div>
+      <div style={styles.footer}>
+        {filteredWords.length > 0 && `현재 단어: ${currentWordIndex + 1} / ${filteredWords.length}`}
+      </div>
     </div>
   );
 };
@@ -58,15 +99,23 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: 'white',
     textAlign: 'center',
     fontSize: '22px',
-    marginBottom: '24px',
+    marginBottom: '8px',
     fontWeight: 'bold',
     textShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+  },
+  count: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    textAlign: 'center',
+    fontSize: '14px',
+    marginBottom: '16px',
   },
   list: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '5px',
+    gap: '8px',
     marginBottom: '20px',
+    maxHeight: '600px',
+    overflowY: 'auto',
   },
   wordItem: {
     background: 'rgba(255, 255, 255, 0.2)',
@@ -76,7 +125,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: '12px',
     borderRadius: '16px',
     display: 'grid',
-    gridTemplateColumns: '40px 1fr 40px 40px',
+    gridTemplateColumns: '45px 1fr 45px 40px',
     alignItems: 'center',
     gap: '12px',
     cursor: 'pointer',
@@ -90,28 +139,50 @@ const styles: { [key: string]: React.CSSProperties } = {
     boxShadow: '0 8px 24px rgba(99, 102, 241, 0.3)',
   },
   wordNumber: {
-    background: 'white',
-    color: '#333',
-    width: '35px',
-    height: '35px',
-    borderRadius: '5px',
+    width: '40px',
+    height: '40px',
+    borderRadius: '8px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     fontWeight: 'bold',
+    fontSize: '16px',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+  },
+  wordContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
   },
   wordName: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: '16px',
+    lineHeight: '1.2',
+  },
+  wordMongolian: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: '13px',
+    lineHeight: '1.2',
+  },
+  wordCategory: {
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: '11px',
+    marginTop: '2px',
   },
   wordAttempts: {
     background: 'rgba(255,255,255,0.3)',
     color: 'white',
-    padding: '5px',
-    borderRadius: '3px',
+    padding: '6px',
+    borderRadius: '8px',
     textAlign: 'center',
     fontSize: '14px',
+    fontWeight: 'bold',
+    width: '40px',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   playButton: {
     background: 'rgba(251, 191, 36, 0.4)',
@@ -133,11 +204,24 @@ const styles: { [key: string]: React.CSSProperties } = {
     WebkitBackdropFilter: 'blur(10px)',
     border: '1px solid rgba(255, 255, 255, 0.3)',
     color: 'white',
-    padding: '16px',
-    borderRadius: '16px',
+    padding: '12px',
+    borderRadius: '12px',
     textAlign: 'center',
+    fontSize: '13px',
     fontWeight: 'bold',
     boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
+  },
+  empty: {
+    textAlign: 'center',
+    padding: '60px 20px',
+  },
+  emptyIcon: {
+    fontSize: '64px',
+    marginBottom: '16px',
+  },
+  emptyText: {
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: '16px',
   },
 };
 

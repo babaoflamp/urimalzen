@@ -11,6 +11,9 @@ import recordingRoutes from './routes/recordingRoutes';
 import progressRoutes from './routes/progressRoutes';
 import rankingRoutes from './routes/rankingRoutes';
 import adminRoutes from './routes/adminRoutes';
+import categoryRoutes from './routes/categoryRoutes';
+import pronunciationRoutes from './routes/pronunciationRoutes';
+import unitRoutes from './routes/unitRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -54,6 +57,9 @@ app.get('/health', (req: Request, res: Response) => {
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/words', wordRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/pronunciation', pronunciationRoutes);
+app.use('/api/units', unitRoutes);
 app.use('/api/recordings', recordingRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/rankings', rankingRoutes);

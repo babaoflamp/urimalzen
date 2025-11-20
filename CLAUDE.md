@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**우리말젠 (Urimalzen)** - A Korean-Mongolian language learning web application for Mongolians learning Korean. The app features vocabulary learning with 9 flower names, voice recording, progress tracking, and a multi-level ranking system (global/country/region).
+**우리말젠 (Urimalzen)** - A Korean-Mongolian language learning web application for Mongolians learning Korean. Features vocabulary learning with KIIP (Korea Immigration & Integration Program) integration, pronunciation analysis, category-based learning, voice recording, progress tracking, and multi-level ranking system.
 
-**Stack**: Full-stack TypeScript application with React frontend and Express backend.
+**Stack**: Full-stack TypeScript application with React 19 frontend and Express 5 backend.
 
 ## Repository Structure
 
@@ -25,17 +25,24 @@ urimalzen/
 cd backend
 
 # Development
-npm run dev              # Start with hot-reload (nodemon + ts-node)
-npm run build            # Compile TypeScript to dist/
-npm start                # Run compiled code (production)
+npm run dev                    # Start with hot-reload (nodemon + ts-node)
+npm run build                  # Compile TypeScript to dist/
+npm start                      # Run compiled code (production)
 
-# Database
-npm run seed             # Seed initial 9 flower words to MongoDB
-
-# Note: No test or lint commands configured
+# Database seeding
+npm run seed                   # Seed initial 9 flower words
+npm run seed:categories        # Seed 14 KIIP categories
+npm run seed:phoneme-rules     # Seed Korean phoneme rules
+npm run seed:kiip-words        # Seed KIIP vocabulary
+npm run migrate:flowers        # Migrate flower words to new schema
+npm run seed:all               # Run all seeders in order
 ```
 
 **Server**: `http://localhost:5000` (configured for external access via `0.0.0.0`)
+
+**Prerequisites**:
+- MongoDB running on `localhost:27017` or via Docker
+- Check MongoDB with: `docker ps --filter "name=mongo"`
 
 ### Frontend (React + Vite + TypeScript)
 
@@ -47,175 +54,227 @@ npm run dev              # Start dev server with HMR
 npm run build            # TypeScript compile + Vite build
 npm run preview          # Preview production build
 npm run lint             # ESLint
-
-# Note: No test commands configured
 ```
 
 **Server**: `http://localhost:5173` (configured for external access via `0.0.0.0`)
 
-### Prerequisites
-
-**Backend requires**:
-- MongoDB running on `localhost:27017` (or set `MONGODB_URI` in `.env`)
-- Node.js (TypeScript compilation via `tsc`)
-
-**Seeding**: Run `npm run seed` in backend to populate 9 flower vocabulary words.
-
 ## Backend Architecture
 
-**Pattern**: MVC with Mongoose ODM
+**Pattern**: MVC with Mongoose ODM and TypeScript strict mode
 
-**Directory structure**:
-```
-backend/src/
-├── index.ts              # Express app entry, CORS, MongoDB connection
-├── models/               # Mongoose schemas with TypeScript interfaces
-│   ├── User.ts           # IUser with bcrypt password hashing
-│   ├── Word.ts           # IWord with examples, synonyms
-│   ├── Recording.ts      # Audio recording metadata
-│   ├── UserProgress.ts   # Learning progress per word
-│   └── Ranking.ts        # User ranking data
-├── controllers/          # Request handlers (async functions)
-│   ├── authController.ts
-│   ├── wordController.ts
-│   ├── recordingController.ts
-│   ├── progressController.ts
-│   └── rankingController.ts
-├── routes/               # Express routers
-├── middleware/
-│   ├── auth.ts           # JWT authentication + admin check
-│   └── upload.ts         # Multer file upload config
-└── utils/
-    ├── jwt.ts            # JWT token generation/verification
-    └── seedWords.ts      # Database seeding script
-```
+### Core Data Models
 
-**Key patterns**:
+**Word Model** - Comprehensive vocabulary data with KIIP integration:
+- Basic fields: `koreanWord`, `mongolianWord`, `pronunciation`, `imageUrl`, `description`
+- KIIP/CEFR levels: `level.kiip` (0-5), `level.cefr` (A1-C2)
+- 14-category system: `mainCategory`, `subCategory`
+- Pronunciation: `phonemeRules[]`, `standardPronunciation`
+- Vocabulary relationships: `synonyms[]`, `antonyms[]`, `collocations[]`, `relatedWords[]`
+- Learning metadata: `wordType`, `formalityLevel`, `difficultyScore`, `frequencyRank`
+- Examples array with Korean-Mongolian pairs
+- Indexes on: `order`, `category`, `level.kiip`, `mainCategory`
 
-1. **Models**: Mongoose schemas with TypeScript interfaces extending `Document`
-   - Pre-save hooks (e.g., password hashing in User model)
-   - Instance methods (e.g., `comparePassword` in User)
-   - Indexes for performance (e.g., `order` and `category` in Word)
+**Unit Model** - KIIP curriculum organization:
+- Structure: `unitNumber`, `title`, `titleMn`, `kiipLevel` (0-5)
+- Contains: `lessons[]` array with `lessonNumber`, `title`, `wordIds[]`, `isReview`
+- Challenge system: `challenge.wordIds[]`, `challenge.passingScore`
+- Nested schemas: `lessonSchema`, `challengeSchema` (both with `_id: false`)
 
-2. **Controllers**: Async functions with explicit `Promise<void>` return type
-   - Controllers use `res.status().json()` and must `return` after sending response
-   - Error handling with try-catch, logging to console
-   - Type safety with `AuthRequest` interface (extends `Request` with `user` property)
+**Category Model** - 14 major KIIP categories:
+- Multi-language: `name`, `nameEn`, `nameMn`
+- Visual: `icon`, `color`, `order` (1-14)
+- Structure: `subCategories[]` array
+- Indexed on: `order`, `name`
 
-3. **Authentication**:
-   - JWT tokens in `Authorization: Bearer <token>` header
-   - `authenticate` middleware attaches user to `req.user`
-   - `requireAdmin` middleware checks `req.user.isAdmin`
+**PhonemeRule Model** - Korean pronunciation rules:
+- Multi-language: `ruleName`, `ruleNameEn`, `ruleNameMn`
+- Examples array with: `word`, `written`, `pronounced`, `writtenMn`, `pronouncedMn`
+- Metadata: `pattern`, `kiipLevel`, `order`
 
-4. **File uploads**: Multer saves audio recordings to `backend/uploads/` directory
-   - Served statically via `/uploads` route
+**User Model** - Authentication and profile:
+- Auth: `email`, `password` (bcrypt hashed), `username`
+- Levels: `level` (CEFR + KIIP)
+- Location: `region`, `country`
+- Stats: `totalScore`, `isAdmin`
+- Pre-save hook for password hashing (salt rounds: 10)
+- Method: `comparePassword(candidatePassword)`
 
-## Frontend Architecture
+**UserProgress Model** - Learning tracking per word/user:
+- References: `userId`, `wordId`
+- Metrics: `completed`, `score`, `attempts`
 
-**Pattern**: React 19 with Zustand state management and TypeScript
-
-**Directory structure**:
-```
-frontend/src/
-├── main.tsx              # React app entry
-├── App.tsx               # Router setup (react-router-dom)
-├── pages/                # Route components
-│   ├── Login.tsx
-│   ├── Learning.tsx
-│   ├── AdminLogin.tsx
-│   └── AdminDashboard.tsx
-├── components/           # Reusable UI components
-│   ├── Header.tsx
-│   ├── Navigation.tsx
-│   ├── LearningArea.tsx
-│   ├── WordList.tsx
-│   ├── RecordingControls.tsx  # MediaRecorder API integration
-│   ├── RankingInfo.tsx
-│   └── SelfStudy.tsx
-├── store/                # Zustand stores with persist middleware
-│   ├── useAuthStore.ts   # Authentication state + token in localStorage
-│   └── useLearningStore.ts
-├── services/
-│   └── api.ts            # Axios client + API functions (authAPI, wordAPI, etc.)
-└── types/
-    └── index.ts          # Shared TypeScript types
-```
-
-**Key patterns**:
-
-1. **State management**: Zustand with persistence
-   - `useAuthStore`: Manages user, token, isAuthenticated
-   - Persists to localStorage via `persist` middleware
-   - Token automatically added to requests via axios interceptor
-
-2. **API layer**: Centralized in `services/api.ts`
-   - Organized by domain: `authAPI`, `wordAPI`, `recordingAPI`, `progressAPI`, `rankingAPI`, `adminAPI`
-   - Axios instance with `baseURL` from `VITE_API_URL` env var
-   - Request interceptor adds `Authorization` header from localStorage
-
-3. **Recording**: Uses browser MediaRecorder API
-   - Records audio in WebM format
-   - Converts to FormData for upload via `recordingAPI.uploadRecording`
-
-## Database Models
-
-**User Model** (`models/User.ts`):
-- Fields: `username`, `email`, `password` (hashed), `level` (CEFR + KIIP), `totalScore`, `region`, `country`, `isAdmin`
-- Pre-save hook: bcrypt password hashing (salt rounds: 10)
-- Method: `comparePassword(candidatePassword)` - async bcrypt comparison
-- Timestamps: auto-managed by Mongoose
-
-**Word Model** (`models/Word.ts`):
-- Fields: `koreanWord`, `mongolianWord`, `imageUrl`, `description`, `pronunciation`, `category`, `order`, `examples[]`, `synonyms[]`, `videoUrl`, `readingContent`
-- Unique indexes on `koreanWord` and `order`
-- Performance indexes on `order` and `category`
-
-**Recording Model**:
+**Recording Model** - Audio pronunciation practice:
 - References: `userId`, `wordId`
 - File metadata: `audioUrl`, `duration`, `fileSize`
 
-**UserProgress Model**:
-- Tracks completion and score per word per user
-- Fields: `userId`, `wordId`, `completed`, `score`, `attempts`
+**Ranking Model** - Leaderboard system:
+- Per-user document with `userId`, `rank`
+- Scores organized by level
 
-**Ranking Model**:
-- One document per user
-- Fields: `userId`, `rank`, scores by level
+### Controller Patterns
 
-## API Endpoints
+**Critical patterns** for all controllers:
+
+1. **Type signature**: `async (req: Request | AuthRequest, res: Response): Promise<void>`
+2. **Response pattern**: ALWAYS `return` after `res.status().json()` (Express 5 requirement)
+3. **Error handling**: Try-catch blocks with console.error logging
+4. **AuthRequest**: Extended Request interface with `user` property (from middleware)
+
+Example:
+```typescript
+export const someController = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    // Logic here
+    res.status(200).json({ success: true, data: result });
+    return; // REQUIRED for TypeScript Promise<void>
+  } catch (error: any) {
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    return;
+  }
+};
+```
+
+### Middleware & Authentication
+
+**Authentication flow**:
+1. JWT tokens in `Authorization: Bearer <token>` header
+2. `authenticate` middleware extracts token, verifies, attaches `user` to `req.user`
+3. `requireAdmin` middleware checks `req.user.isAdmin`
+
+**File uploads**:
+- Multer saves to `backend/uploads/` directory
+- Served statically via `/uploads` route
+- Audio recordings in WebM format
+
+### API Routes Structure
 
 All routes prefixed with `/api`:
 
-**Authentication** (`/api/auth`):
-- `POST /register` - Create account (auto-creates Ranking entry)
-- `POST /login` - Returns JWT token
-- `GET /profile` - Get current user (requires auth)
+```
+/api/auth          - Authentication (register, login, profile)
+/api/words         - Vocabulary CRUD + filtering by level/category
+/api/categories    - 14 KIIP categories
+/api/pronunciation - Phoneme rules and pronunciation analysis
+/api/units         - KIIP curriculum units and lessons
+/api/recordings    - Audio recording upload/retrieval
+/api/progress      - User learning progress tracking
+/api/rankings      - Leaderboards (global/country/region)
+/api/admin         - Admin-only operations (all require authenticate + requireAdmin)
+```
 
-**Words** (`/api/words`):
-- `GET /` - List all words
-- `GET /:id` - Get word by ID
-- `GET /order/:order` - Get word by order number (1-9)
+**Admin routes** (all require both `authenticate` and `requireAdmin`):
+- Dashboard stats, user management, word CRUD, recording management
 
-**Recordings** (`/api/recordings`):
-- `POST /` - Upload recording (multipart/form-data with auth)
-- `GET /` - Get user's recordings (requires auth)
-- `GET /word/:wordId` - Get recordings for specific word
+## Frontend Architecture
 
-**Progress** (`/api/progress`):
-- `GET /` - Get user's progress (requires auth)
-- `POST /` - Update progress for a word (requires auth)
+**Pattern**: React 19 with Zustand state management and React Router v7
 
-**Rankings** (`/api/rankings`):
-- `GET /me` - Get current user's ranking
-- `GET /global` - Global leaderboard
-- `GET /country/:country` - Country leaderboard
-- `GET /region/:region` - Region leaderboard
+### Routing Structure
 
-**Admin** (`/api/admin`) - All require `authenticate` + `requireAdmin` middleware:
-- `GET /stats` - Dashboard statistics
-- User management: `GET /users`, `GET /users/:id`, `PATCH /users/:id/admin`
-- Word management: `GET /words`, `POST /words`, `PUT /words/:id`, `DELETE /words/:id`
-- Recording management: `GET /recordings`
+Protected routes using `isAuthenticated` check:
+- `/login` - User login
+- `/` and `/learning` - Main learning interface (original 9 flowers)
+- `/categories` - Browse 14 KIIP categories
+- `/levels` - KIIP level selection (0-5)
+- `/pronunciation` - Phoneme rules and pronunciation practice
+- `/units` - KIIP curriculum units and lessons
+- `/admin/login` - Admin authentication
+- `/admin/dashboard` - Admin panel
+
+All user routes redirect to `/login` if not authenticated.
+
+### State Management (Zustand)
+
+**Five main stores** with persist middleware:
+
+1. **useAuthStore** - Authentication state:
+   - State: `user`, `token`, `isAuthenticated`
+   - Persists to localStorage
+   - Actions: `login`, `logout`, `setUser`
+
+2. **useLearningStore** - Original flower learning:
+   - Word list, current word, progress
+   - Used by `/learning` route
+
+3. **useCategoryStore** - KIIP category browsing:
+   - Categories, selected category, words by category
+   - Used by `/categories` route
+
+4. **usePronunciationStore** - Pronunciation rules:
+   - Phoneme rules, examples, analysis
+   - Used by `/pronunciation` route
+
+5. **useUnitStore** - KIIP curriculum:
+   - Units, lessons, current unit/lesson
+   - Used by `/units` and `/levels` routes
+
+**Pattern**:
+```typescript
+export const useStore = create<State>()(
+  persist(
+    (set) => ({
+      // state and actions
+    }),
+    { name: 'storage-key' }
+  )
+);
+```
+
+### API Layer (services/api.ts)
+
+**Centralized axios instance** with:
+- Base URL from `VITE_API_URL` env var
+- Request interceptor adds `Authorization: Bearer ${token}` from localStorage
+- Organized by domain: `authAPI`, `wordAPI`, `categoryAPI`, `pronunciationAPI`, `unitAPI`, `recordingAPI`, `progressAPI`, `rankingAPI`, `adminAPI`
+
+Each API module exports typed functions matching backend endpoints.
+
+### Audio Recording
+
+Uses browser **MediaRecorder API**:
+- Records in WebM format
+- Converts to FormData for multipart upload
+- Handled by `RecordingControls.tsx` component
+- Uploaded via `recordingAPI.uploadRecording()`
+
+## Development Workflow
+
+### Adding a new KIIP unit or lesson
+
+1. Create unit via admin API: `POST /api/units`
+2. Add lessons to unit: `POST /api/units/:id/lessons`
+   - Required fields: `lessonNumber`, `title`, `titleMn`, `wordIds[]`, `isReview`
+   - **Match ILesson interface**: Do NOT use `exercises`, `learningObjective` (not in schema)
+3. Add challenge to unit: `POST /api/units/:id/challenge`
+4. Update frontend `useUnitStore` to fetch and display
+
+### Adding a new API endpoint
+
+1. Define Mongoose model in `backend/src/models/` (if new entity)
+2. Create controller in `backend/src/controllers/`:
+   - Use `async (req: Request | AuthRequest, res: Response): Promise<void>`
+   - ALWAYS `return` after `res.status().json()`
+3. Add route in `backend/src/routes/`:
+   - Apply `authenticate` middleware for protected routes
+   - Apply `requireAdmin` for admin-only routes
+4. Register route in `backend/src/index.ts`
+5. Add API function to `frontend/src/services/api.ts`
+6. Update TypeScript types in `frontend/src/types/index.ts`
+7. Create/update Zustand store if needed
+
+### Seeding the database
+
+**Initial setup** (run in order):
+```bash
+cd backend
+npm run seed:categories        # 14 KIIP categories
+npm run seed:phoneme-rules     # Korean pronunciation rules
+npm run migrate:flowers        # Migrate 9 flower words to new schema
+npm run seed:kiip-words        # KIIP vocabulary by level
+# Or run all at once:
+npm run seed:all
+```
 
 ## Environment Configuration
 
@@ -239,95 +298,57 @@ VITE_API_URL=http://localhost:5000/api
 **Backend** (`tsconfig.json`):
 - Module: `commonjs` (matching `package.json` type)
 - Target: `es2020`
-- Strict mode enabled
-- Compiles `src/` → `dist/`
+- Strict mode: enabled
+- Compiles: `src/` → `dist/`
 - Source maps and declaration files generated
 
-**Frontend**: Uses Vite's TypeScript setup with project references
+**Frontend**: Vite's TypeScript setup with project references
 - `tsconfig.json` references `tsconfig.app.json` and `tsconfig.node.json`
 - Module: `ESNext` (Vite handles bundling)
 - React JSX support
 
-## Deployment Considerations
+## Deployment
 
-**Production deployment** (as documented in README):
+**Production setup** (as documented in README):
 
 1. **Backend**: PM2 process manager
    ```bash
-   npm run build
+   cd backend && npm run build
    pm2 start dist/index.js --name urimalzen-backend
    pm2 startup && pm2 save
    ```
 
-2. **Frontend**: Static files served via Nginx
+2. **Frontend**: Static files via Nginx
    ```bash
-   npm run build  # Outputs to dist/
+   cd frontend && npm run build  # outputs to dist/
    # Copy dist/ to Nginx root
    ```
 
-3. **Nginx config**: Reverse proxy `/api` and `/uploads` to backend:5000, serve frontend static files for all other routes with `try_files $uri /index.html` for SPA routing.
+3. **Nginx config**:
+   - Reverse proxy `/api` and `/uploads` to `localhost:5000`
+   - Serve frontend static files with `try_files $uri /index.html` for SPA routing
+   - CORS handled by backend (allows all origins in development)
 
-## Initial Data
+## KIIP Integration
 
-The database includes 9 Korean flower vocabulary words:
-1. 만들레 (민들레/Dandelion) - Цэцэрлэг
-2. 환주리 - Хуануури
-3. 들국화 (Wild Chrysanthemum) - Хээрийн хризантем
-4. 은방울 (Lily of the Valley) - Мөнгөн хонх
-5. 개나리 (Forsythia) - Форзици
-6. 진달래 (Azalea) - Азалиа
-7. 패랭이 (Pink/Dianthus) - Гвоздик
-8. 제비꽃 (Violet) - Нил цэцэг
-9. 해바라기 (Sunflower) - Наранцэцэг
+**Korea Immigration & Integration Program** (KIIP) integration features:
 
-Load via: `cd backend && npm run seed`
-
-## Development Workflow
-
-**Adding a new API endpoint**:
-
-1. Define Mongoose model in `backend/src/models/` (if new entity)
-2. Create controller function in `backend/src/controllers/`
-   - Use `async (req: Request | AuthRequest, res: Response): Promise<void>`
-   - Always `return` after `res.status().json()`
-3. Add route in `backend/src/routes/`
-   - Apply `authenticate` middleware for protected routes
-4. Add API function to `frontend/src/services/api.ts`
-5. Update TypeScript types in `frontend/src/types/index.ts`
-
-**Adding authentication to a route**:
-```typescript
-import { authenticate, requireAdmin } from '../middleware/auth';
-import type { AuthRequest } from '../middleware/auth';
-
-router.get('/protected', authenticate, async (req: AuthRequest, res: Response) => {
-  const user = req.user;  // Available after authenticate middleware
-  // ...
-});
-```
-
-**State management pattern**:
-```typescript
-// In Zustand store
-export const useStore = create<State>()(
-  persist(
-    (set) => ({
-      // state and actions
-    }),
-    { name: 'storage-key' }
-  )
-);
-```
+- **6 levels**: 0 (초급), 1-5 (중급-고급)
+- **14 categories**: 인사, 자기소개, 음식, 쇼핑, 교통, etc.
+- **CEFR mapping**: A1, A2, B1, B2, C1, C2
+- **Curriculum**: Units → Lessons → Words → Challenges
+- **Phoneme rules**: Korean pronunciation rules with examples
+- **Progressive learning**: Difficulty scores, frequency ranks, word types
 
 ## Technology Versions
 
 **Backend**:
-- Node.js (ts-node for development)
 - TypeScript: ^5.9.3
 - Express: ^5.1.0
 - Mongoose: ^8.20.0
 - bcrypt: ^6.0.0
 - jsonwebtoken: ^9.0.2
+- multer: ^2.0.2
 
 **Frontend**:
 - React: ^19.2.0
@@ -339,14 +360,20 @@ export const useStore = create<State>()(
 
 ## Common Pitfalls
 
-1. **Express 5 response handling**: Controllers must `return` after `res.status().json()` to satisfy TypeScript `Promise<void>` return type.
+1. **Express 5 response handling**: Controllers MUST `return` after `res.status().json()` to satisfy TypeScript `Promise<void>` return type. This is not optional.
 
-2. **MongoDB connection**: Ensure MongoDB is running before starting backend. Connection string defaults to `localhost:27017/urimalzen`.
+2. **ILesson interface mismatch**: Unit lessons use `wordIds[]` and `isReview`, NOT `exercises[]` or `learningObjective`. Always check `backend/src/models/Unit.ts` for correct schema.
 
-3. **CORS**: Backend allows all origins (`origin: '*'`) for development. Restrict in production.
+3. **MongoDB connection**: Ensure MongoDB is running (Docker or systemd) before starting backend. Check with `docker ps --filter "name=mongo"`.
 
-4. **File uploads**: Recordings saved to `backend/uploads/` - ensure directory exists or Multer will fail.
+4. **CORS**: Backend allows all origins (`origin: '*'`) for development. Restrict in production.
 
-5. **Authentication**: Frontend stores token in both Zustand state AND localStorage. Axios interceptor reads from localStorage.
+5. **File uploads**: Recordings saved to `backend/uploads/` - ensure directory exists or Multer will fail.
 
-6. **Build order**: Backend must compile TypeScript before running production (`npm run build` then `npm start`). Frontend build includes TypeScript check (`tsc -b`).
+6. **Token storage**: Frontend stores token in BOTH Zustand state AND localStorage. Axios interceptor reads from localStorage. This redundancy is intentional for persistence.
+
+7. **Build order**: Backend must compile TypeScript before production (`npm run build` then `npm start`). Frontend build includes TypeScript check (`tsc -b`).
+
+8. **Nested schemas**: Unit model uses nested `lessonSchema` and `challengeSchema` with `_id: false`. When pushing to these arrays, match the exact interface fields.
+
+9. **Mongoose index warnings**: Duplicate index warnings are expected due to both `unique: true` and explicit `schema.index()`. Safe to ignore in development.

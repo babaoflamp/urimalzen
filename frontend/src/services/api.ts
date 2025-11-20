@@ -1,5 +1,17 @@
 import axios from 'axios';
-import type { AuthResponse, Word, UserProgress, Recording, Ranking } from '../types';
+import type {
+  AuthResponse,
+  Word,
+  UserProgress,
+  Recording,
+  Ranking,
+  Category,
+  CategoryStats,
+  PhonemeRule,
+  PronunciationAnalysis,
+  Unit,
+  ApiResponse,
+} from '../types';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -58,6 +70,43 @@ export const wordAPI = {
 
   getWordByOrder: async (order: number): Promise<{ success: boolean; data: Word }> => {
     const response = await api.get(`/words/order/${order}`);
+    return response.data;
+  },
+
+  getWordsByLevel: async (
+    kiipLevel: number
+  ): Promise<{ success: boolean; kiipLevel: number; count: number; data: Word[] }> => {
+    const response = await api.get(`/words/level/${kiipLevel}`);
+    return response.data;
+  },
+
+  getWordsByCategory: async (
+    category: string,
+    kiipLevel?: number
+  ): Promise<{ success: boolean; category: string; count: number; data: Word[] }> => {
+    const response = await api.get(`/words/category/${category}`, {
+      params: kiipLevel !== undefined ? { kiipLevel } : {},
+    });
+    return response.data;
+  },
+
+  getWordsByCriteria: async (params: {
+    kiipLevel?: number;
+    cefrLevel?: string;
+    category?: string;
+    subCategory?: string;
+    minDifficulty?: number;
+    maxDifficulty?: number;
+    wordType?: string;
+  }): Promise<{ success: boolean; filters: any; count: number; data: Word[] }> => {
+    const response = await api.get('/words/search', { params });
+    return response.data;
+  },
+
+  searchWords: async (
+    query: string
+  ): Promise<{ success: boolean; query: string; count: number; data: Word[] }> => {
+    const response = await api.get('/words/search/text', { params: { q: query } });
     return response.data;
   },
 };
@@ -130,6 +179,176 @@ export const rankingAPI = {
     limit?: number
   ): Promise<{ success: boolean; region: string; count: number; data: Ranking[] }> => {
     const response = await api.get(`/rankings/region/${region}`, { params: { limit } });
+    return response.data;
+  },
+};
+
+// Category API
+export const categoryAPI = {
+  getAllCategories: async (): Promise<ApiResponse<Category[]>> => {
+    const response = await api.get('/categories');
+    return response.data;
+  },
+
+  getCategoryById: async (id: string): Promise<ApiResponse<Category>> => {
+    const response = await api.get(`/categories/${id}`);
+    return response.data;
+  },
+
+  getCategoryByName: async (name: string): Promise<ApiResponse<Category>> => {
+    const response = await api.get(`/categories/name/${name}`);
+    return response.data;
+  },
+
+  getWordsByCategory: async (
+    id: string,
+    kiipLevel?: number,
+    subCategory?: string
+  ): Promise<{ success: boolean; category: string; count: number; data: Word[] }> => {
+    const params: any = {};
+    if (kiipLevel !== undefined) params.kiipLevel = kiipLevel;
+    if (subCategory) params.subCategory = subCategory;
+    const response = await api.get(`/categories/${id}/words`, { params });
+    return response.data;
+  },
+
+  getCategoryStats: async (id: string): Promise<ApiResponse<CategoryStats>> => {
+    const response = await api.get(`/categories/${id}/stats`);
+    return response.data;
+  },
+
+  // Admin operations
+  createCategory: async (data: Partial<Category>): Promise<ApiResponse<Category>> => {
+    const response = await api.post('/categories', data);
+    return response.data;
+  },
+
+  updateCategory: async (id: string, data: Partial<Category>): Promise<ApiResponse<Category>> => {
+    const response = await api.put(`/categories/${id}`, data);
+    return response.data;
+  },
+
+  deleteCategory: async (id: string): Promise<ApiResponse<void>> => {
+    const response = await api.delete(`/categories/${id}`);
+    return response.data;
+  },
+};
+
+// Pronunciation API
+export const pronunciationAPI = {
+  getAllPhonemeRules: async (kiipLevel?: number): Promise<ApiResponse<PhonemeRule[]>> => {
+    const params = kiipLevel !== undefined ? { kiipLevel } : {};
+    const response = await api.get('/pronunciation/rules', { params });
+    return response.data;
+  },
+
+  getPhonemeRuleById: async (id: string): Promise<ApiResponse<PhonemeRule>> => {
+    const response = await api.get(`/pronunciation/rules/${id}`);
+    return response.data;
+  },
+
+  getPhonemeRuleByName: async (ruleName: string): Promise<ApiResponse<PhonemeRule>> => {
+    const response = await api.get(`/pronunciation/rules/name/${ruleName}`);
+    return response.data;
+  },
+
+  analyzeWord: async (word: string): Promise<ApiResponse<PronunciationAnalysis>> => {
+    const response = await api.post('/pronunciation/analyze', { word });
+    return response.data;
+  },
+
+  // Admin operations
+  createPhonemeRule: async (data: Partial<PhonemeRule>): Promise<ApiResponse<PhonemeRule>> => {
+    const response = await api.post('/pronunciation/rules', data);
+    return response.data;
+  },
+
+  updatePhonemeRule: async (
+    id: string,
+    data: Partial<PhonemeRule>
+  ): Promise<ApiResponse<PhonemeRule>> => {
+    const response = await api.put(`/pronunciation/rules/${id}`, data);
+    return response.data;
+  },
+
+  deletePhonemeRule: async (id: string): Promise<ApiResponse<void>> => {
+    const response = await api.delete(`/pronunciation/rules/${id}`);
+    return response.data;
+  },
+};
+
+// Unit API
+export const unitAPI = {
+  getAllUnits: async (
+    kiipLevel?: number,
+    category?: string
+  ): Promise<ApiResponse<Unit[]>> => {
+    const params: any = {};
+    if (kiipLevel !== undefined) params.kiipLevel = kiipLevel;
+    if (category) params.category = category;
+    const response = await api.get('/units', { params });
+    return response.data;
+  },
+
+  getUnitById: async (id: string): Promise<ApiResponse<Unit>> => {
+    const response = await api.get(`/units/${id}`);
+    return response.data;
+  },
+
+  getUnitByNumber: async (unitNumber: number): Promise<ApiResponse<Unit>> => {
+    const response = await api.get(`/units/number/${unitNumber}`);
+    return response.data;
+  },
+
+  getUnitsByLevel: async (
+    kiipLevel: number
+  ): Promise<{ success: boolean; kiipLevel: number; count: number; data: Unit[] }> => {
+    const response = await api.get(`/units/level/${kiipLevel}`);
+    return response.data;
+  },
+
+  getUnitsByCategory: async (
+    category: string,
+    kiipLevel?: number
+  ): Promise<{ success: boolean; category: string; count: number; data: Unit[] }> => {
+    const params = kiipLevel !== undefined ? { kiipLevel } : {};
+    const response = await api.get(`/units/category/${category}`, { params });
+    return response.data;
+  },
+
+  getUnitLessons: async (
+    unitId: string
+  ): Promise<{ success: boolean; unitNumber: number; unitTitle: string; lessonCount: number; data: any[] }> => {
+    const response = await api.get(`/units/${unitId}/lessons`);
+    return response.data;
+  },
+
+  getUnitLesson: async (
+    unitId: string,
+    lessonNumber: number
+  ): Promise<ApiResponse<any>> => {
+    const response = await api.get(`/units/${unitId}/lessons/${lessonNumber}`);
+    return response.data;
+  },
+
+  // Admin operations
+  createUnit: async (data: Partial<Unit>): Promise<ApiResponse<Unit>> => {
+    const response = await api.post('/units', data);
+    return response.data;
+  },
+
+  updateUnit: async (id: string, data: Partial<Unit>): Promise<ApiResponse<Unit>> => {
+    const response = await api.put(`/units/${id}`, data);
+    return response.data;
+  },
+
+  deleteUnit: async (id: string): Promise<ApiResponse<void>> => {
+    const response = await api.delete(`/units/${id}`);
+    return response.data;
+  },
+
+  addLessonToUnit: async (unitId: string, lessonData: any): Promise<ApiResponse<Unit>> => {
+    const response = await api.post(`/units/${unitId}/lessons`, lessonData);
     return response.data;
   },
 };
