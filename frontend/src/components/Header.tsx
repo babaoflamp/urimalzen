@@ -27,7 +27,7 @@ const Header = () => {
         <h1 style={styles.appName}>우리말젠</h1>
       </div>
 
-      {/* 중앙: 사용자 정보 + 진도 + 현재 학습 단어 */}
+      {/* 중앙: 사용자 정보 + 진도 */}
       <div style={styles.centerSection}>
         <div style={styles.infoRow}>
           {user && (
@@ -44,11 +44,6 @@ const Header = () => {
             </>
           )}
         </div>
-        {currentWord && (
-          <div style={styles.currentWord}>
-            현재 학습: {currentWord.koreanWord} ({currentWord.mongolianWord})
-          </div>
-        )}
       </div>
 
       {/* 우측: 점수 + 순위 + 로그아웃 */}
@@ -118,6 +113,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: 'column',
     gap: '8px',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   infoRow: {
     display: 'flex',
@@ -131,18 +127,6 @@ const styles: { [key: string]: React.CSSProperties } = {
   separator: {
     color: 'rgba(255,255,255,0.6)',
     fontSize: '14px',
-  },
-  currentWord: {
-    color: 'white',
-    fontSize: '14px',
-    background: 'rgba(255, 255, 255, 0.25)',
-    backdropFilter: 'blur(10px)',
-    WebkitBackdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
-    padding: '8px 20px',
-    borderRadius: '20px',
-    fontStyle: 'italic',
-    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
   },
   rightSection: {
     display: 'flex',
