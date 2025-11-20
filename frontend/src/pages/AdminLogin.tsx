@@ -2,10 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI } from "../services/api";
 import { useAuthStore } from "../store/useAuthStore";
+import { useLanguageStore } from "../store/useLanguageStore";
+import { translations } from "../utils/translations";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   const [formData, setFormData] = useState({
     email: "",
@@ -25,11 +29,12 @@ const AdminLogin = () => {
         password: formData.password,
       });
 
-      // TODO: 관리자 권한 체크
-      // if (!response.user.isAdmin) {
-      //   setError('관리자 권한이 없습니다');
-      //   return;
-      // }
+      // 관리자 권한 체크
+      if (!response.user.isAdmin) {
+        setError(t.notAdminError || '관리자 권한이 없습니다');
+        setLoading(false);
+        return;
+      }
 
       login(response.user, response.token);
       navigate("/admin/dashboard");

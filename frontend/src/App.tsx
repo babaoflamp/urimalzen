@@ -5,6 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
+import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -54,11 +55,9 @@ function App() {
         <Route
           path="/admin/dashboard"
           element={
-            isAuthenticated ? (
+            <ProtectedAdminRoute>
               <AdminDashboard />
-            ) : (
-              <Navigate to="/admin/login" />
-            )
+            </ProtectedAdminRoute>
           }
         />
 

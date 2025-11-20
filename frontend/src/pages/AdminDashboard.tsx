@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
+import { useLanguageStore } from "../store/useLanguageStore";
+import { translations } from "../utils/translations";
 import { adminAPI } from "../services/api";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalWords: 0,
@@ -15,11 +20,11 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: 관리자 권한 체크
-    // if (!user?.isAdmin) {
-    //   navigate('/admin/login');
-    //   return;
-    // }
+    // 관리자 권한 체크
+    if (!user?.isAdmin) {
+      navigate('/admin/login');
+      return;
+    }
 
     loadStats();
   }, [user, navigate]);
@@ -46,42 +51,42 @@ const AdminDashboard = () => {
       {/* 헤더 */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>👨‍💼 관리자 대시보드</h1>
+          <h1 style={styles.title}>👨‍💼 {t.adminDashboard}</h1>
           <p style={styles.subtitle}>우리말젠 Admin</p>
         </div>
         <button onClick={handleLogout} style={styles.logoutButton}>
-          로그아웃
+          {t.logout}
         </button>
       </div>
 
       {/* 통계 카드 */}
       <div style={styles.statsGrid}>
         {loading ? (
-          <div style={styles.loading}>통계 데이터 로딩 중...</div>
+          <div style={styles.loading}>{t.loading}</div>
         ) : (
           <>
             <div style={styles.statCard}>
               <div style={styles.statIcon}>👥</div>
               <div style={styles.statNumber}>{stats.totalUsers}</div>
-              <div style={styles.statLabel}>전체 사용자</div>
+              <div style={styles.statLabel}>{t.totalUsers}</div>
             </div>
 
             <div style={styles.statCard}>
               <div style={styles.statIcon}>📚</div>
               <div style={styles.statNumber}>{stats.totalWords}</div>
-              <div style={styles.statLabel}>단어 수</div>
+              <div style={styles.statLabel}>{t.totalWords}</div>
             </div>
 
             <div style={styles.statCard}>
               <div style={styles.statIcon}>🎤</div>
               <div style={styles.statNumber}>{stats.totalRecordings}</div>
-              <div style={styles.statLabel}>총 녹음</div>
+              <div style={styles.statLabel}>{t.totalRecordings}</div>
             </div>
 
             <div style={styles.statCard}>
               <div style={styles.statIcon}>✅</div>
               <div style={styles.statNumber}>{stats.activeUsers}</div>
-              <div style={styles.statLabel}>활성 사용자</div>
+              <div style={styles.statLabel}>{t.activeUsers}</div>
             </div>
           </>
         )}
@@ -91,53 +96,84 @@ const AdminDashboard = () => {
       <div style={styles.menuGrid}>
         <div
           style={styles.menuCard}
-          onClick={() => alert("사용자 관리 기능 준비 중")}
+          onClick={() => alert(t.comingSoon)}
         >
           <div style={styles.menuIcon}>👥</div>
-          <div style={styles.menuTitle}>사용자 관리</div>
+          <div style={styles.menuTitle}>{t.userManagement}</div>
           <div style={styles.menuDescription}>회원 정보 조회 및 관리</div>
         </div>
 
         <div
           style={styles.menuCard}
-          onClick={() => alert("단어 관리 기능 준비 중")}
+          onClick={() => alert(t.comingSoon)}
         >
           <div style={styles.menuIcon}>📚</div>
-          <div style={styles.menuTitle}>단어 관리</div>
+          <div style={styles.menuTitle}>{t.wordManagement}</div>
           <div style={styles.menuDescription}>단어 추가, 수정, 삭제</div>
         </div>
 
         <div
           style={styles.menuCard}
-          onClick={() => alert("녹음 관리 기능 준비 중")}
+          onClick={() => alert(t.comingSoon)}
         >
           <div style={styles.menuIcon}>🎤</div>
-          <div style={styles.menuTitle}>녹음 관리</div>
+          <div style={styles.menuTitle}>{t.recordingManagement}</div>
           <div style={styles.menuDescription}>사용자 녹음 파일 관리</div>
         </div>
 
-        <div style={styles.menuCard} onClick={() => alert("통계 기능 준비 중")}>
+        <div
+          style={styles.menuCard}
+          onClick={() => alert(t.comingSoon)}
+        >
           <div style={styles.menuIcon}>📊</div>
-          <div style={styles.menuTitle}>통계 분석</div>
+          <div style={styles.menuTitle}>{t.statistics}</div>
           <div style={styles.menuDescription}>학습 현황 및 통계</div>
         </div>
 
         <div
           style={styles.menuCard}
-          onClick={() => alert("KIIP 콘텐츠 관리 기능 준비 중")}
+          onClick={() => alert(t.comingSoon)}
         >
           <div style={styles.menuIcon}>🎓</div>
-          <div style={styles.menuTitle}>KIIP 콘텐츠</div>
+          <div style={styles.menuTitle}>{t.kiipContent}</div>
           <div style={styles.menuDescription}>단계별 학습 콘텐츠 관리</div>
+        </div>
+
+        {/* AI/TTS/STT 메뉴 */}
+        <div
+          style={styles.menuCard}
+          onClick={() => alert(t.comingSoon)}
+        >
+          <div style={styles.menuIcon}>🤖</div>
+          <div style={styles.menuTitle}>{t.aiContentManagement}</div>
+          <div style={styles.menuDescription}>AI 기반 콘텐츠 자동 생성</div>
         </div>
 
         <div
           style={styles.menuCard}
-          onClick={() => alert("시스템 설정 기능 준비 중")}
+          onClick={() => alert(t.comingSoon)}
+        >
+          <div style={styles.menuIcon}>🔊</div>
+          <div style={styles.menuTitle}>{t.ttsSettings}</div>
+          <div style={styles.menuDescription}>음성 합성 설정 및 오디오 생성</div>
+        </div>
+
+        <div
+          style={styles.menuCard}
+          onClick={() => alert(t.comingSoon)}
+        >
+          <div style={styles.menuIcon}>🎙️</div>
+          <div style={styles.menuTitle}>{t.sttSettings}</div>
+          <div style={styles.menuDescription}>음성 인식 및 발음 평가 설정</div>
+        </div>
+
+        <div
+          style={styles.menuCard}
+          onClick={() => alert(t.comingSoon)}
         >
           <div style={styles.menuIcon}>⚙️</div>
-          <div style={styles.menuTitle}>시스템 설정</div>
-          <div style={styles.menuDescription}>환경 설정 및 관리</div>
+          <div style={styles.menuTitle}>{t.systemSettings}</div>
+          <div style={styles.menuDescription}>환경 설정 및 API 관리</div>
         </div>
       </div>
     </div>
