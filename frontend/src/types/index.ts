@@ -212,7 +212,7 @@ export interface AIConfiguration {
   serviceName: 'ollama' | 'openai' | 'claude' | 'gemini';
   apiUrl: string;
   apiKey?: string;
-  model: string;
+  modelName: string;
   temperature?: number;
   maxTokens?: number;
   isActive: boolean;

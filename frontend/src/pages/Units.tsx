@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import MainNav from '../components/MainNav';
 import { UnitCard } from '../components/UnitCard';
 import { useUnitStore } from '../store/useUnitStore';
 
 const Units = () => {
-  const navigate = useNavigate();
   const { units, fetchUnits, isLoading } = useUnitStore();
   const [filterLevel, setFilterLevel] = useState<number | null>(null);
-  const [filterCategory, setFilterCategory] = useState<string | null>(null);
+  const [filterCategory] = useState<string | null>(null);
 
   useEffect(() => {
     fetchUnits(filterLevel ?? undefined, filterCategory ?? undefined);

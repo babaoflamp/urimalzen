@@ -8,7 +8,7 @@ import { useLearningStore } from '../store/useLearningStore';
 
 const Categories = () => {
   const navigate = useNavigate();
-  const { selectedCategory } = useCategoryStore();
+  const { currentCategory } = useCategoryStore();
   const { fetchWordsByCategory } = useLearningStore();
 
   useEffect(() => {
@@ -40,10 +40,10 @@ const Categories = () => {
 
         <CategoryGrid onCategorySelect={handleCategorySelect} />
 
-        {selectedCategory && (
+        {currentCategory && (
           <div style={styles.infoBox}>
             <div style={styles.infoText}>
-              "{selectedCategory}" 카테고리가 선택되었습니다.
+              "{currentCategory.name}" 카테고리가 선택되었습니다.
             </div>
             <button
               onClick={() => navigate('/learning')}

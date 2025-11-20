@@ -8,6 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Stack**: Full-stack TypeScript application with React 19 frontend and Express 5 backend.
 
+**Developer**: 김영훈 Manager (Kim Young-hoon Manager)
+
 ## Repository Structure
 
 ```

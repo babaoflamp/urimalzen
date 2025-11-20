@@ -84,7 +84,7 @@ const pronunciationEvaluationSchema = new Schema<IPronunciationEvaluation>(
 // Indexes
 pronunciationEvaluationSchema.index({ userId: 1, wordId: 1 });
 pronunciationEvaluationSchema.index({ userId: 1, createdAt: -1 });
-pronunciation EvaluationSchema.index({ accuracyScore: -1 });
+pronunciationEvaluationSchema.index({ accuracyScore: -1 });
 
 const PronunciationEvaluation = mongoose.model<IPronunciationEvaluation>(
   'PronunciationEvaluation',

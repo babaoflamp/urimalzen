@@ -16,7 +16,7 @@ import Navigation from "../components/Navigation";
 const Learning = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
-  const { words, setWords, setUserProgress, setRanking, setCurrentWordIndex } =
+  const { setWords, setUserProgress, setRanking, setCurrentWordIndex } =
     useLearningStore();
 
   useEffect(() => {

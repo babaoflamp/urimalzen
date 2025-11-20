@@ -4,7 +4,7 @@ export interface IAIConfiguration extends Document {
   serviceName: 'ollama' | 'openai' | 'claude' | 'gemini';
   apiUrl: string;
   apiKey?: string;
-  model: string;
+  modelName: string;
   temperature?: number;
   maxTokens?: number;
   isActive: boolean;
@@ -52,7 +52,7 @@ const aiConfigurationSchema = new Schema<IAIConfiguration>(
       type: String,
       select: false, // Don't include in default queries for security
     },
-    model: {
+    modelName: {
       type: String,
       required: true,
     },
