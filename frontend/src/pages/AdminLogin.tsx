@@ -31,7 +31,7 @@ const AdminLogin = () => {
 
       // 관리자 권한 체크
       if (!response.user.isAdmin) {
-        setError(t.notAdminError || '관리자 권한이 없습니다');
+        setError(t.notAdminError || "관리자 권한이 없습니다");
         setLoading(false);
         return;
       }
@@ -63,14 +63,14 @@ const AdminLogin = () => {
 
         <form onSubmit={handleSubmit} style={styles.form}>
           <input
-            type="email"
+            type="text"
             name="email"
-            placeholder="관리자 이메일"
+            placeholder="관리자 ID 또는 이메일"
             value={formData.email}
             onChange={handleChange}
             style={styles.input}
             required
-            autoComplete="email"
+            autoComplete="username"
           />
 
           <input

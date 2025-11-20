@@ -54,6 +54,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         level: user.level,
         region: user.region,
         country: user.country,
+        isAdmin: user.isAdmin,
       },
     });
   } catch (error: any) {
@@ -68,12 +69,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     // Validation
     if (!email || !password) {
-      res.status(400).json({ message: 'Please provide email and password' });
+      res.status(400).json({ message: 'Please provide email/username and password' });
       return;
     }
 
-    // Find user with password field
-    const user = await User.findOne({ email }).select('+password');
+    // Find user by email or username with password field
+    const user = await User.findOne({
+      $or: [{ email }, { username: email }]
+    }).select('+password');
 
     if (!user) {
       res.status(401).json({ message: 'Invalid credentials' });
@@ -105,6 +108,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         totalScore: user.totalScore,
         region: user.region,
         country: user.country,
+        isAdmin: user.isAdmin,
       },
     });
   } catch (error: any) {
@@ -134,6 +138,7 @@ export const getProfile = async (
         totalScore: user.totalScore,
         region: user.region,
         country: user.country,
+        isAdmin: user.isAdmin,
       },
     });
   } catch (error: any) {
