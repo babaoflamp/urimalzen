@@ -125,7 +125,7 @@ const AdminDashboard = () => {
 
         <div
           style={styles.menuCard}
-          onClick={() => alert(t.comingSoon)}
+          onClick={() => navigate('/admin/statistics')}
         >
           <div style={styles.menuIcon}>📊</div>
           <div style={styles.menuTitle}>{t.statistics}</div>

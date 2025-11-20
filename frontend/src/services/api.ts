@@ -570,4 +570,65 @@ export const sttAPI = {
   },
 };
 
+// Admin Statistics API
+export const adminStatsAPI = {
+  getDashboardStats: async (startDate?: string, endDate?: string) => {
+    const response = await api.get('/admin/stats/dashboard', {
+      params: { startDate, endDate },
+    });
+    return response.data;
+  },
+
+  getUserStats: async (startDate?: string, endDate?: string, groupBy = 'day') => {
+    const response = await api.get('/admin/stats/users', {
+      params: { startDate, endDate, groupBy },
+    });
+    return response.data;
+  },
+
+  getLearningStats: async (
+    level?: number,
+    category?: string,
+    startDate?: string,
+    endDate?: string
+  ) => {
+    const response = await api.get('/admin/stats/learning', {
+      params: { level, category, startDate, endDate },
+    });
+    return response.data;
+  },
+
+  getPronunciationStats: async (startDate?: string, endDate?: string) => {
+    const response = await api.get('/admin/stats/pronunciation', {
+      params: { startDate, endDate },
+    });
+    return response.data;
+  },
+
+  getContentStats: async () => {
+    const response = await api.get('/admin/stats/content');
+    return response.data;
+  },
+
+  getTrendStats: async (days = 30) => {
+    const response = await api.get('/admin/stats/trends', {
+      params: { days },
+    });
+    return response.data;
+  },
+
+  getGeographyStats: async () => {
+    const response = await api.get('/admin/stats/geography');
+    return response.data;
+  },
+
+  exportStats: async (type = 'dashboard', format = 'json') => {
+    const response = await api.get('/admin/stats/export', {
+      params: { type, format },
+      responseType: format === 'csv' ? 'blob' : 'json',
+    });
+    return response.data;
+  },
+};
+
 export default api;

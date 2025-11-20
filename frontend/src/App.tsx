@@ -12,6 +12,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminAIContent from "./pages/AdminAIContent";
 import AdminTTS from "./pages/AdminTTS";
 import AdminSTT from "./pages/AdminSTT";
+import AdminStatistics from "./pages/AdminStatistics";
 import Learning from "./pages/Learning";
 import Categories from "./pages/Categories";
 import Levels from "./pages/Levels";
@@ -84,6 +85,14 @@ function App() {
           element={
             <ProtectedAdminRoute>
               <AdminSTT />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/statistics"
+          element={
+            <ProtectedAdminRoute>
+              <AdminStatistics />
             </ProtectedAdminRoute>
           }
         />
