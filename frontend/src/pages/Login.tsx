@@ -51,8 +51,60 @@ const Login = () => {
 
   return (
     <div style={styles.container}>
+      {/* Left Side - Platform Introduction */}
+      <div style={styles.introSection}>
+        <div style={styles.introContent}>
+          <h1 style={styles.platformTitle}>
+            우리말젠 <span style={styles.platformSubtitle}>Urimalzen</span>
+          </h1>
+          <p style={styles.platformTagline}>
+            KIIP 기반 한국어 학습 플랫폼
+          </p>
+          <p style={styles.platformDescription}>
+            대한민국 이주민을 위한 체계적인 한국어 교육 솔루션
+          </p>
+
+          <div style={styles.featuresSection}>
+            <h3 style={styles.featuresTitle}>✨ 주요 특징</h3>
+            <ul style={styles.featuresList}>
+              <li style={styles.featureItem}>
+                📚 법무부 KIIP 공식 커리큘럼 기반
+              </li>
+              <li style={styles.featureItem}>
+                🎯 6단계 레벨 시스템 (0-5급)
+              </li>
+              <li style={styles.featureItem}>
+                🌏 다국어 지원 (모국어 기반 학습)
+              </li>
+              <li style={styles.featureItem}>
+                🎤 발음 연습 및 음성 녹음
+              </li>
+              <li style={styles.featureItem}>
+                📊 진도 추적 및 순위 시스템
+              </li>
+            </ul>
+          </div>
+
+          <div style={styles.languagesSection}>
+            <h3 style={styles.languagesTitle}>🌐 지원 언어</h3>
+            <div style={styles.languageFlags}>
+              <span style={styles.flagItem} title="몽골어">🇲🇳</span>
+              <span style={{...styles.flagItem, ...styles.flagComingSoon}} title="베트남어 (예정)">🇻🇳</span>
+              <span style={{...styles.flagItem, ...styles.flagComingSoon}} title="인도네시아어 (예정)">🇮🇩</span>
+              <span style={{...styles.flagItem, ...styles.flagComingSoon}} title="일본어 (예정)">🇯🇵</span>
+              <span style={{...styles.flagItem, ...styles.flagComingSoon}} title="중국어 (예정)">🇨🇳</span>
+              <span style={{...styles.flagItem, ...styles.flagComingSoon}} title="필리핀어 (예정)">🇵🇭</span>
+            </div>
+            <p style={styles.languageNote}>
+              * 현재 몽골어 지원 | 다국어 확장 예정
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Side - Login Form */}
       <div style={styles.formWrapper}>
-        <h1 style={styles.title}>우리말젠 - 한국어 학습</h1>
+        <h1 style={styles.title}>우리말젠</h1>
         <h2 style={styles.subtitle}>{isRegister ? "회원가입" : "로그인"}</h2>
 
         <form onSubmit={handleSubmit} style={styles.form}>
@@ -142,6 +194,103 @@ const styles: { [key: string]: React.CSSProperties } = {
     background:
       "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
     backgroundAttachment: "fixed",
+    padding: "40px 20px",
+    gap: "40px",
+  },
+  introSection: {
+    flex: "1",
+    maxWidth: "600px",
+    minWidth: "400px",
+  },
+  introContent: {
+    background: "rgba(255, 255, 255, 0.1)",
+    backdropFilter: "blur(20px)",
+    WebkitBackdropFilter: "blur(20px)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    padding: "40px",
+    borderRadius: "24px",
+    boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.3)",
+    color: "white",
+  },
+  platformTitle: {
+    fontSize: "48px",
+    fontWeight: "bold",
+    marginBottom: "8px",
+    textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+    lineHeight: "1.2",
+  },
+  platformSubtitle: {
+    fontSize: "28px",
+    fontWeight: "300",
+    opacity: "0.9",
+  },
+  platformTagline: {
+    fontSize: "24px",
+    fontWeight: "600",
+    marginBottom: "8px",
+    color: "rgba(255, 255, 255, 0.95)",
+  },
+  platformDescription: {
+    fontSize: "16px",
+    marginBottom: "32px",
+    color: "rgba(255, 255, 255, 0.85)",
+    lineHeight: "1.6",
+  },
+  featuresSection: {
+    marginBottom: "32px",
+  },
+  featuresTitle: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    marginBottom: "16px",
+    color: "rgba(255, 255, 255, 0.95)",
+  },
+  featuresList: {
+    listStyle: "none",
+    padding: "0",
+    margin: "0",
+  },
+  featureItem: {
+    fontSize: "15px",
+    marginBottom: "12px",
+    padding: "12px 16px",
+    background: "rgba(255, 255, 255, 0.1)",
+    borderRadius: "12px",
+    border: "1px solid rgba(255, 255, 255, 0.15)",
+    lineHeight: "1.5",
+  },
+  languagesSection: {
+    marginTop: "32px",
+    paddingTop: "24px",
+    borderTop: "1px solid rgba(255, 255, 255, 0.2)",
+  },
+  languagesTitle: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    marginBottom: "16px",
+    color: "rgba(255, 255, 255, 0.95)",
+  },
+  languageFlags: {
+    display: "flex",
+    gap: "16px",
+    marginBottom: "12px",
+    flexWrap: "wrap",
+  },
+  flagItem: {
+    fontSize: "40px",
+    cursor: "pointer",
+    transition: "transform 0.2s ease",
+    filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))",
+  },
+  flagComingSoon: {
+    opacity: "0.4",
+    filter: "grayscale(70%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))",
+  },
+  languageNote: {
+    fontSize: "13px",
+    color: "rgba(255, 255, 255, 0.7)",
+    fontStyle: "italic",
+    margin: "0",
   },
   formWrapper: {
     background: "rgba(255, 255, 255, 0.15)",
@@ -152,6 +301,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: "24px",
     boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.3)",
     minWidth: "420px",
+    maxWidth: "480px",
   },
   title: {
     textAlign: "center",
