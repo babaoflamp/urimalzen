@@ -51,63 +51,61 @@ const Login = () => {
 
   return (
     <div style={styles.container}>
-      {/* Left Side - Platform Introduction */}
-      <div style={styles.introSection}>
-        <div style={styles.introContent}>
-          <h1 style={styles.platformTitle}>
-            우리말젠 <span style={styles.platformSubtitle}>Urimalzen</span>
-          </h1>
-          <p style={styles.platformTagline}>
-            KIIP 기반 한국어 학습 플랫폼
-          </p>
-          <p style={styles.platformDescription}>
-            대한민국 이주민을 위한 체계적인 한국어 교육 솔루션
+      <div style={styles.contentWrapper}>
+        {/* 왼쪽: 솔루션 설명 */}
+        <div style={styles.infoSection}>
+          <h1 style={styles.mainTitle}>KIIP 기반 AI 한국어 학습 플랫폼</h1>
+          <p style={styles.description}>
+            이주민의 성공적인 사회통합을 위한 맞춤형 한국어 교육 솔루션
           </p>
 
-          <div style={styles.featuresSection}>
-            <h3 style={styles.featuresTitle}>✨ 주요 특징</h3>
-            <ul style={styles.featuresList}>
-              <li style={styles.featureItem}>
-                📚 법무부 KIIP 공식 커리큘럼 기반
+          <div style={styles.targetAudience}>
+            <h3 style={styles.sectionTitle}>🎯 이런 분들을 위한 서비스입니다</h3>
+            <ul style={styles.list}>
+              <li style={styles.listItem}>한국에서 생활하는 이주민</li>
+              <li style={styles.listItem}>사회통합프로그램(KIIP) 학습자</li>
+              <li style={styles.listItem}>한국어 어휘 학습이 필요한 외국인</li>
+              <li style={styles.listItem}>체계적인 발음 연습을 원하는 학습자</li>
+            </ul>
+          </div>
+
+          <div style={styles.features}>
+            <h3 style={styles.sectionTitle}>✨ 주요 특징</h3>
+            <ul style={styles.list}>
+              <li style={styles.listItem}>
+                <strong>KIIP 단계별 학습:</strong> 입문부터 고급까지 체계적 커리큘럼
               </li>
-              <li style={styles.featureItem}>
-                🎯 6단계 레벨 시스템 (0-5급)
+              <li style={styles.listItem}>
+                <strong>AI 발음 분석:</strong> 실시간 발음 교정 및 피드백
               </li>
-              <li style={styles.featureItem}>
-                🌏 다국어 지원 (모국어 기반 학습)
+              <li style={styles.listItem}>
+                <strong>카테고리별 어휘:</strong> 주제별로 분류된 맞춤 학습
               </li>
-              <li style={styles.featureItem}>
-                🎤 발음 연습 및 음성 녹음
+              <li style={styles.listItem}>
+                <strong>게임화 학습:</strong> 순위 시스템으로 재미있게 학습
               </li>
-              <li style={styles.featureItem}>
-                📊 진도 추적 및 순위 시스템
+              <li style={styles.listItem}>
+                <strong>다국어 지원:</strong> 중국어, 일본어, 필리핀어, 베트남어, 인도네시아어, 몽골어 등 번역으로 쉬운 이해
               </li>
             </ul>
           </div>
 
-          <div style={styles.languagesSection}>
-            <h3 style={styles.languagesTitle}>🌐 지원 언어</h3>
-            <div style={styles.languageFlags}>
-              <span style={styles.flagItem} title="몽골어">🇲🇳</span>
-              <span style={{...styles.flagItem, ...styles.flagComingSoon}} title="베트남어 (예정)">🇻🇳</span>
-              <span style={{...styles.flagItem, ...styles.flagComingSoon}} title="인도네시아어 (예정)">🇮🇩</span>
-              <span style={{...styles.flagItem, ...styles.flagComingSoon}} title="일본어 (예정)">🇯🇵</span>
-              <span style={{...styles.flagItem, ...styles.flagComingSoon}} title="중국어 (예정)">🇨🇳</span>
-              <span style={{...styles.flagItem, ...styles.flagComingSoon}} title="필리핀어 (예정)">🇵🇭</span>
-            </div>
-            <p style={styles.languageNote}>
-              * 현재 몽골어 지원 | 다국어 확장 예정
-            </p>
+          <div style={styles.benefits}>
+            <h3 style={styles.sectionTitle}>🌟 학습 효과</h3>
+            <ul style={styles.list}>
+              <li style={styles.listItem}>일상생활에 필요한 실용적인 어휘 습득</li>
+              <li style={styles.listItem}>정확한 발음으로 자신감 있는 의사소통</li>
+              <li style={styles.listItem}>사회통합프로그램 시험 준비</li>
+              <li style={styles.listItem}>한국 사회 적응력 향상</li>
+            </ul>
           </div>
         </div>
-      </div>
 
-      {/* Right Side - Login Form */}
-      <div style={styles.formWrapper}>
-        <h1 style={styles.title}>우리말젠</h1>
-        <h2 style={styles.subtitle}>{isRegister ? "회원가입" : "로그인"}</h2>
+        {/* 오른쪽: 로그인 폼 */}
+        <div style={styles.formWrapper}>
+          <h2 style={styles.formTitle}>{isRegister ? "회원가입" : "로그인"}</h2>
 
-        <form onSubmit={handleSubmit} style={styles.form}>
+          <form onSubmit={handleSubmit} style={styles.form}>
           {isRegister && (
             <input
               type="text"
@@ -180,6 +178,7 @@ const Login = () => {
             👨‍💼 관리자 로그인
           </span>
         </p>
+        </div>
       </div>
     </div>
   );
@@ -195,104 +194,16 @@ const styles: { [key: string]: React.CSSProperties } = {
       "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
     backgroundAttachment: "fixed",
     padding: "40px 20px",
-    gap: "40px",
   },
-  introSection: {
-    flex: "1",
-    maxWidth: "600px",
-    minWidth: "400px",
-  },
-  introContent: {
-    background: "rgba(255, 255, 255, 0.1)",
-    backdropFilter: "blur(20px)",
-    WebkitBackdropFilter: "blur(20px)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    padding: "40px",
-    borderRadius: "24px",
-    boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.3)",
-    color: "white",
-  },
-  platformTitle: {
-    fontSize: "48px",
-    fontWeight: "bold",
-    marginBottom: "8px",
-    textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
-    lineHeight: "1.2",
-  },
-  platformSubtitle: {
-    fontSize: "28px",
-    fontWeight: "300",
-    opacity: "0.9",
-  },
-  platformTagline: {
-    fontSize: "24px",
-    fontWeight: "600",
-    marginBottom: "8px",
-    color: "rgba(255, 255, 255, 0.95)",
-  },
-  platformDescription: {
-    fontSize: "16px",
-    marginBottom: "32px",
-    color: "rgba(255, 255, 255, 0.85)",
-    lineHeight: "1.6",
-  },
-  featuresSection: {
-    marginBottom: "32px",
-  },
-  featuresTitle: {
-    fontSize: "20px",
-    fontWeight: "bold",
-    marginBottom: "16px",
-    color: "rgba(255, 255, 255, 0.95)",
-  },
-  featuresList: {
-    listStyle: "none",
-    padding: "0",
-    margin: "0",
-  },
-  featureItem: {
-    fontSize: "15px",
-    marginBottom: "12px",
-    padding: "12px 16px",
-    background: "rgba(255, 255, 255, 0.1)",
-    borderRadius: "12px",
-    border: "1px solid rgba(255, 255, 255, 0.15)",
-    lineHeight: "1.5",
-  },
-  languagesSection: {
-    marginTop: "32px",
-    paddingTop: "24px",
-    borderTop: "1px solid rgba(255, 255, 255, 0.2)",
-  },
-  languagesTitle: {
-    fontSize: "20px",
-    fontWeight: "bold",
-    marginBottom: "16px",
-    color: "rgba(255, 255, 255, 0.95)",
-  },
-  languageFlags: {
+  contentWrapper: {
     display: "flex",
-    gap: "16px",
-    marginBottom: "12px",
-    flexWrap: "wrap",
+    gap: "40px",
+    maxWidth: "1400px",
+    width: "100%",
+    alignItems: "stretch",
   },
-  flagItem: {
-    fontSize: "40px",
-    cursor: "pointer",
-    transition: "transform 0.2s ease",
-    filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))",
-  },
-  flagComingSoon: {
-    opacity: "0.4",
-    filter: "grayscale(70%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))",
-  },
-  languageNote: {
-    fontSize: "13px",
-    color: "rgba(255, 255, 255, 0.7)",
-    fontStyle: "italic",
-    margin: "0",
-  },
-  formWrapper: {
+  infoSection: {
+    flex: "1",
     background: "rgba(255, 255, 255, 0.15)",
     backdropFilter: "blur(20px)",
     WebkitBackdropFilter: "blur(20px)",
@@ -300,23 +211,66 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: "48px",
     borderRadius: "24px",
     boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.3)",
-    minWidth: "420px",
-    maxWidth: "480px",
+    color: "white",
   },
-  title: {
+  mainTitle: {
+    fontSize: "36px",
+    fontWeight: "bold",
+    marginBottom: "16px",
+    textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+    color: "white",
+  },
+  description: {
+    fontSize: "18px",
+    lineHeight: "1.6",
+    marginBottom: "32px",
+    color: "rgba(255, 255, 255, 0.95)",
+  },
+  targetAudience: {
+    marginBottom: "32px",
+  },
+  features: {
+    marginBottom: "32px",
+  },
+  benefits: {
+    marginBottom: "0",
+  },
+  sectionTitle: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    marginBottom: "16px",
+    color: "white",
+  },
+  list: {
+    listStyle: "none",
+    padding: "0",
+    margin: "0",
+  },
+  listItem: {
+    fontSize: "16px",
+    lineHeight: "1.8",
+    marginBottom: "8px",
+    paddingLeft: "24px",
+    position: "relative",
+    color: "rgba(255, 255, 255, 0.9)",
+  },
+  formWrapper: {
+    flex: "0 0 420px",
+    background: "rgba(255, 255, 255, 0.15)",
+    backdropFilter: "blur(20px)",
+    WebkitBackdropFilter: "blur(20px)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    padding: "48px",
+    borderRadius: "24px",
+    boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.3)",
+  },
+  formTitle: {
     textAlign: "center",
     color: "white",
-    marginBottom: "12px",
-    fontSize: "32px",
+    marginBottom: "32px",
+    fontSize: "28px",
     fontWeight: "bold",
     textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
-  },
-  subtitle: {
-    textAlign: "center",
-    color: "rgba(255, 255, 255, 0.9)",
-    marginBottom: "32px",
-    fontSize: "20px",
-    textShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
   },
   form: {
     display: "flex",

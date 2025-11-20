@@ -186,7 +186,7 @@ All user routes redirect to `/login` if not authenticated.
 
 ### State Management (Zustand)
 
-**Five main stores** with persist middleware:
+**Six main stores** with persist middleware:
 
 1. **useAuthStore** - Authentication state:
    - State: `user`, `token`, `isAuthenticated`
@@ -209,6 +209,12 @@ All user routes redirect to `/login` if not authenticated.
    - Units, lessons, current unit/lesson
    - Used by `/units` and `/levels` routes
 
+6. **useLanguageStore** - UI language switching:
+   - State: `language` (type: `'ko' | 'mn'`)
+   - Action: `setLanguage(lang)`
+   - Does NOT persist (defaults to 'ko' on refresh)
+   - Used by Header and other UI components for translation display
+
 **Pattern**:
 ```typescript
 export const useStore = create<State>()(
@@ -220,6 +226,37 @@ export const useStore = create<State>()(
   )
 );
 ```
+
+### Translation System (i18n)
+
+**Location**: `frontend/src/utils/translations.ts`
+
+**Structure**: Object-based translations with Korean (`ko`) and Mongolian (`mn`) support:
+```typescript
+export const translations = {
+  ko: { appName: 'KIIP 기반 AI 한국어 학습 플랫폼', ... },
+  mn: { appName: 'KIIP суурьтай AI Солонгос хэл сургалтын платформ', ... }
+};
+```
+
+**Usage pattern** in components:
+```typescript
+import { useLanguageStore } from "../store/useLanguageStore";
+import { translations } from "../utils/translations";
+
+const { language } = useLanguageStore();
+const t = translations[language];
+
+// In JSX:
+<h1>{t.appName}</h1>
+```
+
+**Language Switching**:
+- UI includes Korean and Mongolian flag icons in Header component
+- Clicking flags calls `setLanguage('ko')` or `setLanguage('mn')`
+- Flags located at: `/public/images/flags/korea.png`, `/public/images/flags/mongol.png`
+
+**Translation Keys**: All UI text must use translation keys from `translations.ts`. Do NOT hardcode Korean or Mongolian text in components.
 
 ### API Layer (services/api.ts)
 
@@ -263,6 +300,22 @@ Uses browser **MediaRecorder API**:
 6. Update TypeScript types in `frontend/src/types/index.ts`
 7. Create/update Zustand store if needed
 
+### Adding new UI translations
+
+1. Open `frontend/src/utils/translations.ts`
+2. Add new key to BOTH `ko` and `mn` objects:
+   ```typescript
+   ko: { newKey: '한국어 텍스트', ... },
+   mn: { newKey: 'Монгол текст', ... }
+   ```
+3. Use in components:
+   ```typescript
+   const { language } = useLanguageStore();
+   const t = translations[language];
+   // <div>{t.newKey}</div>
+   ```
+4. TypeScript will enforce that all keys exist in both languages via `TranslationKey` type
+
 ### Seeding the database
 
 **Initial setup** (run in order):
@@ -285,6 +338,8 @@ NODE_ENV=development
 MONGODB_URI=mongodb://localhost:27017/urimalzen
 JWT_SECRET=your-secret-key-change-this-in-production
 JWT_EXPIRE=7d
+MAX_FILE_SIZE=10485760
+UPLOAD_PATH=./uploads
 ```
 
 **Frontend** (`.env`):
@@ -377,3 +432,7 @@ VITE_API_URL=http://localhost:5000/api
 8. **Nested schemas**: Unit model uses nested `lessonSchema` and `challengeSchema` with `_id: false`. When pushing to these arrays, match the exact interface fields.
 
 9. **Mongoose index warnings**: Duplicate index warnings are expected due to both `unique: true` and explicit `schema.index()`. Safe to ignore in development.
+
+10. **Translation completeness**: When adding UI text, ALWAYS add to both `ko` and `mn` objects in `translations.ts`. Missing translations will cause runtime errors.
+
+11. **Language store persistence**: `useLanguageStore` does NOT persist to localStorage (unlike other stores). Language resets to `'ko'` on page refresh. This is intentional design.
