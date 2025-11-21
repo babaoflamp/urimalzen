@@ -13,6 +13,11 @@ import AdminAIContent from "./pages/AdminAIContent";
 import AdminTTS from "./pages/AdminTTS";
 import AdminSTT from "./pages/AdminSTT";
 import AdminStatistics from "./pages/AdminStatistics";
+import AdminUsers from "./pages/AdminUsers";
+import AdminWords from "./pages/AdminWords";
+import AdminRecordings from "./pages/AdminRecordings";
+import AdminKIIP from "./pages/AdminKIIP";
+import AdminSystem from "./pages/AdminSystem";
 import Learning from "./pages/Learning";
 import Categories from "./pages/Categories";
 import Levels from "./pages/Levels";
@@ -93,6 +98,46 @@ function App() {
           element={
             <ProtectedAdminRoute>
               <AdminStatistics />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedAdminRoute>
+              <AdminUsers />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/words"
+          element={
+            <ProtectedAdminRoute>
+              <AdminWords />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/recordings"
+          element={
+            <ProtectedAdminRoute>
+              <AdminRecordings />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/kiip"
+          element={
+            <ProtectedAdminRoute>
+              <AdminKIIP />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/system"
+          element={
+            <ProtectedAdminRoute>
+              <AdminSystem />
             </ProtectedAdminRoute>
           }
         />

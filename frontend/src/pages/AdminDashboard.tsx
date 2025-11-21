@@ -98,7 +98,7 @@ const AdminDashboard = () => {
       <div style={styles.menuGrid}>
         <div
           style={styles.menuCard}
-          onClick={() => alert(t.comingSoon)}
+          onClick={() => navigate('/admin/users')}
         >
           <div style={styles.menuIcon}>👥</div>
           <div style={styles.menuTitle}>{t.userManagement}</div>
@@ -107,7 +107,7 @@ const AdminDashboard = () => {
 
         <div
           style={styles.menuCard}
-          onClick={() => alert(t.comingSoon)}
+          onClick={() => navigate('/admin/words')}
         >
           <div style={styles.menuIcon}>📚</div>
           <div style={styles.menuTitle}>{t.wordManagement}</div>
@@ -116,7 +116,7 @@ const AdminDashboard = () => {
 
         <div
           style={styles.menuCard}
-          onClick={() => alert(t.comingSoon)}
+          onClick={() => navigate('/admin/recordings')}
         >
           <div style={styles.menuIcon}>🎤</div>
           <div style={styles.menuTitle}>{t.recordingManagement}</div>
@@ -134,7 +134,7 @@ const AdminDashboard = () => {
 
         <div
           style={styles.menuCard}
-          onClick={() => alert(t.comingSoon)}
+          onClick={() => navigate('/admin/kiip')}
         >
           <div style={styles.menuIcon}>🎓</div>
           <div style={styles.menuTitle}>{t.kiipContent}</div>
@@ -171,7 +171,7 @@ const AdminDashboard = () => {
 
         <div
           style={styles.menuCard}
-          onClick={() => alert(t.comingSoon)}
+          onClick={() => navigate('/admin/system')}
         >
           <div style={styles.menuIcon}>⚙️</div>
           <div style={styles.menuTitle}>{t.systemSettings}</div>
