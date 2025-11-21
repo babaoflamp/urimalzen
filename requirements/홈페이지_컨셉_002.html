@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>민들레</title>
+
+<style>
+/* -------------------------------------------------------
+   GLOBAL STYLE
+------------------------------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* 더 깊고 어둡고 고급스러운 파란색 그라데이션 */
+  background: radial-gradient(circle at 30% 20%, 
+    #203a72 0%, 
+    #0f2658 30%, 
+    #071a40 60%, 
+    #031226 100%);
+  overflow: hidden;
+}
+
+/* -------------------------------------------------------
+   TITLE
+------------------------------------------------------- */
+#title {
+  font-size: 56px;   /* 조금 작게 */
+  font-weight: 900;
+  color: #e7f0ff;
+  letter-spacing: 6px;
+  text-shadow: 0 8px 25px rgba(0,0,0,0.55);
+  margin-bottom: 20px;
+}
+
+/* -------------------------------------------------------
+   START BUTTON
+------------------------------------------------------- */
+#startBtn {
+  margin-top: 22px;
+  padding: 14px 48px;
+  font-size: 22px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ffd44d, #ffb300);
+  color: #222;
+  font-weight: 800;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  transition: 0.2s;
+}
+
+#startBtn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.55);
+}
+
+/* -------------------------------------------------------
+   DANDELION (홀씨 + 노란 꽃) — SVG 기반
+------------------------------------------------------- */
+.dandelion-wrap {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  animation: flowerFloat 6s ease-in-out infinite alternate;
+}
+
+@keyframes flowerFloat {
+  0% { transform: translateX(-50%) translateY(0); }
+  100% { transform: translateX(-50%) translateY(-12px); }
+}
+
+/* -------------------------------------------------------
+   DANDELION SEEDS (씨앗 애니메이션)
+------------------------------------------------------- */
+.seed {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 50%;
+  opacity: 0.75;
+  filter: blur(0.6px);
+  animation: floatSeed 7s linear infinite;
+}
+
+@keyframes floatSeed {
+  0%   { transform: translate(0,0) scale(1); opacity: 0.85; }
+  25%  { transform: translate(-20px,-70px) scale(0.95); opacity: 0.9; }
+  50%  { transform: translate(35px,-140px) scale(0.85); opacity: 0.7; }
+  75%  { transform: translate(-15px,-210px) scale(0.75); opacity: 0.55; }
+  100% { transform: translate(30px,-300px) scale(0.7); opacity: 0; }
+}
+
+/* -------------------------------------------------------
+   POPUP
+------------------------------------------------------- */
+#popupOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; } 
+  to { opacity: 1; }
+}
+
+#popup {
+  background: linear-gradient(145deg, #ffffff, #f0f4ff);
+  padding: 40px 60px;
+  border-radius: 28px;
+  box-shadow: 0 14px 38px rgba(0,0,0,0.45);
+  text-align: center;
+  animation: popupShow 0.35s ease-out;
+}
+
+@keyframes popupShow {
+  from { transform: scale(0.75); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#popup h2 {
+  font-size: 32px;
+  margin-bottom: 24px;
+  color: #333;
+  font-weight: 900;
+}
+
+#closePopup {
+  padding: 10px 40px;
+  border-radius: 20px;
+  border: none;
+  background: linear-gradient(135deg, #c5d0ff, #8fa2ff);
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #222;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+#closePopup:hover {
+  transform: translateY(-2px);
+}
+</style>
+</head>
+
+<body>
+
+<!-- MAIN AREA -->
+<div id="main">
+  <div id="title">민들레</div>
+  <button id="startBtn">시작</button>
+
+  <!-- DANDELION SVG: 홀씨 + 노란 꽃 구성 -->
+  <div class="dandelion-wrap">
+    <svg viewBox="0 0 180 200">
+
+      <!-- 노란 민들레 꽃 (그래픽) -->
+      <circle cx="90" cy="150" r="38" fill="yellow" opacity="0.88" />
+      <circle cx="90" cy="150" r="26" fill="#ffeb66" opacity="0.9" />
+      <circle cx="90" cy="150" r="14" fill="#fff7b3" />
+
+      <!-- 하얀 홀씨(원형) -->
+      <circle cx="90" cy="90" r="45" fill="white" opacity="0.85" />
+
+      <!-- 줄기 -->
+      <line x1="90" y1="135" x2="90" y2="200" stroke="white" stroke-width="6"/>
+    </svg>
+  </div>
+
+  <!-- SEEDS -->
+  <div class="seed" style="left: 48%; bottom: 100px; animation-delay: 0s;"></div>
+  <div class="seed" style="left: 50%; bottom: 120px; animation-delay: 1s;"></div>
+  <div class="seed" style="left: 52%; bottom: 140px; animation-delay: 2s;"></div>
+  <div class="seed" style="left: 49%; bottom: 110px; animation-delay: 1.5s;"></div>
+  <div class="seed" style="left: 53%; bottom: 130px; animation-delay: 0.8s;"></div>
+  <div class="seed" style="left: 47%; bottom: 150px; animation-delay: 2.5s;"></div>
+
+</div>
+
+<!-- POPUP -->
+<div id="popupOverlay">
+  <div id="popup">
+    <h2>시작합니다!</h2>
+    <button id="closePopup">닫기</button>
+  </div>
+</div>
+
+<script>
+document.getElementById("startBtn").onclick = () => {
+  document.getElementById("popupOverlay").style.display = "flex";
+};
+
+document.getElementById("closePopup").onclick = () => {
+  document.getElementById("popupOverlay").style.display = "none";
+};
+</script>
+
+</body>
+</html>

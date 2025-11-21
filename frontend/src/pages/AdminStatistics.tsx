@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './AdminCommon.css';
-import { adminStatsAPI } from '../services/api';
-import StatCard from '../components/charts/StatCard';
-import MetricTile from '../components/charts/MetricTile';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./AdminCommon.css";
+import { adminStatsAPI } from "../services/api";
+import StatCard from "../components/charts/StatCard";
+import MetricTile from "../components/charts/MetricTile";
 import {
   LineChart,
   Line,
@@ -20,7 +20,7 @@ import {
   Legend,
   ResponsiveContainer,
   Cell,
-} from 'recharts';
+} from "recharts";
 import type {
   DashboardStatsResponse,
   UserStatsResponse,
@@ -28,17 +28,22 @@ import type {
   PronunciationStatsResponse,
   ContentStatsResponse,
   TrendStatsResponse,
-} from '../types';
+} from "../types";
 
 const AdminStatistics = () => {
   const navigate = useNavigate();
 
   // State for all statistics data
-  const [dashboardStats, setDashboardStats] = useState<DashboardStatsResponse | null>(null);
+  const [dashboardStats, setDashboardStats] =
+    useState<DashboardStatsResponse | null>(null);
   const [userStats, setUserStats] = useState<UserStatsResponse | null>(null);
-  const [learningStats, setLearningStats] = useState<LearningStatsResponse | null>(null);
-  const [pronunciationStats, setPronunciationStats] = useState<PronunciationStatsResponse | null>(null);
-  const [contentStats, setContentStats] = useState<ContentStatsResponse | null>(null);
+  const [learningStats, setLearningStats] =
+    useState<LearningStatsResponse | null>(null);
+  const [pronunciationStats, setPronunciationStats] =
+    useState<PronunciationStatsResponse | null>(null);
+  const [contentStats, setContentStats] = useState<ContentStatsResponse | null>(
+    null
+  );
   const [trendStats, setTrendStats] = useState<TrendStatsResponse | null>(null);
 
   // Loading and error states
@@ -46,9 +51,13 @@ const AdminStatistics = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Filter states
-  const [dateRange, setDateRange] = useState({ startDate: '', endDate: '' });
-  const [selectedLevel, setSelectedLevel] = useState<number | undefined>(undefined);
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
+  const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
+  const [selectedLevel, setSelectedLevel] = useState<number | undefined>(
+    undefined
+  );
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
+    undefined
+  );
 
   // Load all statistics
   const loadAllStats = async () => {
@@ -56,19 +65,26 @@ const AdminStatistics = () => {
     setError(null);
 
     try {
-      const [dashboard, users, learning, pronunciation, content, trends] = await Promise.all([
-        adminStatsAPI.getDashboardStats(dateRange.startDate, dateRange.endDate),
-        adminStatsAPI.getUserStats(dateRange.startDate, dateRange.endDate),
-        adminStatsAPI.getLearningStats(
-          selectedLevel,
-          selectedCategory,
-          dateRange.startDate,
-          dateRange.endDate
-        ),
-        adminStatsAPI.getPronunciationStats(dateRange.startDate, dateRange.endDate),
-        adminStatsAPI.getContentStats(),
-        adminStatsAPI.getTrendStats(30),
-      ]);
+      const [dashboard, users, learning, pronunciation, content, trends] =
+        await Promise.all([
+          adminStatsAPI.getDashboardStats(
+            dateRange.startDate,
+            dateRange.endDate
+          ),
+          adminStatsAPI.getUserStats(dateRange.startDate, dateRange.endDate),
+          adminStatsAPI.getLearningStats(
+            selectedLevel,
+            selectedCategory,
+            dateRange.startDate,
+            dateRange.endDate
+          ),
+          adminStatsAPI.getPronunciationStats(
+            dateRange.startDate,
+            dateRange.endDate
+          ),
+          adminStatsAPI.getContentStats(),
+          adminStatsAPI.getTrendStats(30),
+        ]);
 
       setDashboardStats(dashboard);
       setUserStats(users);
@@ -77,8 +93,8 @@ const AdminStatistics = () => {
       setContentStats(content);
       setTrendStats(trends);
     } catch (err: any) {
-      console.error('Error loading statistics:', err);
-      setError(err.response?.data?.message || '통계 데이터 로딩 실패');
+      console.error("Error loading statistics:", err);
+      setError(err.response?.data?.message || "통계 데이터 로딩 실패");
     } finally {
       setLoading(false);
     }
@@ -92,53 +108,58 @@ const AdminStatistics = () => {
     loadAllStats();
   };
 
-  const handleExport = async (format: 'csv' | 'json') => {
+  const handleExport = async (format: "csv" | "json") => {
     try {
-      const data = await adminStatsAPI.exportStats('dashboard', format);
+      const data = await adminStatsAPI.exportStats("dashboard", format);
 
       // Create download link
-      const blob = new Blob([format === 'json' ? JSON.stringify(data, null, 2) : data], {
-        type: format === 'json' ? 'application/json' : 'text/csv',
-      });
+      const blob = new Blob(
+        [format === "json" ? JSON.stringify(data, null, 2) : data],
+        {
+          type: format === "json" ? "application/json" : "text/csv",
+        }
+      );
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `statistics-${new Date().toISOString().split('T')[0]}.${format}`;
+      link.download = `statistics-${
+        new Date().toISOString().split("T")[0]
+      }.${format}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (err: any) {
-      console.error('Export error:', err);
-      alert('엑스포트 실패');
+      console.error("Export error:", err);
+      alert("엑스포트 실패");
     }
   };
 
   // Chart colors
   const COLORS = {
-    primary: '#10b981',
-    secondary: '#fbbf24',
-    tertiary: '#3b82f6',
-    danger: '#ef4444',
-    purple: '#8b5cf6',
-    pink: '#ec4899',
+    primary: "#10b981",
+    secondary: "#fbbf24",
+    tertiary: "#3b82f6",
+    danger: "#ef4444",
+    purple: "#8b5cf6",
+    pink: "#ec4899",
   };
 
   const PIE_COLORS = [COLORS.primary, COLORS.secondary, COLORS.danger];
 
   if (loading) {
     return (
-      <div style={styles.container}>
-        <div style={styles.loading}>통계 데이터 로딩 중...</div>
+      <div className="admin-page-container">
+        <div className="admin-loading-text">통계 데이터 로딩 중...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={styles.container}>
-        <div style={styles.error}>{error}</div>
-        <button style={styles.button} onClick={handleRefresh}>
+      <div className="admin-page-container">
+        <div className="admin-empty-text">{error}</div>
+        <button className="admin-action-button" onClick={handleRefresh}>
           재시도
         </button>
       </div>
@@ -146,47 +167,63 @@ const AdminStatistics = () => {
   }
 
   return (
-    <div style={styles.container}>
+    <div className="admin-page-container">
       {/* Header */}
-      <div style={styles.header}>
+      <div
+        className="admin-page-header"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <div>
-          <button style={styles.backButton} onClick={() => navigate('/admin/dashboard')}>
+          <button
+            className="admin-back-button"
+            onClick={() => navigate("/admin/dashboard")}
+          >
             ← 뒤로
           </button>
-          <h1 style={styles.title}>📊 통계 현황 대시보드</h1>
+          <h1 className="admin-page-title">📊 통계 현황 대시보드</h1>
         </div>
-        <button style={styles.refreshButton} onClick={handleRefresh}>
+        <button className="admin-refresh-button" onClick={handleRefresh}>
           🔄 새로고침
         </button>
       </div>
 
       {/* Filter Bar */}
-      <div style={styles.filterBar}>
-        <div style={styles.filterGroup}>
-          <label style={styles.filterLabel}>시작일:</label>
+      <div className="admin-filter-bar">
+        <div className="admin-filter-group">
+          <label className="admin-filter-label">시작일:</label>
           <input
             type="date"
-            style={styles.filterInput}
+            className="admin-filter-input"
             value={dateRange.startDate}
-            onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
+            onChange={(e) =>
+              setDateRange({ ...dateRange, startDate: e.target.value })
+            }
           />
         </div>
-        <div style={styles.filterGroup}>
-          <label style={styles.filterLabel}>종료일:</label>
+        <div className="admin-filter-group">
+          <label className="admin-filter-label">종료일:</label>
           <input
             type="date"
-            style={styles.filterInput}
+            className="admin-filter-input"
             value={dateRange.endDate}
-            onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
+            onChange={(e) =>
+              setDateRange({ ...dateRange, endDate: e.target.value })
+            }
           />
         </div>
-        <div style={styles.filterGroup}>
-          <label style={styles.filterLabel}>레벨:</label>
+        <div className="admin-filter-group">
+          <label className="admin-filter-label">레벨:</label>
           <select
-            style={styles.filterInput}
-            value={selectedLevel ?? ''}
+            className="admin-filter-input"
+            value={selectedLevel ?? ""}
             onChange={(e) =>
-              setSelectedLevel(e.target.value ? parseInt(e.target.value) : undefined)
+              setSelectedLevel(
+                e.target.value ? parseInt(e.target.value) : undefined
+              )
             }
           >
             <option value="">전체</option>
@@ -197,14 +234,14 @@ const AdminStatistics = () => {
             ))}
           </select>
         </div>
-        <button style={styles.applyButton} onClick={loadAllStats}>
+        <button className="admin-apply-button" onClick={loadAllStats}>
           적용
         </button>
       </div>
 
       {/* Overview Cards */}
       {dashboardStats && (
-        <div style={styles.overviewGrid}>
+        <div className="admin-overview-grid">
           <StatCard
             title="총 사용자"
             value={dashboardStats.data.overview.totalUsers.toLocaleString()}
@@ -234,19 +271,22 @@ const AdminStatistics = () => {
 
       {/* User Activity Section */}
       {userStats && (
-        <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>📈 사용자 활동 추이</h2>
-          <div style={styles.chartContainer}>
+        <div className="admin-section">
+          <h2 className="admin-section-title">📈 사용자 활동 추이</h2>
+          <div className="admin-chart-container">
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={userStats.data.registrationTrends}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(255,255,255,0.1)"
+                />
                 <XAxis dataKey="_id" stroke="rgba(255,255,255,0.7)" />
                 <YAxis stroke="rgba(255,255,255,0.7)" />
                 <Tooltip
                   contentStyle={{
-                    background: 'rgba(0,0,0,0.8)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
+                    background: "rgba(0,0,0,0.8)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    borderRadius: "8px",
                   }}
                 />
                 <Legend />
@@ -261,7 +301,7 @@ const AdminStatistics = () => {
             </ResponsiveContainer>
           </div>
 
-          <div style={styles.metricsGrid}>
+          <div className="admin-metrics-grid">
             <MetricTile
               label="7일 활성 사용자"
               value={userStats.data.overview.activeUsers7d.toLocaleString()}
@@ -280,18 +320,21 @@ const AdminStatistics = () => {
           </div>
 
           {/* Users by Country */}
-          <div style={styles.chartContainer}>
-            <h3 style={styles.chartTitle}>국가별 사용자 분포</h3>
+          <div className="admin-chart-container">
+            <h3 className="admin-chart-title">국가별 사용자 분포</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={userStats.data.usersByCountry.slice(0, 10)}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(255,255,255,0.1)"
+                />
                 <XAxis dataKey="_id" stroke="rgba(255,255,255,0.7)" />
                 <YAxis stroke="rgba(255,255,255,0.7)" />
                 <Tooltip
                   contentStyle={{
-                    background: 'rgba(0,0,0,0.8)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
+                    background: "rgba(0,0,0,0.8)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    borderRadius: "8px",
                   }}
                 />
                 <Bar dataKey="count" fill={COLORS.primary} name="사용자 수" />
@@ -303,10 +346,10 @@ const AdminStatistics = () => {
 
       {/* Learning Progress Section */}
       {learningStats && (
-        <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>📚 학습 진행 현황</h2>
+        <div className="admin-section">
+          <h2 className="admin-section-title">📚 학습 진행 현황</h2>
 
-          <div style={styles.metricsGrid}>
+          <div className="admin-metrics-grid">
             <MetricTile
               label="전체 완료율"
               value={`${learningStats.data.overview.completionRate}%`}
@@ -330,11 +373,14 @@ const AdminStatistics = () => {
           </div>
 
           {/* Completion by Level */}
-          <div style={styles.chartContainer}>
-            <h3 style={styles.chartTitle}>레벨별 완료율</h3>
+          <div className="admin-chart-container">
+            <h3 className="admin-chart-title">레벨별 완료율</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={learningStats.data.completionByLevel}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(255,255,255,0.1)"
+                />
                 <XAxis
                   dataKey="level"
                   stroke="rgba(255,255,255,0.7)"
@@ -343,13 +389,17 @@ const AdminStatistics = () => {
                 <YAxis stroke="rgba(255,255,255,0.7)" />
                 <Tooltip
                   contentStyle={{
-                    background: 'rgba(0,0,0,0.8)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
+                    background: "rgba(0,0,0,0.8)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    borderRadius: "8px",
                   }}
-                  formatter={(value: any) => [`${value.toFixed(0)}%`, '완료율']}
+                  formatter={(value: any) => [`${value.toFixed(0)}%`, "완료율"]}
                 />
-                <Bar dataKey="completionRate" fill={COLORS.secondary} name="완료율 (%)" />
+                <Bar
+                  dataKey="completionRate"
+                  fill={COLORS.secondary}
+                  name="완료율 (%)"
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -370,7 +420,10 @@ const AdminStatistics = () => {
                   </thead>
                   <tbody>
                     {learningStats.data.mostPracticedWords.map((word, idx) => (
-                      <tr key={word.wordId} style={idx % 2 === 0 ? styles.trEven : styles.trOdd}>
+                      <tr
+                        key={word.wordId}
+                        style={idx % 2 === 0 ? styles.trEven : styles.trOdd}
+                      >
                         <td style={styles.td}>{word.koreanWord}</td>
                         <td style={styles.td}>{word.mongolianWord}</td>
                         <td style={styles.td}>{word.totalAttempts}</td>
@@ -428,15 +481,20 @@ const AdminStatistics = () => {
                     outerRadius={80}
                     label={(entry) => `${entry.range}: ${entry.count}`}
                   >
-                    {pronunciationStats.data.scoreDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                    ))}
+                    {pronunciationStats.data.scoreDistribution.map(
+                      (entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={PIE_COLORS[index % PIE_COLORS.length]}
+                        />
+                      )
+                    )}
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      background: 'rgba(0,0,0,0.8)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      borderRadius: '8px',
+                      background: "rgba(0,0,0,0.8)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      borderRadius: "8px",
                     }}
                   />
                 </PieChart>
@@ -448,14 +506,17 @@ const AdminStatistics = () => {
               <h3 style={styles.chartTitle}>평균 점수 추이</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={pronunciationStats.data.scoreTrends}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.1)"
+                  />
                   <XAxis dataKey="_id" stroke="rgba(255,255,255,0.7)" />
                   <YAxis stroke="rgba(255,255,255,0.7)" domain={[0, 100]} />
                   <Tooltip
                     contentStyle={{
-                      background: 'rgba(0,0,0,0.8)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      borderRadius: '8px',
+                      background: "rgba(0,0,0,0.8)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      borderRadius: "8px",
                     }}
                   />
                   <Area
@@ -531,7 +592,10 @@ const AdminStatistics = () => {
               <h3 style={styles.chartTitle}>레벨별 단어 분포</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={contentStats.data.wordsByLevel}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.1)"
+                  />
                   <XAxis
                     dataKey="_id"
                     stroke="rgba(255,255,255,0.7)"
@@ -540,9 +604,9 @@ const AdminStatistics = () => {
                   <YAxis stroke="rgba(255,255,255,0.7)" />
                   <Tooltip
                     contentStyle={{
-                      background: 'rgba(0,0,0,0.8)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      borderRadius: '8px',
+                      background: "rgba(0,0,0,0.8)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      borderRadius: "8px",
                     }}
                   />
                   <Bar dataKey="count" fill={COLORS.primary} name="단어 수" />
@@ -554,14 +618,23 @@ const AdminStatistics = () => {
               <h3 style={styles.chartTitle}>카테고리별 단어 분포</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={contentStats.data.wordsByCategory.slice(0, 10)}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="_id" stroke="rgba(255,255,255,0.7)" angle={-45} textAnchor="end" height={80} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.1)"
+                  />
+                  <XAxis
+                    dataKey="_id"
+                    stroke="rgba(255,255,255,0.7)"
+                    angle={-45}
+                    textAnchor="end"
+                    height={80}
+                  />
                   <YAxis stroke="rgba(255,255,255,0.7)" />
                   <Tooltip
                     contentStyle={{
-                      background: 'rgba(0,0,0,0.8)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      borderRadius: '8px',
+                      background: "rgba(0,0,0,0.8)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      borderRadius: "8px",
                     }}
                   />
                   <Bar dataKey="count" fill={COLORS.secondary} name="단어 수" />
@@ -574,10 +647,13 @@ const AdminStatistics = () => {
 
       {/* Export Buttons */}
       <div style={styles.exportBar}>
-        <button style={styles.exportButton} onClick={() => handleExport('csv')}>
+        <button style={styles.exportButton} onClick={() => handleExport("csv")}>
           📥 CSV 다운로드
         </button>
-        <button style={styles.exportButton} onClick={() => handleExport('json')}>
+        <button
+          style={styles.exportButton}
+          onClick={() => handleExport("json")}
+        >
           📥 JSON 다운로드
         </button>
       </div>
@@ -585,210 +661,5 @@ const AdminStatistics = () => {
   );
 };
 
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    minHeight: '100vh',
-    padding: '40px 20px',
-    maxWidth: '1400px',
-    margin: '0 auto',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '32px',
-  },
-  backButton: {
-    background: 'rgba(59, 130, 246, 0.3)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
-    color: 'white',
-    padding: '12px 24px',
-    borderRadius: '12px',
-    fontSize: '16px',
-    cursor: 'pointer',
-    marginRight: '16px',
-  },
-  title: {
-    color: 'white',
-    fontSize: '36px',
-    fontWeight: 'bold',
-    margin: '16px 0',
-    textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
-  },
-  refreshButton: {
-    background: 'rgba(16, 185, 129, 0.3)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
-    color: 'white',
-    padding: '12px 24px',
-    borderRadius: '12px',
-    fontSize: '16px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-  },
-  filterBar: {
-    background: 'rgba(255, 255, 255, 0.1)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
-    borderRadius: '16px',
-    padding: '20px',
-    marginBottom: '32px',
-    display: 'flex',
-    gap: '16px',
-    flexWrap: 'wrap',
-    alignItems: 'end',
-  },
-  filterGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-  },
-  filterLabel: {
-    color: 'white',
-    fontSize: '14px',
-    fontWeight: 'bold',
-  },
-  filterInput: {
-    background: 'rgba(255, 255, 255, 0.2)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
-    borderRadius: '8px',
-    padding: '10px',
-    color: 'white',
-    fontSize: '14px',
-    minWidth: '150px',
-  },
-  applyButton: {
-    background: 'rgba(251, 191, 36, 0.3)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
-    color: 'white',
-    padding: '10px 24px',
-    borderRadius: '8px',
-    fontSize: '16px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-  },
-  overviewGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '20px',
-    marginBottom: '32px',
-  },
-  section: {
-    background: 'rgba(255, 255, 255, 0.1)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
-    borderRadius: '24px',
-    padding: '32px',
-    marginBottom: '32px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-  },
-  sectionTitle: {
-    color: 'white',
-    fontSize: '28px',
-    fontWeight: 'bold',
-    marginBottom: '24px',
-    textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
-  },
-  chartContainer: {
-    background: 'rgba(129, 199, 132, 0.1)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
-    borderRadius: '16px',
-    padding: '24px',
-    marginBottom: '20px',
-  },
-  chartTitle: {
-    color: 'white',
-    fontSize: '18px',
-    fontWeight: 'bold',
-    marginBottom: '16px',
-  },
-  metricsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '16px',
-    marginBottom: '24px',
-  },
-  twoColumnGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-    gap: '20px',
-    marginBottom: '20px',
-  },
-  wordList: {
-    marginTop: '24px',
-  },
-  tableContainer: {
-    overflowX: 'auto',
-    background: 'rgba(129, 199, 132, 0.1)',
-    borderRadius: '12px',
-    padding: '16px',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-  },
-  th: {
-    color: 'white',
-    textAlign: 'left',
-    padding: '12px',
-    borderBottom: '2px solid rgba(255, 255, 255, 0.2)',
-    fontWeight: 'bold',
-  },
-  td: {
-    color: 'white',
-    padding: '12px',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-  },
-  trEven: {
-    background: 'rgba(255, 255, 255, 0.05)',
-  },
-  trOdd: {
-    background: 'transparent',
-  },
-  exportBar: {
-    display: 'flex',
-    gap: '16px',
-    justifyContent: 'center',
-    marginTop: '32px',
-  },
-  exportButton: {
-    background: 'rgba(139, 92, 246, 0.3)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
-    color: 'white',
-    padding: '16px 32px',
-    borderRadius: '12px',
-    fontSize: '18px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-  },
-  loading: {
-    color: 'white',
-    fontSize: '24px',
-    textAlign: 'center',
-    padding: '100px 0',
-  },
-  error: {
-    color: '#ef4444',
-    fontSize: '20px',
-    textAlign: 'center',
-    padding: '50px 0',
-  },
-  button: {
-    background: 'rgba(59, 130, 246, 0.3)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
-    color: 'white',
-    padding: '12px 24px',
-    borderRadius: '12px',
-    fontSize: '16px',
-    cursor: 'pointer',
-    margin: '0 auto',
-    display: 'block',
-  },
-};
 
 export default AdminStatistics;
