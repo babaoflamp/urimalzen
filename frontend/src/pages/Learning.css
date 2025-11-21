@@ -1,9 +1,7 @@
-/* Learning Page - Glassmorphism Design */
+/* Learning Page - Dandelion Theme */
 
 .learning-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #a5b4fc 0%, #d8b4fe 50%, #fcd34d 100%);
-  background-attachment: fixed;
   padding: 20px;
 }
 

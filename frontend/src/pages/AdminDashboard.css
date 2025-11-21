@@ -1,32 +1,30 @@
-/* Admin Dashboard Glassmorphism Styles */
+/* Admin Dashboard Dandelion Theme */
 .admin-dashboard-container {
   min-height: 100vh;
   padding: 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   max-width: 1600px;
   margin: 0 auto;
 }
 
 .admin-header {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 16px 24px;
   margin-bottom: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-lg);
 }
 
 .admin-header-content h1 {
   margin: 0;
   font-size: 24px;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -39,36 +37,34 @@
 }
 
 .admin-logout-btn {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: #202124;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
   padding: 10px 24px;
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
   font-size: 14px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-logout-btn:hover {
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  background: var(--glass-bg-strong);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
-  border-color: rgba(234, 67, 53, 0.3);
-  color: #ea4335;
+  border-color: var(--accent-red);
+  color: var(--accent-red);
 }
 
 .admin-section-title {
-  color: white;
+  color: var(--text-primary);
   font-size: 18px;
   font-weight: 700;
   margin: 16px 0 12px 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .admin-stats-grid {
@@ -79,22 +75,20 @@
 }
 
 .admin-stat-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 16px;
   text-align: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-lg);
 }
 
 .admin-stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 48px rgba(31, 38, 135, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-xl);
 }
 
 .admin-stat-icon {

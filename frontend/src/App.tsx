@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
+import DandelionBackground from "./components/DandelionBackground";
 import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -29,6 +30,7 @@ function App() {
 
   return (
     <Router>
+      <DandelionBackground />
       <Routes>
         {/* 사용자 라우트 */}
         <Route path="/login" element={<Login />} />

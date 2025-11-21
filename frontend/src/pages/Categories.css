@@ -1,9 +1,7 @@
-/* Categories Page - Glassmorphism Design */
+/* Categories Page - Dandelion Theme */
 
 .categories-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #a5b4fc 0%, #d8b4fe 50%, #fcd34d 100%);
-  background-attachment: fixed;
   padding: 20px;
 }
 
@@ -20,13 +18,12 @@
 .categories-hero {
   text-align: center;
   padding: 40px 20px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
   animation: slideInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -35,11 +32,7 @@
   font-size: 48px;
   font-weight: 700;
   margin: 0 0 16px 0;
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary),
-    var(--accent-purple)
-  );
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -60,14 +53,10 @@
 
 /* Info Box */
 .categories-info-box {
-  background: linear-gradient(
-    135deg,
-    rgba(66, 133, 244, 0.1),
-    rgba(147, 51, 234, 0.1)
-  );
+  background: var(--glass-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(66, 133, 244, 0.3);
+  border: 1px solid var(--glass-border);
   border-radius: 20px;
   padding: 24px;
   display: flex;
@@ -75,8 +64,7 @@
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-  box-shadow: 0 8px 24px rgba(66, 133, 244, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-glow);
   animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -87,17 +75,17 @@
 }
 
 .categories-start-button {
-  background: linear-gradient(135deg, var(--accent-green), #22c55e);
-  color: white;
+  background: var(--gradient-success);
+  color: var(--text-inverse);
   border: none;
-  border-radius: 12px;
-  padding: 14px 32px;
+  border-radius: 30px;
+  padding: 14px 48px;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(52, 168, 83, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
 }
@@ -123,25 +111,23 @@
 }
 
 .categories-start-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(52, 168, 83, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
 .categories-start-button:active {
-  transform: translateY(0);
+  transform: translateY(-2px);
 }
 
 /* Description Section */
 .categories-description {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--glass-border);
   padding: 32px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-lg);
   animation: fadeIn 0.6s ease 0.2s backwards;
 }
 
@@ -160,21 +146,21 @@
 }
 
 .categories-feature-card {
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--glass-bg-light);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 24px;
   text-align: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(31, 38, 135, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .categories-feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(31, 38, 135, 0.2);
-  background: rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow-md);
+  background: var(--glass-bg);
 }
 
 .categories-feature-icon {

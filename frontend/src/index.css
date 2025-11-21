@@ -8,43 +8,57 @@
 }
 
 :root {
-  /* Glassmorphism Color Palette - Google Gemini Inspired */
-  --background-primary: #ffffff;
-  --background-secondary: #f8f9fa;
-  --background-tertiary: #f1f3f4;
+  /* Dandelion Theme - Deep Blue & Golden */
+  --background-primary: #203a72;
+  --background-secondary: #0f2658;
+  --background-tertiary: #071a40;
+  --background-deep: #031226;
 
-  /* Glass Effects */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-bg-light: rgba(255, 255, 255, 0.5);
-  --glass-bg-strong: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  --glass-shadow: rgba(0, 0, 0, 0.1);
-  --glass-shadow-hover: rgba(0, 0, 0, 0.15);
+  /* Dandelion Background Gradient */
+  --bg-gradient: radial-gradient(
+    circle at 30% 20%,
+    #203a72 0%,
+    #0f2658 30%,
+    #071a40 60%,
+    #031226 100%
+  );
 
-  /* Accent Colors - Gemini Style */
-  --accent-primary: #4285f4;
-  --accent-secondary: #ea4335;
-  --accent-success: #34a853;
-  --accent-warning: #fbbc04;
-  --accent-purple: #9334e9;
-  --accent-cyan: #06b6d4;
+  /* Glass Effects - Adjusted for dark theme */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-light: rgba(255, 255, 255, 0.05);
+  --glass-bg-strong: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+  --glass-shadow-hover: rgba(0, 0, 0, 0.45);
+
+  /* Dandelion Colors */
+  --accent-primary: #ffd44d; /* Dandelion Yellow */
+  --accent-secondary: #ffb300; /* Deep Yellow */
+  --accent-success: #4ade80;
+  --accent-warning: #fbbf24;
+  --accent-blue: #60a5fa;
+  --accent-light: #e7f0ff;
 
   /* Gradient Accents */
-  --gradient-primary: linear-gradient(135deg, #4285f4 0%, #9334e9 100%);
-  --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #4285f4 100%);
-  --gradient-warm: linear-gradient(135deg, #fbbc04 0%, #ea4335 100%);
-  --gradient-cool: linear-gradient(135deg, #34a853 0%, #06b6d4 100%);
+  --gradient-primary: linear-gradient(
+    135deg,
+    #ffd44d 0%,
+    #ffb300 100%
+  ); /* Yellow gradient for primary buttons */
+  --gradient-secondary: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  --gradient-warm: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  --gradient-cool: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
 
-  /* Text Colors */
-  --text-primary: #202124;
-  --text-secondary: #5f6368;
-  --text-tertiary: #80868b;
-  --text-inverse: #ffffff;
+  /* Text Colors - Light text for dark background */
+  --text-primary: #e7f0ff;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #222222;
 
-  /* Border & Divider */
-  --border-light: rgba(0, 0, 0, 0.06);
-  --border-medium: rgba(0, 0, 0, 0.12);
-  --divider: rgba(0, 0, 0, 0.08);
+  /* Border & Divider - Lighter for dark theme */
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.15);
+  --divider: rgba(255, 255, 255, 0.1);
 
   /* Backdrop Blur */
   --blur-sm: 8px;
@@ -67,12 +81,13 @@
   --radius-xl: 24px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 20px rgba(66, 133, 244, 0.3);
+  /* Shadows - Darker shadows for depth */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.45), 0 4px 6px rgba(0, 0, 0, 0.35);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5), 0 10px 10px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px rgba(255, 212, 77, 0.4);
+  --shadow-glow-strong: 0 8px 25px rgba(0, 0, 0, 0.55);
 }
 
 body {
@@ -82,7 +97,8 @@ body {
     sans-serif;
   margin: 0;
   padding: 0;
-  background: var(--background-primary);
+  background: var(--bg-gradient);
+  background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.6;
   font-weight: 400;
@@ -258,19 +274,21 @@ button {
   background: var(--gradient-primary);
   color: var(--text-inverse);
   border: none;
-  border-radius: var(--radius-md);
-  padding: var(--spacing-sm) var(--spacing-lg);
-  font-weight: 600;
+  border-radius: 30px;
+  padding: 14px 48px;
+  font-size: 18px;
+  font-weight: 800;
   box-shadow: var(--shadow-md);
+  letter-spacing: 1px;
 }
 
 .btn-primary:hover {
   box-shadow: var(--shadow-lg), var(--shadow-glow);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  transform: translateY(-2px);
 }
 
 /* Gradient Text */
@@ -350,35 +368,80 @@ button {
   animation: glow 2s ease-in-out infinite;
 }
 
-/* Scrollbar Styling */
+/* Scrollbar Styling - Dark theme */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background-secondary);
+  background: var(--background-deep);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--glass-bg);
+  background: var(--glass-bg-strong);
   backdrop-filter: blur(var(--blur-sm));
   border-radius: var(--radius-full);
   border: 2px solid var(--background-secondary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--glass-bg-strong);
+  background: rgba(255, 255, 255, 0.2);
 }
 
-/* Selection */
+/* Selection - Yellow highlight */
 ::selection {
-  background: rgba(66, 133, 244, 0.2);
+  background: rgba(255, 212, 77, 0.3);
   color: var(--text-primary);
 }
 
-/* Focus Visible */
+/* Focus Visible - Yellow outline */
 *:focus-visible {
   outline: 2px solid var(--accent-primary);
   outline-offset: 2px;
+}
+
+/* Dandelion Seed Animation */
+@keyframes floatSeed {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.85;
+  }
+  25% {
+    transform: translate(-20px, -70px) scale(0.95);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(35px, -140px) scale(0.85);
+    opacity: 0.7;
+  }
+  75% {
+    transform: translate(-15px, -210px) scale(0.75);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(30px, -300px) scale(0.7);
+    opacity: 0;
+  }
+}
+
+@keyframes flowerFloat {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-12px);
+  }
+}
+
+.dandelion-seed {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 50%;
+  opacity: 0.75;
+  filter: blur(0.6px);
+  animation: floatSeed 7s linear infinite;
+  pointer-events: none;
 }

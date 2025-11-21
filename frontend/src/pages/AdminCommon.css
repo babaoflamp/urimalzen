@@ -1,4 +1,4 @@
-/* AdminCommon.css - 모든 관리자 페이지에서 사용하는 공통 스타일 */
+/* AdminCommon.css - 모든 관리자 페이지에서 사용하는 공통 스타일 - Dandelion Theme */
 
 /* 컨테이너 */
 .admin-page-container {
@@ -6,8 +6,6 @@
   padding: 40px 20px;
   max-width: 1400px;
   margin: 0 auto;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  background-attachment: fixed;
 }
 
 /* 헤더 */

@@ -1,0 +1,89 @@
+.dandelion-background {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.dandelion-flower {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 200px;
+  animation: flowerFloat 6s ease-in-out infinite alternate;
+  opacity: 0.7;
+}
+
+@keyframes flowerFloat {
+  0% {
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-12px);
+  }
+}
+
+.dandelion-seed {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 50%;
+  opacity: 0.75;
+  filter: blur(0.6px);
+  animation: floatSeed 7s linear infinite;
+}
+
+@keyframes floatSeed {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.85;
+  }
+  25% {
+    transform: translate(-20px, -70px) scale(0.95);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(35px, -140px) scale(0.85);
+    opacity: 0.7;
+  }
+  75% {
+    transform: translate(-15px, -210px) scale(0.75);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(30px, -300px) scale(0.7);
+    opacity: 0;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dandelion-flower {
+    width: 140px;
+    height: 160px;
+    bottom: 40px;
+  }
+
+  .dandelion-seed {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dandelion-flower {
+    width: 100px;
+    height: 120px;
+    bottom: 30px;
+    opacity: 0.5;
+  }
+
+  .dandelion-seed {
+    width: 8px;
+    height: 8px;
+  }
+}
