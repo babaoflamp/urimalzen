@@ -1,13 +1,12 @@
-/* FilterPanel Glassmorphism Styles */
+/* FilterPanel Dandelion Theme */
 .filter-container {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -17,8 +16,7 @@
 }
 
 .filter-container:hover {
-  box-shadow: 0 12px 48px rgba(31, 38, 135, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
+  box-shadow: var(--shadow-xl);
 }
 
 .filter-header {
@@ -81,11 +79,11 @@
 }
 
 .filter-level-btn {
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--glass-bg-light);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
   color: var(--text-primary);
   padding: 10px 6px;
   cursor: pointer;
@@ -95,22 +93,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(31, 38, 135, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .filter-level-btn:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--glass-bg);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(31, 38, 135, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .filter-level-btn.selected {
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  background: var(--gradient-primary);
+  border: 2px solid var(--accent-primary);
   transform: scale(1.05);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  font-weight: 600;
-  color: white;
+  box-shadow: var(--shadow-glow);
+  font-weight: 700;
+  color: var(--text-inverse);
 }
 
 .filter-level-btn.selected:hover {

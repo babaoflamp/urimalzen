@@ -1,18 +1,12 @@
-/* 학습 단어 목록 스크롤바 스타일 */
+/* 학습 단어 목록 스크롤바 스타일 - Dandelion Theme */
 .word-list-container {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(135, 206, 235, 0.15) 50%,
-    rgba(38, 198, 218, 0.1) 100%
-  );
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(79, 195, 247, 0.3);
+  border: 1px solid var(--glass-border);
   border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   height: fit-content;
@@ -37,26 +31,18 @@
 }
 
 .word-list::-webkit-scrollbar-track {
-  background: rgba(135, 206, 235, 0.1);
+  background: var(--glass-bg-light);
   border-radius: 10px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
 .word-list::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    135deg,
-    rgba(79, 195, 247, 0.5) 0%,
-    rgba(38, 198, 218, 0.4) 100%
-  );
+  background: var(--gradient-primary);
   border-radius: 10px;
-  border: 1px solid rgba(79, 195, 247, 0.3);
+  border: 1px solid var(--accent-primary);
 }
 
 .word-list::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(79, 195, 247, 0.7) 0%,
-    rgba(38, 198, 218, 0.6) 100%
-  );
+  background: var(--gradient-secondary);
 }

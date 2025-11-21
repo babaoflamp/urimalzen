@@ -11,21 +11,19 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 8px 10px;
-  box-shadow: 0 4px 16px rgba(31, 38, 135, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
 }
 
 .search-box:hover {
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 6px 20px rgba(31, 38, 135, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
+  background: var(--glass-bg-strong);
+  box-shadow: var(--shadow-lg);
 }
 
 .search-icon-container {
@@ -87,21 +85,16 @@
 }
 
 .search-button {
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary),
-    var(--accent-purple)
-  );
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
   border: none;
   border-radius: 10px;
   padding: 6px 16px;
   cursor: pointer;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-md);
   white-space: nowrap;
   min-width: 70px;
   flex-shrink: 0;
@@ -109,8 +102,7 @@
 
 .search-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(66, 133, 244, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  box-shadow: var(--shadow-glow);
 }
 
 .search-button:active {

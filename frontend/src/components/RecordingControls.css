@@ -7,14 +7,10 @@
 
 /* 녹음 중 인디케이터 */
 .recording-indicator {
-  background: linear-gradient(
-    135deg,
-    rgba(239, 68, 68, 0.3) 0%,
-    rgba(239, 68, 68, 0.2) 100%
-  );
+  background: var(--gradient-error);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  border: 1px solid var(--accent-red);
   color: var(--text-primary);
   padding: 16px;
   border-radius: 16px;
@@ -22,8 +18,7 @@
   font-size: 18px;
   font-weight: 600;
   animation: pulse 1.5s infinite;
-  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
 }
 
 @keyframes pulse {
@@ -38,22 +33,17 @@
 
 /* 평가 중 인디케이터 */
 .evaluating-indicator {
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.3) 0%,
-    rgba(59, 130, 246, 0.2) 100%
-  );
+  background: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(59, 130, 246, 0.4);
+  border: 1px solid var(--accent-primary);
   color: var(--text-primary);
   padding: 16px;
   border-radius: 16px;
   text-align: center;
   font-size: 18px;
   font-weight: 600;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px var(--shadow-glow);
 }
 
 /* 평가 결과 */
@@ -100,30 +90,18 @@
 }
 
 .score-card.score-excellent {
-  background: linear-gradient(
-    135deg,
-    rgba(16, 185, 129, 0.3) 0%,
-    rgba(16, 185, 129, 0.2) 100%
-  );
-  border-color: rgba(16, 185, 129, 0.4);
+  background: var(--gradient-success);
+  border-color: var(--accent-green);
 }
 
 .score-card.score-good {
-  background: linear-gradient(
-    135deg,
-    rgba(251, 191, 36, 0.3) 0%,
-    rgba(251, 191, 36, 0.2) 100%
-  );
-  border-color: rgba(251, 191, 36, 0.4);
+  background: var(--gradient-primary);
+  border-color: var(--accent-primary);
 }
 
 .score-card.score-poor {
-  background: linear-gradient(
-    135deg,
-    rgba(239, 68, 68, 0.3) 0%,
-    rgba(239, 68, 68, 0.2) 100%
-  );
-  border-color: rgba(239, 68, 68, 0.4);
+  background: var(--gradient-error);
+  border-color: var(--accent-red);
 }
 
 .score-label {
@@ -207,36 +185,29 @@
 }
 
 .recording-button {
-  background: linear-gradient(
-    135deg,
-    rgba(251, 191, 36, 0.25) 0%,
-    rgba(251, 191, 36, 0.15) 100%
-  );
+  background: var(--gradient-primary);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  color: var(--text-primary);
+  border: 1px solid var(--accent-primary);
+  color: var(--text-inverse);
   border-radius: 16px;
   padding: 20px;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-md);
 }
 
 .recording-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  border-color: rgba(251, 191, 36, 0.5);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--accent-primary);
 }
 
 .recording-button:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-sm);
 }
 
 .recording-button:disabled {

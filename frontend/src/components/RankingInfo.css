@@ -1,13 +1,12 @@
-/* 순위 정보 컴포넌트 스타일 */
+/* 순위 정보 컴포넌트 스타일 - Dandelion Theme */
 .ranking-info-container {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(79, 195, 247, 0.2);
+  border: 1px solid var(--glass-border);
   border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-lg);
 }
 
 .ranking-info-title {
@@ -27,19 +26,14 @@
 }
 
 .ranking-box {
-  background: linear-gradient(
-    135deg,
-    rgba(16, 185, 129, 0.25) 0%,
-    rgba(16, 185, 129, 0.15) 100%
-  );
+  background: var(--gradient-success);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid var(--accent-green);
   border-radius: 16px;
   padding: 16px 18px;
   text-align: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-md);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
@@ -50,8 +44,7 @@
 
 .ranking-box:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow-lg);
 }
 
 .ranking-badge {
@@ -77,21 +70,16 @@
 }
 
 .ranking-stats {
-  background: linear-gradient(
-    135deg,
-    rgba(16, 185, 129, 0.15) 0%,
-    rgba(16, 185, 129, 0.1) 100%
-  );
+  background: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-item {
