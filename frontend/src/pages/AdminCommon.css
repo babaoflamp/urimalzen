@@ -14,37 +14,34 @@
 }
 
 .admin-back-button {
-  background: rgba(102, 126, 234, 0.5);
+  background: var(--gradient-primary);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  border: 1px solid var(--accent-primary);
+  color: var(--text-inverse);
   padding: 12px 24px;
   border-radius: 12px;
   font-size: 16px;
   font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
     sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   margin-bottom: 16px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .admin-back-button:hover {
-  background: rgba(102, 126, 234, 0.7);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-glow-strong);
 }
 
 .admin-page-title {
-  color: white;
+  color: var(--text-primary);
   font-size: 36px;
   font-weight: 700;
   margin: 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  text-shadow: var(--shadow-md);
 }
 
 /* 검색 바 */
@@ -56,39 +53,37 @@
 
 .admin-search-input {
   flex: 1;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--glass-bg-light);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--glass-border);
   border-radius: 12px;
   padding: 12px 20px;
-  color: white;
+  color: var(--text-primary);
   font-size: 16px;
   font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
     sans-serif;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-search-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
 }
 
 .admin-search-input:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 3px rgba(255, 255, 255, 0.1);
+  background: var(--glass-bg);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--shadow-glow), var(--shadow-md);
 }
 
 .admin-search-button {
-  background: rgba(16, 185, 129, 0.5);
+  background: var(--gradient-primary);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  border: 1px solid var(--accent-primary);
+  color: var(--text-inverse);
   padding: 12px 32px;
   border-radius: 12px;
   font-size: 16px;
@@ -97,28 +92,24 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .admin-search-button:hover {
-  background: rgba(16, 185, 129, 0.7);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-glow-strong);
 }
 
 /* 테이블 */
 .admin-table-container {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 24px;
   overflow-x: auto;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-lg);
 }
 
 .admin-table {
@@ -127,28 +118,27 @@
 }
 
 .admin-table th {
-  color: white;
+  color: var(--text-primary);
   text-align: left;
   padding: 16px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 2px solid var(--border-light);
   font-weight: 700;
   white-space: nowrap;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .admin-table td {
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--text-secondary);
   padding: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-light);
   white-space: nowrap;
 }
 
 .admin-table tr:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg-light);
 }
 
 .admin-table-row-even {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--glass-bg-light);
 }
 
 .admin-table-row-odd {
@@ -157,46 +147,44 @@
 
 /* 액션 버튼 */
 .admin-action-button {
-  background: rgba(59, 130, 246, 0.5);
+  background: var(--gradient-primary);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  border: 1px solid var(--accent-primary);
+  color: var(--text-inverse);
   padding: 8px 16px;
   border-radius: 8px;
   font-size: 14px;
   font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
     sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   margin-right: 8px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-action-button:hover {
-  background: rgba(59, 130, 246, 0.7);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-glow);
 }
 
 .admin-action-button-delete {
-  background: rgba(239, 68, 68, 0.5);
+  background: var(--gradient-error);
+  border: 1px solid var(--accent-red);
 }
 
 .admin-action-button-delete:hover {
-  background: rgba(239, 68, 68, 0.7);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
 
 /* 로딩 */
 .admin-loading {
-  color: white;
+  color: var(--text-primary);
   font-size: 24px;
   text-align: center;
   padding: 100px 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  text-shadow: var(--shadow-sm);
 }
 
 /* 모달 */
@@ -217,26 +205,24 @@
 }
 
 .admin-modal-content {
-  background: rgba(30, 30, 40, 0.95);
+  background: var(--glass-bg-strong);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 32px;
   min-width: 500px;
   max-width: 600px;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-xl);
 }
 
 .admin-modal-title {
-  color: white;
+  color: var(--text-primary);
   font-size: 24px;
   font-weight: 700;
   margin: 0 0 24px 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .admin-form-group {
@@ -244,31 +230,29 @@
 }
 
 .admin-form-label {
-  color: white;
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 600;
   display: block;
   margin-bottom: 8px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .admin-form-input,
 .admin-form-textarea {
   width: 100%;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--glass-bg-light);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--border-light);
   border-radius: 8px;
   padding: 12px;
-  color: white;
+  color: var(--text-primary);
   font-size: 16px;
   font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
     sans-serif;
   transition: all 0.3s ease;
   box-sizing: border-box;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-form-textarea {
@@ -278,16 +262,15 @@
 
 .admin-form-input::placeholder,
 .admin-form-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
 }
 
 .admin-form-input:focus,
 .admin-form-textarea:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 3px rgba(255, 255, 255, 0.1);
+  background: var(--glass-bg);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--shadow-glow), var(--shadow-md);
 }
 
 .admin-modal-actions {
@@ -298,11 +281,11 @@
 
 .admin-modal-button {
   flex: 1;
-  background: rgba(16, 185, 129, 0.5);
+  background: var(--gradient-primary);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  border: 1px solid var(--accent-primary);
+  color: var(--text-inverse);
   padding: 12px;
   border-radius: 8px;
   font-size: 16px;
@@ -311,23 +294,23 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .admin-modal-button:hover {
-  background: rgba(16, 185, 129, 0.7);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-glow-strong);
 }
 
 .admin-modal-button-cancel {
-  background: rgba(107, 114, 128, 0.5);
+  background: var(--glass-bg);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
 }
 
 .admin-modal-button-cancel:hover {
-  background: rgba(107, 114, 128, 0.7);
+  background: var(--glass-bg-strong);
+  box-shadow: var(--shadow-md);
 }
 
 /* 페이지네이션 */
@@ -341,28 +324,25 @@
 }
 
 .admin-page-button {
-  background: rgba(102, 126, 234, 0.5);
+  background: var(--gradient-primary);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  border: 1px solid var(--accent-primary);
+  color: var(--text-inverse);
   padding: 10px 24px;
   border-radius: 8px;
   font-size: 14px;
   font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
     sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-page-button:hover:not(:disabled) {
-  background: rgba(102, 126, 234, 0.7);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-glow);
 }
 
 .admin-page-button:disabled {
@@ -371,14 +351,13 @@
 }
 
 .admin-page-info {
-  color: white;
+  color: var(--text-primary);
   font-size: 16px;
   font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .admin-modal-text {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   font-size: 16px;
   margin: 12px 0;
   line-height: 1.5;
@@ -386,27 +365,25 @@
 
 /* 정보 박스 */
 .admin-info-box {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-lg);
 }
 
 .admin-info-title {
-  color: white;
+  color: var(--text-primary);
   font-size: 20px;
   font-weight: 700;
   margin: 0 0 12px 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .admin-info-text {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   font-size: 16px;
   margin: 8px 0;
   line-height: 1.6;
@@ -421,32 +398,30 @@
 }
 
 .admin-card {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 24px;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .admin-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(31, 38, 135, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-glow-strong);
 }
 
 .admin-card-icon {
   font-size: 48px;
   text-align: center;
   margin-bottom: 16px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(var(--shadow-sm));
 }
 
 .admin-card-label {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   font-size: 14px;
   text-align: center;
   margin-bottom: 8px;
@@ -454,11 +429,10 @@
 }
 
 .admin-card-value {
-  color: white;
+  color: var(--text-primary);
   font-size: 20px;
   font-weight: 700;
   text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* 섹션 */
@@ -467,11 +441,10 @@
 }
 
 .admin-section-title {
-  color: white;
+  color: var(--text-primary);
   font-size: 20px;
   font-weight: 700;
   margin: 0 0 16px 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* 설정 항목 */
@@ -589,11 +562,11 @@
 }
 
 .admin-primary-button {
-  background: rgba(16, 185, 129, 0.5);
+  background: var(--gradient-primary);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  border: 1px solid var(--accent-primary);
+  color: var(--text-inverse);
   padding: 14px 32px;
   border-radius: 12px;
   font-size: 16px;
@@ -602,23 +575,20 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .admin-primary-button:hover {
-  background: rgba(16, 185, 129, 0.7);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-glow-strong);
 }
 
 .admin-secondary-button {
-  background: rgba(107, 114, 128, 0.5);
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
   padding: 14px 32px;
   border-radius: 12px;
   font-size: 16px;
@@ -627,15 +597,13 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-secondary-button:hover {
-  background: rgba(107, 114, 128, 0.7);
+  background: var(--glass-bg-strong);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 /* 통계 페이지 스타일 */

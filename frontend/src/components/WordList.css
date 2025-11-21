@@ -209,15 +209,15 @@
 
 /* KIIP 레벨별 색상 */
 .word-number.level-0 {
-  background: #B0BEC5;
+  background: #b0bec5;
 }
 
 .word-number.level-1 {
-  background: #64B5F6;
+  background: #64b5f6;
 }
 
 .word-number.level-2 {
-  background: #4DB6AC;
+  background: #4db6ac;
 }
 
 .word-number.level-3 {
@@ -229,7 +229,7 @@
 }
 
 .word-number.level-5 {
-  background: #FF8A65;
+  background: #ff8a65;
 }
 
 /* 반응형 */
@@ -281,4 +281,3 @@
     gap: 6px;
   }
 }
-

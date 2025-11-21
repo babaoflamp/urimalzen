@@ -50,9 +50,7 @@ const WordList = () => {
               className={`word-item ${isActive ? "active" : ""}`}
               onClick={() => setCurrentWordIndex(index)}
             >
-              <div className={`word-number ${levelClass}`}>
-                {index + 1}
-              </div>
+              <div className={`word-number ${levelClass}`}>{index + 1}</div>
               <div className="word-content">
                 <div className="word-name">{word.koreanWord}</div>
                 <div className="word-mongolian">{word.mongolianWord}</div>
