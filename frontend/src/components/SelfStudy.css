@@ -1,0 +1,78 @@
+/* 자율학습 컴포넌트 스타일 */
+.self-study-container {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(79, 195, 247, 0.2);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.self-study-menu-title {
+  color: var(--text-primary);
+  text-align: left;
+  font-size: 18px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.self-study-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.self-study-menu-button {
+  background: linear-gradient(
+    135deg,
+    rgba(76, 175, 80, 0.25) 0%,
+    rgba(76, 175, 80, 0.15) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  color: var(--text-primary);
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.self-study-menu-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  border-color: rgba(76, 175, 80, 0.4);
+}
+
+.self-study-menu-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.self-study-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(
+    135deg,
+    rgba(76, 175, 80, 0.35) 0%,
+    rgba(76, 175, 80, 0.25) 100%
+  );
+  color: var(--text-primary);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

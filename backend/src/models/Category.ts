@@ -68,7 +68,6 @@ const categorySchema = new Schema<ICategory>(
 );
 
 // Index for faster queries
-categorySchema.index({ order: 1 });
-categorySchema.index({ name: 1 });
+// Note: order and name fields already have indexes due to unique: true
 
 export default mongoose.model<ICategory>('Category', categorySchema);

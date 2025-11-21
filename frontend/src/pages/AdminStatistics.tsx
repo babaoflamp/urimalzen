@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './AdminCommon.css';
 import { adminStatsAPI } from '../services/api';
 import StatCard from '../components/charts/StatCard';
 import MetricTile from '../components/charts/MetricTile';

@@ -1,0 +1,301 @@
+/* Levels Page - Glassmorphism Design */
+
+.levels-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #a5b4fc 0%, #d8b4fe 50%, #fcd34d 100%);
+  background-attachment: fixed;
+  padding: 20px;
+}
+
+.levels-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  animation: fadeIn 0.6s ease;
+}
+
+/* Hero Section */
+.levels-hero {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  animation: slideInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.levels-hero-title {
+  color: var(--accent-primary);
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-purple)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.levels-hero-subtitle {
+  color: var(--text-primary);
+  font-size: 20px;
+  margin: 0 0 8px 0;
+  font-weight: 400;
+}
+
+.levels-hero-subtitle-mn {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Info Box */
+.levels-info-box {
+  background: linear-gradient(
+    135deg,
+    rgba(66, 133, 244, 0.1),
+    rgba(147, 51, 234, 0.1)
+  );
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(66, 133, 244, 0.3);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  box-shadow: 0 8px 24px rgba(66, 133, 244, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.levels-info-content {
+  flex: 1;
+}
+
+.levels-info-title {
+  color: var(--accent-primary);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.levels-info-text {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.levels-start-button {
+  background: linear-gradient(135deg, var(--accent-green), #22c55e);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 32px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(52, 168, 83, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.levels-start-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.levels-start-button:hover::before {
+  left: 100%;
+}
+
+.levels-start-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(52, 168, 83, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.levels-start-button:active {
+  transform: translateY(0);
+}
+
+/* Info Section */
+.levels-info-section {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  animation: fadeIn 0.6s ease 0.2s backwards;
+}
+
+.levels-section-title {
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+}
+
+.levels-info-card {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 12px rgba(31, 38, 135, 0.1);
+}
+
+.levels-info-paragraph {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.8;
+  margin: 0 0 16px 0;
+}
+
+.levels-info-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.levels-info-paragraph strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Level Goals */
+.levels-goal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.levels-goal-card {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(31, 38, 135, 0.1);
+}
+
+.levels-goal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(31, 38, 135, 0.2);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.levels-goal-level {
+  color: var(--accent-primary);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.levels-goal-desc {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .levels-container {
+    padding: 12px;
+  }
+
+  .levels-content {
+    gap: 24px;
+  }
+
+  .levels-hero {
+    padding: 32px 16px;
+  }
+
+  .levels-hero-title {
+    font-size: 36px;
+  }
+
+  .levels-hero-subtitle {
+    font-size: 18px;
+  }
+
+  .levels-info-box {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .levels-start-button {
+    width: 100%;
+  }
+
+  .levels-info-section {
+    padding: 24px 16px;
+  }
+
+  .levels-goal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

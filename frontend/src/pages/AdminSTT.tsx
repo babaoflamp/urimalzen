@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './AdminCommon.css';
 import { useAuthStore } from '../store/useAuthStore';
 import { adminSTTAPI } from '../services/api';
 

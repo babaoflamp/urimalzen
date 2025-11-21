@@ -125,8 +125,8 @@ const unitSchema = new Schema<IUnit>(
 );
 
 // Index for faster queries
+// Note: order and unitNumber fields already have indexes due to unique: true
 unitSchema.index({ kiipLevel: 1, order: 1 });
 unitSchema.index({ mainCategory: 1 });
-unitSchema.index({ unitNumber: 1 });
 
 export default mongoose.model<IUnit>('Unit', unitSchema);

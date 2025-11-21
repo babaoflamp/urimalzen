@@ -24,22 +24,28 @@ const LearningArea = () => {
 
       if (response.success && response.data.audioUrl) {
         // Create audio element and play
-        const audio = new Audio(`${import.meta.env.VITE_API_URL?.replace('/api', '')}${response.data.audioUrl}`);
+        const audio = new Audio(
+          `${import.meta.env.VITE_API_URL?.replace("/api", "")}${
+            response.data.audioUrl
+          }`
+        );
 
         audio.onended = () => setIsPlaying(false);
         audio.onerror = () => {
           setIsPlaying(false);
-          setAudioError('오디오 재생 실패');
+          setAudioError("오디오 재생 실패");
         };
 
         await audio.play();
       } else {
-        setAudioError('오디오를 찾을 수 없습니다');
+        setAudioError("오디오를 찾을 수 없습니다");
         setIsPlaying(false);
       }
     } catch (error: any) {
-      console.error('Audio playback error:', error);
-      setAudioError(error.response?.data?.message || '오디오 재생 중 오류 발생');
+      console.error("Audio playback error:", error);
+      setAudioError(
+        error.response?.data?.message || "오디오 재생 중 오류 발생"
+      );
       setIsPlaying(false);
     }
   };
@@ -55,7 +61,10 @@ const LearningArea = () => {
   return (
     <div style={styles.container}>
       <div style={styles.titleBar}>
-        <div style={styles.wordTitle}>{currentWord.koreanWord}</div>
+        <div style={styles.wordTitleContainer}>
+          <div style={styles.wordTitle}>{currentWord.koreanWord}</div>
+          <div style={styles.mongolianText}>[{currentWord.mongolianWord}]</div>
+        </div>
         <button
           style={{
             ...styles.playButton,
@@ -64,15 +73,11 @@ const LearningArea = () => {
           onClick={handlePlayAudio}
           disabled={isPlaying}
         >
-          {isPlaying ? '🔊' : '▶'}
+          {isPlaying ? "🔊" : "▶"}
         </button>
       </div>
 
-      {audioError && (
-        <div style={styles.errorMessage}>{audioError}</div>
-      )}
-
-      <div style={styles.mongolianText}>[{currentWord.mongolianWord}]</div>
+      {audioError && <div style={styles.errorMessage}>{audioError}</div>}
 
       <div style={styles.contentArea}>
         <div style={styles.imageSection}>
@@ -106,13 +111,15 @@ const LearningArea = () => {
 
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
-    background: "rgba(255, 255, 255, 0.15)",
+    background:
+      "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(135, 206, 235, 0.15) 50%, rgba(38, 198, 218, 0.1) 100%)",
     backdropFilter: "blur(20px)",
     WebkitBackdropFilter: "blur(20px)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
+    border: "1px solid rgba(79, 195, 247, 0.3)",
     borderRadius: "24px",
     padding: "32px",
-    boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.2)",
+    boxShadow:
+      "0 8px 32px 0 rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
     position: "relative",
     zIndex: 1,
   },
@@ -122,29 +129,36 @@ const styles: { [key: string]: React.CSSProperties } = {
     alignItems: "center",
     marginBottom: "20px",
   },
-  wordTitle: {
-    background: "rgba(16, 185, 129, 0.3)",
+  wordTitleContainer: {
+    background:
+      "linear-gradient(135deg, rgba(79, 195, 247, 0.25) 0%, rgba(38, 198, 218, 0.2) 100%)",
     backdropFilter: "blur(10px)",
     WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    color: "white",
+    border: "1px solid rgba(79, 195, 247, 0.4)",
     padding: "18px 40px",
-    borderRadius: "16px",
-    fontSize: "28px",
-    fontWeight: "bold",
+    borderRadius: "20px",
     flex: 1,
     textAlign: "center",
     marginRight: "20px",
-    textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
-    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+    boxShadow:
+      "0 4px 16px rgba(31, 38, 135, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.7)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+  },
+  wordTitle: {
+    color: "#1a1a1a",
+    fontSize: "28px",
+    fontWeight: "bold",
   },
   playButton: {
-    background: "rgba(251, 191, 36, 0.4)",
+    background:
+      "linear-gradient(135deg, rgba(79, 195, 247, 0.3) 0%, rgba(38, 198, 218, 0.25) 100%)",
     backdropFilter: "blur(10px)",
     WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    color: "white",
-    borderRadius: "16px",
+    border: "1px solid rgba(79, 195, 247, 0.4)",
+    color: "#1a1a1a",
+    borderRadius: "20px",
     fontSize: "32px",
     cursor: "pointer",
     width: "80px",
@@ -153,36 +167,32 @@ const styles: { [key: string]: React.CSSProperties } = {
     justifyContent: "center",
     alignItems: "center",
     transition: "all 0.3s ease",
-    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.15)",
+    boxShadow:
+      "0 4px 16px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.7)",
   },
   playButtonActive: {
-    background: "rgba(251, 191, 36, 0.7)",
+    background:
+      "linear-gradient(135deg, rgba(79, 195, 247, 0.5) 0%, rgba(38, 198, 218, 0.4) 100%)",
     transform: "scale(0.95)",
-    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+    boxShadow:
+      "0 2px 8px rgba(31, 38, 135, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
   },
   errorMessage: {
-    background: "rgba(239, 68, 68, 0.2)",
-    border: "1px solid rgba(239, 68, 68, 0.4)",
-    color: "white",
+    background:
+      "linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.1) 100%)",
+    border: "1px solid rgba(239, 68, 68, 0.3)",
+    color: "#dc2626",
     padding: "12px",
     borderRadius: "12px",
     textAlign: "center",
     marginBottom: "16px",
     fontSize: "14px",
+    backdropFilter: "blur(10px)",
   },
   mongolianText: {
-    background: "rgba(251, 191, 36, 0.3)",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    color: "white",
-    padding: "12px",
-    borderRadius: "12px",
-    textAlign: "center",
-    marginBottom: "24px",
-    fontSize: "18px",
-    fontWeight: "bold",
-    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+    color: "#4a4a4a",
+    fontSize: "16px",
+    fontWeight: "600",
   },
   contentArea: {
     display: "grid",
@@ -191,71 +201,75 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: "20px",
   },
   imageSection: {
-    background: "rgba(16, 185, 129, 0.2)",
+    background:
+      "linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(135, 206, 235, 0.12) 100%)",
     backdropFilter: "blur(10px)",
     WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    borderRadius: "16px",
+    border: "1px solid rgba(79, 195, 247, 0.25)",
+    borderRadius: "20px",
     padding: "20px",
-    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+    boxShadow:
+      "0 4px 16px rgba(31, 38, 135, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.7)",
   },
   imageBox: {
-    background: "rgba(129, 199, 132, 0.2)",
-    borderRadius: "12px",
+    background: "rgba(135, 206, 235, 0.1)",
+    borderRadius: "16px",
     minHeight: "300px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
+    border: "1px solid rgba(79, 195, 247, 0.2)",
   },
   flowerImage: {
     width: "100%",
     height: "100%",
     objectFit: "cover",
-    borderRadius: "12px",
+    borderRadius: "16px",
   },
   imagePlaceholder: {
-    color: "white",
+    color: "#757575",
     fontSize: "24px",
     fontWeight: "bold",
   },
   textSection: {
-    background: "rgba(16, 185, 129, 0.2)",
+    background:
+      "linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(38, 198, 218, 0.12) 100%)",
     backdropFilter: "blur(10px)",
     WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    borderRadius: "16px",
+    border: "1px solid rgba(79, 195, 247, 0.25)",
+    borderRadius: "20px",
     padding: "20px",
-    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+    boxShadow:
+      "0 4px 16px rgba(31, 38, 135, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.7)",
   },
   textBox: {
-    background: "rgba(129, 199, 132, 0.2)",
-    borderRadius: "12px",
+    background: "rgba(38, 198, 218, 0.08)",
+    borderRadius: "16px",
     padding: "24px",
     minHeight: "300px",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
+    border: "1px solid rgba(79, 195, 247, 0.2)",
   },
   sectionTitle: {
-    color: "white",
+    color: "#1a1a1a",
     marginTop: 0,
     marginBottom: "15px",
     fontSize: "20px",
   },
   description: {
-    color: "white",
+    color: "#1a1a1a",
     fontSize: "16px",
     lineHeight: "1.6",
     marginBottom: "15px",
   },
   pronunciation: {
-    color: "white",
+    color: "#4a4a4a",
     fontSize: "14px",
     fontStyle: "italic",
   },
   emptyState: {
-    color: "white",
+    color: "#757575",
     fontSize: "24px",
     textAlign: "center",
     padding: "100px 0",

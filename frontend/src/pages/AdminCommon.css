@@ -1,0 +1,563 @@
+/* AdminCommon.css - 모든 관리자 페이지에서 사용하는 공통 스타일 */
+
+/* 컨테이너 */
+.admin-page-container {
+  min-height: 100vh;
+  padding: 40px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-attachment: fixed;
+}
+
+/* 헤더 */
+.admin-page-header {
+  margin-bottom: 32px;
+}
+
+.admin-back-button {
+  background: rgba(102, 126, 234, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.admin-back-button:hover {
+  background: rgba(102, 126, 234, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.admin-page-title {
+  color: white;
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 검색 바 */
+.admin-search-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-search-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: white;
+  font-size: 16px;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.admin-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.admin-search-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.admin-search-button {
+  background: rgba(16, 185, 129, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 12px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.admin-search-button:hover {
+  background: rgba(16, 185, 129, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* 테이블 */
+.admin-table-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  overflow-x: auto;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  color: white;
+  text-align: left;
+  padding: 16px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.admin-table td {
+  color: rgba(255, 255, 255, 0.95);
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+}
+
+.admin-table tr:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-table-row-even {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.admin-table-row-odd {
+  background: transparent;
+}
+
+/* 액션 버튼 */
+.admin-action-button {
+  background: rgba(59, 130, 246, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.admin-action-button:hover {
+  background: rgba(59, 130, 246, 0.7);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.admin-action-button-delete {
+  background: rgba(239, 68, 68, 0.5);
+}
+
+.admin-action-button-delete:hover {
+  background: rgba(239, 68, 68, 0.7);
+}
+
+/* 로딩 */
+.admin-loading {
+  color: white;
+  font-size: 24px;
+  text-align: center;
+  padding: 100px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 모달 */
+.admin-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.admin-modal-content {
+  background: rgba(30, 30, 40, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 32px;
+  min-width: 500px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.admin-modal-title {
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 24px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.admin-form-group {
+  margin-bottom: 20px;
+}
+
+.admin-form-label {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.admin-form-input,
+.admin-form-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  color: white;
+  font-size: 16px;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.admin-form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.admin-form-input::placeholder,
+.admin-form-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.admin-form-input:focus,
+.admin-form-textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.admin-modal-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.admin-modal-button {
+  flex: 1;
+  background: rgba(16, 185, 129, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.admin-modal-button:hover {
+  background: rgba(16, 185, 129, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.admin-modal-button-cancel {
+  background: rgba(107, 114, 128, 0.5);
+}
+
+.admin-modal-button-cancel:hover {
+  background: rgba(107, 114, 128, 0.7);
+}
+
+/* 페이지네이션 */
+.admin-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 24px;
+  padding: 20px;
+}
+
+.admin-page-button {
+  background: rgba(102, 126, 234, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.admin-page-button:hover:not(:disabled) {
+  background: rgba(102, 126, 234, 0.7);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.admin-page-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.admin-page-info {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.admin-modal-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  margin: 12px 0;
+  line-height: 1.5;
+}
+
+/* 정보 박스 */
+.admin-info-box {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.admin-info-title {
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.admin-info-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+/* 그리드 레이아웃 */
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.admin-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.admin-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(31, 38, 135, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.admin-card-icon {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.admin-card-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.admin-card-value {
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 섹션 */
+.admin-section {
+  margin-bottom: 32px;
+}
+
+.admin-section-title {
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 설정 항목 */
+.admin-config-box {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.admin-config-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-config-item:last-child {
+  border-bottom: none;
+}
+
+.admin-config-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.admin-config-value {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 968px) {
+  .admin-page-container {
+    padding: 24px 16px;
+  }
+
+  .admin-page-title {
+    font-size: 28px;
+  }
+
+  .admin-modal-content {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .admin-search-bar {
+    flex-direction: column;
+  }
+
+  .admin-search-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-page-title {
+    font-size: 24px;
+  }
+
+  .admin-back-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .admin-table-container {
+    padding: 16px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+
+  .admin-modal-content {
+    padding: 24px 20px;
+  }
+}

@@ -10,14 +10,66 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Developer**: 김영훈 Manager (Kim Young-hoon Manager)
 
+**Project Evolution**: Originally a simple 9-flower vocabulary app, evolved into a comprehensive KIIP-based Korean learning platform with full curriculum support, pronunciation analysis, admin dashboard, and multi-level ranking system. Recent major features include TTS/STT integration and complete admin CRUD operations.
+
 ## Repository Structure
 
 ```
 urimalzen/
-├── frontend/          # React + Vite + TypeScript
-├── backend/           # Express + TypeScript + MongoDB
-└── requirements/      # Requirements documentation
+├── frontend/                   # React + Vite + TypeScript
+│   ├── src/
+│   │   ├── components/        # UI components
+│   │   ├── pages/             # Route pages
+│   │   ├── store/             # Zustand state stores
+│   │   ├── services/          # API client (api.ts)
+│   │   ├── types/             # TypeScript interfaces
+│   │   ├── utils/             # Utilities (translations.ts)
+│   │   └── App.tsx            # Main app with routing
+│   ├── public/                # Static assets
+│   └── .env                   # Environment config (in repo)
+│
+├── backend/                    # Express + TypeScript + MongoDB
+│   ├── src/
+│   │   ├── controllers/       # Request handlers
+│   │   ├── models/            # Mongoose schemas
+│   │   ├── routes/            # API routes
+│   │   ├── middleware/        # Auth & file upload
+│   │   ├── services/          # Business logic
+│   │   ├── utils/             # Seed scripts
+│   │   └── index.ts           # Server entry point
+│   ├── uploads/               # User-uploaded files (audio)
+│   └── .env                   # Environment config (NOT in repo)
+│
+└── requirements/               # Requirements documentation
+    └── screen/                # UI screenshots
 ```
+
+## Quick Start
+
+**First-time setup** from scratch:
+
+```bash
+# 1. Start MongoDB
+docker run -d -p 27017:27017 --name urimalzen-mongodb mongo:latest
+
+# 2. Setup Backend
+cd backend
+npm install
+# Create .env file (see Environment Configuration section)
+npm run seed:all              # Seeds admin user + all data
+npm run dev                   # Starts on http://localhost:5000
+
+# 3. Setup Frontend (in new terminal)
+cd frontend
+npm install
+# Verify .env has correct VITE_API_URL
+npm run dev                   # Starts on http://localhost:5173
+```
+
+**Access**:
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:5000/api`
+- Admin login: `admin@urimalzen.com` / `admin123!@#`
 
 ## Common Development Commands
 
@@ -31,13 +83,18 @@ npm run dev                    # Start with hot-reload (nodemon + ts-node)
 npm run build                  # Compile TypeScript to dist/
 npm start                      # Run compiled code (production)
 
-# Database seeding
-npm run seed                   # Seed initial 9 flower words
+# Database seeding (first-time setup)
+npm run seed:admin             # Create admin user (admin@urimalzen.com / admin123!@#)
 npm run seed:categories        # Seed 14 KIIP categories
 npm run seed:phoneme-rules     # Seed Korean phoneme rules
-npm run seed:kiip-words        # Seed KIIP vocabulary
 npm run migrate:flowers        # Migrate flower words to new schema
-npm run seed:all               # Run all seeders in order
+npm run seed:kiip-words        # Seed KIIP vocabulary
+npm run seed:all               # Run all seeders in order (includes admin)
+
+# Individual seed scripts
+npm run seed                   # Seed initial 9 flower words (deprecated - use migrate:flowers)
+npm run seed:basic-words       # Seed basic vocabulary
+npm run seed:advanced-words    # Seed advanced vocabulary
 ```
 
 **Server**: `http://localhost:5000` (configured for external access via `0.0.0.0`)
@@ -45,6 +102,7 @@ npm run seed:all               # Run all seeders in order
 **Prerequisites**:
 - MongoDB running on `localhost:27017` or via Docker
 - Check MongoDB with: `docker ps --filter "name=mongo"`
+- Create `.env` file (not in repository) - see Environment Configuration section below
 
 ### Frontend (React + Vite + TypeScript)
 
@@ -323,17 +381,26 @@ Uses browser **MediaRecorder API**:
 **Initial setup** (run in order):
 ```bash
 cd backend
+
+# Method 1: Run all seeders at once (recommended)
+npm run seed:all
+
+# Method 2: Run individually in order
+npm run seed:admin             # Admin user (admin@urimalzen.com / admin123!@#)
 npm run seed:categories        # 14 KIIP categories
 npm run seed:phoneme-rules     # Korean pronunciation rules
 npm run migrate:flowers        # Migrate 9 flower words to new schema
 npm run seed:kiip-words        # KIIP vocabulary by level
-# Or run all at once:
-npm run seed:all
 ```
+
+**Important**: `seed:all` includes admin user creation. Default admin credentials:
+- Email: `admin@urimalzen.com`
+- Password: `admin123!@#`
+- **Change password after first login!**
 
 ## Environment Configuration
 
-**Backend** (`.env`):
+**Backend** (`backend/.env` - NOT in repository, create manually):
 ```bash
 PORT=5000
 NODE_ENV=development
@@ -344,11 +411,19 @@ MAX_FILE_SIZE=10485760
 UPLOAD_PATH=./uploads
 ```
 
-**Frontend** (`.env`):
+**Frontend** (`frontend/.env` - in repository):
 ```bash
 VITE_API_URL=http://localhost:5000/api
-# For external access, use server IP instead of localhost
+# For external access from other devices on network:
+# VITE_API_URL=http://192.168.200.200:5000/api
+# Or use public IP: http://112.220.79.218:5000/api
 ```
+
+**First-time setup**:
+1. Create `backend/.env` with the configuration above
+2. Update `JWT_SECRET` to a random secure string
+3. Verify `MONGODB_URI` matches your MongoDB installation
+4. Update `frontend/.env` VITE_API_URL if accessing from external devices
 
 ## TypeScript Configuration
 
@@ -438,3 +513,81 @@ VITE_API_URL=http://localhost:5000/api
 10. **Translation completeness**: When adding UI text, ALWAYS add to both `ko` and `mn` objects in `translations.ts`. Missing translations will cause runtime errors.
 
 11. **Language store persistence**: `useLanguageStore` does NOT persist to localStorage (unlike other stores). Language resets to `'ko'` on page refresh. This is intentional design.
+
+12. **Backend .env missing**: Backend `.env` is NOT in the repository (gitignored). You MUST create it manually on first setup. Without it, the server will fail to start or use incorrect defaults.
+
+13. **Admin credentials**: Default admin user created by `seed:all` or `seed:admin` with email `admin@urimalzen.com` and password `admin123!@#`. These are hardcoded in the seed script for development.
+
+14. **External access**: Both frontend and backend listen on `0.0.0.0` (all interfaces). To access from other devices, update `VITE_API_URL` in `frontend/.env` to use server's IP address instead of localhost.
+
+15. **Uploads directory**: `backend/uploads/` directory must exist for audio recording uploads. Created automatically by Multer, but if deleted, will cause upload failures.
+
+## Troubleshooting
+
+### MongoDB Connection Issues
+
+```bash
+# Check if MongoDB is running
+docker ps --filter "name=mongo"
+
+# Start MongoDB container
+docker start urimalzen-mongodb
+
+# Or create new MongoDB container
+docker run -d -p 27017:27017 --name urimalzen-mongodb mongo:latest
+
+# Check MongoDB logs
+docker logs urimalzen-mongodb
+```
+
+### Backend Won't Start
+
+```bash
+# Common issues:
+# 1. Missing .env file - create backend/.env with required variables
+# 2. MongoDB not running - start MongoDB (see above)
+# 3. Port 5000 already in use - check with: lsof -i :5000
+
+# Check backend logs for specific errors
+cd backend
+npm run dev
+```
+
+### Frontend API Connection Issues
+
+```bash
+# 1. Verify backend is running on http://localhost:5000
+curl http://localhost:5000/api/words
+
+# 2. Check VITE_API_URL in frontend/.env
+cat frontend/.env
+
+# 3. For external access, update to server IP:
+# VITE_API_URL=http://192.168.200.200:5000/api
+```
+
+### TypeScript Compilation Errors
+
+```bash
+# Backend compilation issues
+cd backend
+npm run build  # Check for type errors
+
+# Frontend compilation issues
+cd frontend
+npm run build  # Runs tsc -b && vite build
+```
+
+### Database Seeding Failures
+
+```bash
+# If seeding fails midway, you may need to clear the database
+# Connect to MongoDB and drop collections:
+docker exec -it urimalzen-mongodb mongosh urimalzen
+# In MongoDB shell:
+# db.dropDatabase()
+# exit
+
+# Then re-run seeders
+npm run seed:all
+```

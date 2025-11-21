@@ -93,7 +93,8 @@ const phonemeRuleSchema = new Schema<IPhonemeRule>(
 );
 
 // Index for faster queries
+// Note: order field already has index due to unique: true
+// Note: ruleName field already has index due to unique: true
 phonemeRuleSchema.index({ kiipLevel: 1, order: 1 });
-phonemeRuleSchema.index({ ruleName: 1 });
 
 export default mongoose.model<IPhonemeRule>('PhonemeRule', phonemeRuleSchema);

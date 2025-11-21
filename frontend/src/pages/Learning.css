@@ -1,0 +1,114 @@
+/* Learning Page - Glassmorphism Design */
+
+.learning-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #a5b4fc 0%, #d8b4fe 50%, #fcd34d 100%);
+  background-attachment: fixed;
+  padding: 20px;
+}
+
+.learning-content {
+  max-width: 1600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.learning-main-content {
+  display: grid;
+  grid-template-columns: 350px 1fr 300px;
+  gap: 24px;
+  padding: 0;
+  animation: fadeIn 0.6s ease;
+}
+
+.learning-left-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: slideInLeft 0.5s ease;
+}
+
+.learning-center-area {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.6s ease 0.1s backwards;
+}
+
+.learning-right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: slideInRight 0.5s ease;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1400px) {
+  .learning-main-content {
+    grid-template-columns: 300px 1fr 280px;
+    gap: 20px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .learning-main-content {
+    grid-template-columns: 280px 1fr;
+    gap: 16px;
+  }
+
+  .learning-right-panel {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media screen and (max-width: 968px) {
+  .learning-container {
+    padding: 12px;
+  }
+
+  .learning-main-content {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .learning-left-panel,
+  .learning-right-panel {
+    animation: none;
+  }
+}
+
+/* Animations */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

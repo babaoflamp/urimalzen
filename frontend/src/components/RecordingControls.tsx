@@ -3,6 +3,7 @@ import { useLearningStore } from "../store/useLearningStore";
 import { useLanguageStore } from "../store/useLanguageStore";
 import { translations } from "../utils/translations";
 import { sttAPI, progressAPI } from "../services/api";
+import "./RecordingControls.css";
 
 const RecordingControls = () => {
   const { currentWord, isRecording, setIsRecording, setUserProgress } =
@@ -115,45 +116,40 @@ const RecordingControls = () => {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "rgba(16, 185, 129, 0.4)"; // Green
-    if (score >= 60) return "rgba(251, 191, 36, 0.4)"; // Yellow
-    return "rgba(239, 68, 68, 0.4)"; // Red
+    if (score >= 80) return "score-excellent";
+    if (score >= 60) return "score-good";
+    return "score-poor";
   };
 
   return (
-    <div style={styles.container}>
+    <div className="recording-controls-container">
       {isRecording && (
-        <div style={styles.recordingIndicator}>
+        <div className="recording-indicator">
           녹음 중... {formatTime(recordingTime)}
         </div>
       )}
 
       {isEvaluating && (
-        <div style={styles.evaluatingIndicator}>
-          발음 평가 중...
-        </div>
+        <div className="evaluating-indicator">발음 평가 중...</div>
       )}
 
       {evaluationResult && (
-        <div style={styles.evaluationResult}>
-          <div style={styles.evaluationHeader}>발음 평가 결과</div>
+        <div className="evaluation-result">
+          <div className="evaluation-header">발음 평가 결과</div>
 
-          <div style={styles.scoreGrid}>
+          <div className="score-grid">
             <div
-              style={{
-                ...styles.scoreCard,
-                background: getScoreColor(
-                  Math.round(
-                    (evaluationResult.pronunciationScore +
-                      evaluationResult.fluencyScore +
-                      evaluationResult.completenessScore) /
-                      3
-                  )
-                ),
-              }}
+              className={`score-card ${getScoreColor(
+                Math.round(
+                  (evaluationResult.pronunciationScore +
+                    evaluationResult.fluencyScore +
+                    evaluationResult.completenessScore) /
+                    3
+                )
+              )}`}
             >
-              <div style={styles.scoreLabel}>종합 점수</div>
-              <div style={styles.scoreValue}>
+              <div className="score-label">종합 점수</div>
+              <div className="score-value">
                 {Math.round(
                   (evaluationResult.pronunciationScore +
                     evaluationResult.fluencyScore +
@@ -164,55 +160,50 @@ const RecordingControls = () => {
             </div>
 
             <div
-              style={{
-                ...styles.scoreCard,
-                background: getScoreColor(evaluationResult.pronunciationScore),
-              }}
+              className={`score-card ${getScoreColor(
+                evaluationResult.pronunciationScore
+              )}`}
             >
-              <div style={styles.scoreLabel}>발음</div>
-              <div style={styles.scoreValue}>
+              <div className="score-label">발음</div>
+              <div className="score-value">
                 {evaluationResult.pronunciationScore}
               </div>
             </div>
 
             <div
-              style={{
-                ...styles.scoreCard,
-                background: getScoreColor(evaluationResult.fluencyScore),
-              }}
+              className={`score-card ${getScoreColor(
+                evaluationResult.fluencyScore
+              )}`}
             >
-              <div style={styles.scoreLabel}>유창성</div>
-              <div style={styles.scoreValue}>
-                {evaluationResult.fluencyScore}
-              </div>
+              <div className="score-label">유창성</div>
+              <div className="score-value">{evaluationResult.fluencyScore}</div>
             </div>
 
             <div
-              style={{
-                ...styles.scoreCard,
-                background: getScoreColor(evaluationResult.completenessScore),
-              }}
+              className={`score-card ${getScoreColor(
+                evaluationResult.completenessScore
+              )}`}
             >
-              <div style={styles.scoreLabel}>완성도</div>
-              <div style={styles.scoreValue}>
+              <div className="score-label">완성도</div>
+              <div className="score-value">
                 {evaluationResult.completenessScore}
               </div>
             </div>
           </div>
 
           {evaluationResult.transcribedText && (
-            <div style={styles.transcription}>
-              <div style={styles.transcriptionLabel}>인식된 텍스트:</div>
-              <div style={styles.transcriptionText}>
+            <div className="transcription">
+              <div className="transcription-label">인식된 텍스트:</div>
+              <div className="transcription-text">
                 {evaluationResult.transcribedText}
               </div>
             </div>
           )}
 
           {evaluationResult.feedback && (
-            <div style={styles.feedback}>
-              <div style={styles.feedbackLabel}>피드백:</div>
-              <div style={styles.feedbackText}>
+            <div className="feedback">
+              <div className="feedback-label">피드백:</div>
+              <div className="feedback-text">
                 {language === "ko"
                   ? evaluationResult.feedback.ko
                   : evaluationResult.feedback.mn}
@@ -222,14 +213,11 @@ const RecordingControls = () => {
         </div>
       )}
 
-      <div style={styles.buttonGroup}>
+      <div className="button-group">
         <button
           onClick={startRecording}
           disabled={isRecording || isEvaluating}
-          style={{
-            ...styles.button,
-            ...(isRecording || isEvaluating ? styles.buttonDisabled : {}),
-          }}
+          className="recording-button"
         >
           녹음 시작
         </button>
@@ -237,152 +225,13 @@ const RecordingControls = () => {
         <button
           onClick={stopRecording}
           disabled={!isRecording}
-          style={{
-            ...styles.button,
-            ...(isRecording ? {} : styles.buttonDisabled),
-          }}
+          className="recording-button"
         >
           녹음 종료
         </button>
       </div>
     </div>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px",
-  },
-  recordingIndicator: {
-    background: "rgba(239, 68, 68, 0.4)",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    color: "white",
-    padding: "16px",
-    borderRadius: "16px",
-    textAlign: "center",
-    fontSize: "18px",
-    fontWeight: "bold",
-    animation: "pulse 1.5s infinite",
-    boxShadow: "0 4px 16px rgba(239, 68, 68, 0.3)",
-  },
-  evaluatingIndicator: {
-    background: "rgba(59, 130, 246, 0.4)",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    color: "white",
-    padding: "16px",
-    borderRadius: "16px",
-    textAlign: "center",
-    fontSize: "18px",
-    fontWeight: "bold",
-    boxShadow: "0 4px 16px rgba(59, 130, 246, 0.3)",
-  },
-  evaluationResult: {
-    background: "rgba(16, 185, 129, 0.2)",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    borderRadius: "16px",
-    padding: "20px",
-    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
-  },
-  evaluationHeader: {
-    color: "white",
-    fontSize: "20px",
-    fontWeight: "bold",
-    marginBottom: "16px",
-    textAlign: "center",
-  },
-  scoreGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "12px",
-    marginBottom: "16px",
-  },
-  scoreCard: {
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    borderRadius: "12px",
-    padding: "16px",
-    textAlign: "center",
-    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-  },
-  scoreLabel: {
-    color: "white",
-    fontSize: "14px",
-    marginBottom: "8px",
-    fontWeight: "bold",
-  },
-  scoreValue: {
-    color: "white",
-    fontSize: "28px",
-    fontWeight: "bold",
-  },
-  transcription: {
-    background: "rgba(129, 199, 132, 0.2)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    borderRadius: "12px",
-    padding: "16px",
-    marginBottom: "12px",
-  },
-  transcriptionLabel: {
-    color: "white",
-    fontSize: "14px",
-    fontWeight: "bold",
-    marginBottom: "8px",
-  },
-  transcriptionText: {
-    color: "white",
-    fontSize: "16px",
-    lineHeight: "1.5",
-  },
-  feedback: {
-    background: "rgba(129, 199, 132, 0.2)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    borderRadius: "12px",
-    padding: "16px",
-  },
-  feedbackLabel: {
-    color: "white",
-    fontSize: "14px",
-    fontWeight: "bold",
-    marginBottom: "8px",
-  },
-  feedbackText: {
-    color: "white",
-    fontSize: "16px",
-    lineHeight: "1.5",
-  },
-  buttonGroup: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "16px",
-  },
-  button: {
-    background: "rgba(251, 191, 36, 0.3)",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-    color: "white",
-    borderRadius: "16px",
-    padding: "20px",
-    fontSize: "18px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    transition: "all 0.3s ease",
-    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
-  },
-  buttonDisabled: {
-    background: "rgba(156, 163, 175, 0.3)",
-    cursor: "not-allowed",
-    opacity: 0.5,
-  },
 };
 
 export default RecordingControls;

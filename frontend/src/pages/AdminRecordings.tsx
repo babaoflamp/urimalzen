@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './AdminCommon.css';
 import { adminAPI } from '../services/api';
 
 const AdminRecordings = () => {

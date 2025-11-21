@@ -1,0 +1,62 @@
+/* 학습 단어 목록 스크롤바 스타일 */
+.word-list-container {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(135, 206, 235, 0.15) 50%,
+    rgba(38, 198, 218, 0.1) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(79, 195, 247, 0.3);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  position: relative;
+  z-index: 1;
+}
+
+.word-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  max-height: 440px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 1px;
+}
+
+/* 글래스모피즘 스크롤바 스타일 */
+.word-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.word-list::-webkit-scrollbar-track {
+  background: rgba(135, 206, 235, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.word-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    135deg,
+    rgba(79, 195, 247, 0.5) 0%,
+    rgba(38, 198, 218, 0.4) 100%
+  );
+  border-radius: 10px;
+  border: 1px solid rgba(79, 195, 247, 0.3);
+}
+
+.word-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(79, 195, 247, 0.7) 0%,
+    rgba(38, 198, 218, 0.6) 100%
+  );
+}
