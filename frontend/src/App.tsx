@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminAIContent from "./pages/AdminAIContent";
+import AdminComfyUI from "./pages/AdminComfyUI";
 import AdminTTS from "./pages/AdminTTS";
 import AdminSTT from "./pages/AdminSTT";
 import AdminStatistics from "./pages/AdminStatistics";
@@ -76,6 +77,14 @@ function App() {
           element={
             <ProtectedAdminRoute>
               <AdminAIContent />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/comfyui"
+          element={
+            <ProtectedAdminRoute>
+              <AdminComfyUI />
             </ProtectedAdminRoute>
           }
         />

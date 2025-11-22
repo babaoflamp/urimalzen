@@ -152,6 +152,15 @@ const AdminDashboard = () => {
           <div className="admin-menu-description">AI 기반 콘텐츠 자동 생성</div>
         </div>
 
+        <div
+          className="admin-menu-card"
+          onClick={() => navigate("/admin/comfyui")}
+        >
+          <div className="admin-menu-icon">🎨</div>
+          <div className="admin-menu-title">이미지 생성 (ComfyUI)</div>
+          <div className="admin-menu-description">AI 기반 이미지 자동 생성</div>
+        </div>
+
         <div className="admin-menu-card" onClick={() => navigate("/admin/tts")}>
           <div className="admin-menu-icon">🔊</div>
           <div className="admin-menu-title">{t.ttsSettings}</div>

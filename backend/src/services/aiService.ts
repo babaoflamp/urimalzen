@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const OLLAMA_API_URL = process.env.OLLAMA_API_URL || 'http://localhost:11434/api';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:7b';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'exaone3.5:7.8b';
 const OLLAMA_TEMPERATURE = parseFloat(process.env.OLLAMA_TEMPERATURE || '0.7');
 const OLLAMA_MAX_TOKENS = parseInt(process.env.OLLAMA_MAX_TOKENS || '2000');
 

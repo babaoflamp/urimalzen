@@ -1016,6 +1016,60 @@
   font-size: 16px;
 }
 
+/* 이미지 미리보기 */
+.admin-image-preview {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.admin-image-preview img,
+.admin-generated-image {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-image-path {
+  margin-top: 12px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-family: monospace;
+}
+
+/* 폼 레이아웃 */
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.admin-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-form-label {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 상태 표시 */
+.status-connected {
+  color: var(--accent-green) !important;
+}
+
+.status-disconnected {
+  color: var(--accent-red) !important;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 968px) {
   .admin-page-container {

@@ -20,6 +20,7 @@ import adminSTTRoutes from './routes/adminSTT';
 import adminStatsRoutes from './routes/adminStatsRoutes';
 import userTTSRoutes from './routes/userTTS';
 import userSTTRoutes from './routes/userSTT';
+import comfyuiRoutes from './routes/comfyuiRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -76,6 +77,9 @@ app.use('/api/admin/ai', adminAIRoutes);
 app.use('/api/admin/tts', adminTTSRoutes);
 app.use('/api/admin/stt', adminSTTRoutes);
 app.use('/api/admin/stats', adminStatsRoutes);
+
+// ComfyUI routes
+app.use('/api/comfyui', comfyuiRoutes);
 
 // User TTS/STT routes
 app.use('/api/tts', userTTSRoutes);
