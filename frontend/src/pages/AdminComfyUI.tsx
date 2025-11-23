@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './AdminCommon.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./AdminCommon.css";
 
 interface QueueStatus {
   queue_running: number;
@@ -11,35 +11,36 @@ interface QueueStatus {
 const AdminComfyUI: React.FC = () => {
   const navigate = useNavigate();
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [connectionMessage, setConnectionMessage] = useState<string>('');
+  const [connectionMessage, setConnectionMessage] = useState<string>("");
   const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // 단어 일러스트 생성
   const [wordForm, setWordForm] = useState({
-    koreanWord: '',
-    englishDescription: '',
+    koreanWord: "",
+    englishDescription: "",
   });
 
   // 테마 이미지 생성
   const [themeForm, setThemeForm] = useState({
-    theme: '',
-    style: 'illustration' as 'realistic' | 'illustration' | 'minimal',
+    theme: "",
+    style: "illustration" as "realistic" | "illustration" | "minimal",
     width: 1024,
     height: 1024,
   });
 
   // 생성된 이미지
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
-  const [generationMessage, setGenerationMessage] = useState<string>('');
+  const [generationMessage, setGenerationMessage] = useState<string>("");
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  const BASE_URL = API_URL.replace(/\/api$/, ""); // /api 제거하여 base URL 얻기
 
   // 연결 테스트
   const checkConnection = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/api/comfyui/test`, {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/comfyui/test`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -48,7 +49,7 @@ const AdminComfyUI: React.FC = () => {
     } catch (error) {
       setIsConnected(false);
       setConnectionMessage(
-        error instanceof Error ? error.message : '연결 실패'
+        error instanceof Error ? error.message : "연결 실패"
       );
     }
   };
@@ -56,8 +57,8 @@ const AdminComfyUI: React.FC = () => {
   // 큐 상태 확인
   const fetchQueueStatus = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/api/comfyui/queue-status`, {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/comfyui/queue-status`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -65,7 +66,7 @@ const AdminComfyUI: React.FC = () => {
         setQueueStatus(response.data.data);
       }
     } catch (error) {
-      console.error('Queue status error:', error);
+      console.error("Queue status error:", error);
     }
   };
 
@@ -79,13 +80,13 @@ const AdminComfyUI: React.FC = () => {
   const handleGenerateWordIllustration = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setGenerationMessage('');
+    setGenerationMessage("");
     setGeneratedImage(null);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${API_URL}/api/comfyui/word-illustration`,
+        `${API_URL}/comfyui/word-illustration`,
         wordForm,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -94,15 +95,15 @@ const AdminComfyUI: React.FC = () => {
 
       if (response.data.success) {
         setGeneratedImage(response.data.imagePath);
-        setGenerationMessage('이미지가 성공적으로 생성되었습니다!');
-        setWordForm({ koreanWord: '', englishDescription: '' });
+        setGenerationMessage("이미지가 성공적으로 생성되었습니다!");
+        setWordForm({ koreanWord: "", englishDescription: "" });
         fetchQueueStatus();
       }
     } catch (error) {
       const message =
         axios.isAxiosError(error) && error.response?.data?.message
           ? error.response.data.message
-          : '이미지 생성에 실패했습니다.';
+          : "이미지 생성에 실패했습니다.";
       setGenerationMessage(message);
     } finally {
       setIsLoading(false);
@@ -113,13 +114,13 @@ const AdminComfyUI: React.FC = () => {
   const handleGenerateThemeImage = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setGenerationMessage('');
+    setGenerationMessage("");
     setGeneratedImage(null);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${API_URL}/api/comfyui/theme-image`,
+        `${API_URL}/comfyui/theme-image`,
         themeForm,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -128,10 +129,10 @@ const AdminComfyUI: React.FC = () => {
 
       if (response.data.success) {
         setGeneratedImage(response.data.imagePath);
-        setGenerationMessage('테마 이미지가 성공적으로 생성되었습니다!');
+        setGenerationMessage("테마 이미지가 성공적으로 생성되었습니다!");
         setThemeForm({
-          theme: '',
-          style: 'illustration',
+          theme: "",
+          style: "illustration",
           width: 1024,
           height: 1024,
         });
@@ -141,7 +142,7 @@ const AdminComfyUI: React.FC = () => {
       const message =
         axios.isAxiosError(error) && error.response?.data?.message
           ? error.response.data.message
-          : '이미지 생성에 실패했습니다.';
+          : "이미지 생성에 실패했습니다.";
       setGenerationMessage(message);
     } finally {
       setIsLoading(false);
@@ -151,7 +152,10 @@ const AdminComfyUI: React.FC = () => {
   return (
     <div className="admin-page-container">
       <div className="admin-header">
-        <button onClick={() => navigate('/admin')} className="admin-back-button">
+        <button
+          onClick={() => navigate("/admin/dashboard")}
+          className="admin-back-button"
+        >
           ← 뒤로가기
         </button>
         <h1 className="admin-page-title">ComfyUI 이미지 생성</h1>
@@ -165,10 +169,10 @@ const AdminComfyUI: React.FC = () => {
             <span className="admin-status-label">ComfyUI 연결:</span>
             <span
               className={`admin-status-value ${
-                isConnected ? 'status-connected' : 'status-disconnected'
+                isConnected ? "status-connected" : "status-disconnected"
               }`}
             >
-              {isConnected ? '✓ 연결됨' : '✗ 연결 안됨'}
+              {isConnected ? "✓ 연결됨" : "✗ 연결 안됨"}
             </span>
           </div>
           <div className="admin-status-row">
@@ -188,11 +192,15 @@ const AdminComfyUI: React.FC = () => {
           <div className="admin-grid">
             <div className="admin-card">
               <div className="admin-card-label">실행 중</div>
-              <div className="admin-card-value">{queueStatus.queue_running}</div>
+              <div className="admin-card-value">
+                {queueStatus.queue_running}
+              </div>
             </div>
             <div className="admin-card">
               <div className="admin-card-label">대기 중</div>
-              <div className="admin-card-value">{queueStatus.queue_pending}</div>
+              <div className="admin-card-value">
+                {queueStatus.queue_pending}
+              </div>
             </div>
           </div>
           <button onClick={fetchQueueStatus} className="admin-primary-button">
@@ -239,7 +247,7 @@ const AdminComfyUI: React.FC = () => {
             className="admin-primary-button"
             disabled={isLoading || !isConnected}
           >
-            {isLoading ? '생성 중...' : '일러스트 생성'}
+            {isLoading ? "생성 중..." : "일러스트 생성"}
           </button>
         </form>
       </div>
@@ -253,7 +261,9 @@ const AdminComfyUI: React.FC = () => {
             <input
               type="text"
               value={themeForm.theme}
-              onChange={(e) => setThemeForm({ ...themeForm, theme: e.target.value })}
+              onChange={(e) =>
+                setThemeForm({ ...themeForm, theme: e.target.value })
+              }
               className="admin-input"
               placeholder="예: dandelion seeds floating in the wind"
               required
@@ -262,14 +272,19 @@ const AdminComfyUI: React.FC = () => {
           </div>
 
           <div className="admin-form-group">
-            <label className="admin-form-label" htmlFor="theme-style">스타일</label>
+            <label className="admin-form-label" htmlFor="theme-style">
+              스타일
+            </label>
             <select
               id="theme-style"
               value={themeForm.style}
               onChange={(e) =>
                 setThemeForm({
                   ...themeForm,
-                  style: e.target.value as 'realistic' | 'illustration' | 'minimal',
+                  style: e.target.value as
+                    | "realistic"
+                    | "illustration"
+                    | "minimal",
                 })
               }
               className="admin-input"
@@ -284,13 +299,18 @@ const AdminComfyUI: React.FC = () => {
 
           <div className="admin-form-row">
             <div className="admin-form-group">
-              <label className="admin-form-label" htmlFor="image-width">너비</label>
+              <label className="admin-form-label" htmlFor="image-width">
+                너비
+              </label>
               <input
                 id="image-width"
                 type="number"
                 value={themeForm.width}
                 onChange={(e) =>
-                  setThemeForm({ ...themeForm, width: parseInt(e.target.value) })
+                  setThemeForm({
+                    ...themeForm,
+                    width: parseInt(e.target.value),
+                  })
                 }
                 className="admin-input"
                 min={512}
@@ -302,13 +322,18 @@ const AdminComfyUI: React.FC = () => {
             </div>
 
             <div className="admin-form-group">
-              <label className="admin-form-label" htmlFor="image-height">높이</label>
+              <label className="admin-form-label" htmlFor="image-height">
+                높이
+              </label>
               <input
                 id="image-height"
                 type="number"
                 value={themeForm.height}
                 onChange={(e) =>
-                  setThemeForm({ ...themeForm, height: parseInt(e.target.value) })
+                  setThemeForm({
+                    ...themeForm,
+                    height: parseInt(e.target.value),
+                  })
                 }
                 className="admin-input"
                 min={512}
@@ -325,7 +350,7 @@ const AdminComfyUI: React.FC = () => {
             className="admin-primary-button"
             disabled={isLoading || !isConnected}
           >
-            {isLoading ? '생성 중...' : '테마 이미지 생성'}
+            {isLoading ? "생성 중..." : "테마 이미지 생성"}
           </button>
         </form>
       </div>
@@ -342,7 +367,7 @@ const AdminComfyUI: React.FC = () => {
           {generatedImage && (
             <div className="admin-image-preview">
               <img
-                src={`${API_URL}/uploads/${generatedImage}`}
+                src={`${BASE_URL}/uploads/${generatedImage}`}
                 alt="Generated"
                 className="admin-generated-image"
               />
