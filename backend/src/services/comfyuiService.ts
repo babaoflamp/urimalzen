@@ -52,12 +52,15 @@ const getBasicWorkflow = (
   width: number = 512,
   height: number = 512,
   steps: number = 20,
-  seed: number = -1
+  seed: number = Math.floor(Math.random() * 1000000)
 ) => {
+  // seed가 -1이면 랜덤 seed 생성
+  const actualSeed = seed === -1 ? Math.floor(Math.random() * 1000000) : seed;
+  
   return {
     "3": {
       "inputs": {
-        "seed": seed,
+        "seed": actualSeed,
         "steps": steps,
         "cfg": 7,
         "sampler_name": "euler",
@@ -125,6 +128,9 @@ const submitPrompt = async (workflow: any): Promise<string> => {
       client_id: `urimalzen_${Date.now()}`,
     };
 
+    console.log('Submitting workflow to ComfyUI...');
+    console.log('Workflow:', JSON.stringify(workflow, null, 2));
+    
     const response = await axios.post<ComfyUIPromptResponse>(
       `${COMFYUI_API_URL}/prompt`,
       requestBody,
@@ -133,13 +139,25 @@ const submitPrompt = async (workflow: any): Promise<string> => {
       }
     );
 
-    if (response.data.node_errors) {
-      throw new Error(`ComfyUI 워크플로우 오류: ${JSON.stringify(response.data.node_errors)}`);
+    console.log('ComfyUI Response:', JSON.stringify(response.data, null, 2));
+
+    // node_errors가 존재하고 비어있지 않은 경우에만 오류로 처리
+    if (response.data.node_errors && Object.keys(response.data.node_errors).length > 0) {
+      const errorDetails = JSON.stringify(response.data.node_errors, null, 2);
+      console.error('ComfyUI Workflow Errors:', errorDetails);
+      throw new Error(`ComfyUI 워크플로우 오류: ${errorDetails}`);
     }
 
+    console.log('Workflow submitted successfully, prompt_id:', response.data.prompt_id);
     return response.data.prompt_id;
   } catch (error: any) {
-    console.error('ComfyUI Submit Error:', error.message);
+    console.error('ComfyUI Submit Error:', error.response?.data || error.message);
+    if (error.response?.data?.error) {
+      const errorMsg = typeof error.response.data.error === 'string' 
+        ? error.response.data.error 
+        : JSON.stringify(error.response.data.error);
+      throw new Error(`이미지 생성 요청 실패: ${errorMsg}`);
+    }
     throw new Error(`이미지 생성 요청 실패: ${error.message}`);
   }
 };

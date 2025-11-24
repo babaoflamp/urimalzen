@@ -380,6 +380,29 @@ export const adminAPI = {
     return response.data;
   },
 
+  updateUser: async (id: string, data: any) => {
+    const response = await api.put(`/admin/users/${id}`, data);
+    return response.data;
+  },
+
+  deleteUser: async (id: string) => {
+    const response = await api.delete(`/admin/users/${id}`);
+    return response.data;
+  },
+
+  searchUsers: async (params: {
+    q?: string;
+    level?: number;
+    country?: string;
+    region?: string;
+    isAdmin?: boolean;
+    page?: number;
+    limit?: number;
+  }) => {
+    const response = await api.get('/admin/users/search', { params });
+    return response.data;
+  },
+
   getWords: async () => {
     const response = await api.get('/admin/words');
     return response.data;
@@ -627,6 +650,40 @@ export const adminStatsAPI = {
       params: { type, format },
       responseType: format === 'csv' ? 'blob' : 'json',
     });
+    return response.data;
+  },
+};
+
+// ComfyUI API
+export const comfyuiAPI = {
+  testConnection: async (): Promise<{ success: boolean; message?: string }> => {
+    const response = await api.get('/comfyui/test');
+    return response.data;
+  },
+
+  getQueueStatus: async (): Promise<{
+    success: boolean;
+    data: { queue_running: number; queue_pending: number };
+  }> => {
+    const response = await api.get('/comfyui/queue-status');
+    return response.data;
+  },
+
+  generateWordIllustration: async (data: {
+    koreanWord: string;
+    englishDescription?: string;
+  }): Promise<{ success: boolean; imagePath: string; message?: string }> => {
+    const response = await api.post('/comfyui/word-illustration', data);
+    return response.data;
+  },
+
+  generateThemeImage: async (data: {
+    theme: string;
+    style: 'realistic' | 'illustration' | 'minimal';
+    width: number;
+    height: number;
+  }): Promise<{ success: boolean; imagePath: string; message?: string }> => {
+    const response = await api.post('/comfyui/theme-image', data);
     return response.data;
   },
 };

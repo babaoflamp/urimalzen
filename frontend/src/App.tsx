@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/useAuthStore";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import DandelionBackground from "./components/DandelionBackground";
@@ -31,6 +32,33 @@ function App() {
 
   return (
     <Router>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            borderRadius: '12px',
+            color: '#202124',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          },
+          success: {
+            iconTheme: {
+              primary: '#34a853',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ea4335',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
       <DandelionBackground />
       <Routes>
         {/* 사용자 라우트 */}

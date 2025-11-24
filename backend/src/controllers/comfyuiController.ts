@@ -40,8 +40,11 @@ export const getQueueStatus = async (req: Request, res: Response) => {
 export const generateWordIllustration = async (req: Request, res: Response) => {
   try {
     const { koreanWord, englishDescription } = req.body;
+    
+    console.log('Received word illustration request:', { koreanWord, englishDescription });
 
     if (!koreanWord) {
+      console.log('Error: koreanWord is missing');
       return res.status(400).json({
         success: false,
         message: '한국어 단어를 입력해주세요.',
@@ -79,7 +82,10 @@ export const generateThemeImage = async (req: Request, res: Response) => {
       height = 1024 
     } = req.body;
 
+    console.log('Received theme image request:', { theme, style, width, height });
+
     if (!theme) {
+      console.log('Error: theme is missing');
       return res.status(400).json({
         success: false,
         message: '테마를 입력해주세요.',

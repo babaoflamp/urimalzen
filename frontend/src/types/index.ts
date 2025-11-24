@@ -1,5 +1,5 @@
 export interface User {
-  id: string;
+  _id: string;
   username: string;
   email: string;
   level: {
@@ -9,8 +9,13 @@ export interface User {
   totalScore: number;
   region: string;
   country: string;
-  isAdmin: boolean; // Admin role flag
+  isAdmin: boolean;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
+
+// Alias for consistency with backend naming
+export type IUser = User;
 
 export interface Word {
   _id: string;
@@ -560,4 +565,29 @@ export interface ChartDataPoint {
   name: string;
   value: number;
   [key: string]: string | number;
+}
+
+// ComfyUI Types
+export interface ComfyUIQueueStatus {
+  queue_running: number;
+  queue_pending: number;
+}
+
+export interface ComfyUIWordIllustrationRequest {
+  koreanWord: string;
+  englishDescription?: string;
+}
+
+export interface ComfyUIThemeImageRequest {
+  theme: string;
+  style: 'realistic' | 'illustration' | 'minimal';
+  width: number;
+  height: number;
+}
+
+export interface ComfyUIGenerationResponse {
+  success: boolean;
+  imagePath?: string;
+  message?: string;
+  error?: string;
 }
