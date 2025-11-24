@@ -1,12 +1,5 @@
 /* AdminCommon.css - 모든 관리자 페이지에서 사용하는 공통 스타일 - Dandelion Theme */
 
-/* 접근성 개선 - 전역 포커스 스타일 */
-*:focus-visible {
-  outline: 3px solid var(--accent-primary);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
 /* 컨테이너 */
 .admin-page-container {
   min-height: 100vh;
@@ -18,58 +11,6 @@
 /* 헤더 */
 .admin-page-header {
   margin-bottom: 32px;
-}
-
-.admin-header {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.admin-header-top {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.admin-header-connection {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.admin-status-badge {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.admin-status-badge.status-connected {
-  background-color: #10b981;
-  color: white;
-}
-
-.admin-status-badge.status-disconnected {
-  background-color: #ef4444;
-  color: white;
-}
-
-.admin-refresh-button {
-  padding: 6px 12px;
-  font-size: 14px;
-  background: var(--glass-bg-light);
-  border: 1px solid var(--accent-primary);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.admin-refresh-button:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-glow);
 }
 
 .admin-back-button {
@@ -93,15 +34,6 @@
 .admin-back-button:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-glow-strong);
-}
-
-.admin-back-button:focus-visible {
-  outline: 3px solid var(--accent-primary);
-  outline-offset: 4px;
-}
-
-.admin-back-button:active {
-  transform: translateY(0);
 }
 
 .admin-page-title {
@@ -140,11 +72,10 @@
 }
 
 .admin-search-input:focus {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
+  outline: none;
   background: var(--glass-bg);
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.15), var(--shadow-md);
+  box-shadow: 0 0 0 3px var(--shadow-glow), var(--shadow-md);
 }
 
 .admin-search-button {
@@ -167,21 +98,6 @@
 .admin-search-button:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-glow-strong);
-}
-
-.admin-search-button:focus-visible {
-  outline: 3px solid var(--accent-primary);
-  outline-offset: 4px;
-}
-
-.admin-search-button:active {
-  transform: translateY(0);
-}
-
-.admin-search-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
 }
 
 /* 테이블 */
@@ -260,26 +176,6 @@
 
 .admin-action-button-delete:hover {
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-}
-
-.admin-action-button:focus-visible {
-  outline: 3px solid var(--accent-primary);
-  outline-offset: 2px;
-}
-
-.admin-action-button-delete:focus-visible {
-  outline: 3px solid var(--accent-red);
-  outline-offset: 2px;
-}
-
-.admin-action-button:active {
-  transform: translateY(0);
-}
-
-.admin-action-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
 }
 
 /* 로딩 */
@@ -682,24 +578,9 @@
   box-shadow: var(--shadow-md);
 }
 
-.admin-primary-button:hover:not(:disabled) {
+.admin-primary-button:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-glow-strong);
-}
-
-.admin-primary-button:focus-visible {
-  outline: 3px solid var(--accent-primary);
-  outline-offset: 4px;
-}
-
-.admin-primary-button:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.admin-primary-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
 }
 
 .admin-secondary-button {
@@ -1135,123 +1016,6 @@
   font-size: 16px;
 }
 
-/* 이미지 미리보기 */
-.admin-image-preview {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.admin-image-preview img,
-.admin-generated-image {
-  max-width: 100%;
-  border-radius: 8px;
-  box-shadow: var(--shadow-lg);
-}
-
-.admin-image-path {
-  margin-top: 12px;
-  color: var(--text-secondary);
-  font-size: 14px;
-  font-family: monospace;
-}
-
-/* 폼 레이아웃 */
-.admin-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.admin-form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.admin-form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.admin-form-label {
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.admin-input,
-.admin-textarea,
-.admin-select {
-  width: 100%;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  padding: 12px;
-  color: #1a1a1a;
-  font-size: 16px;
-  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
-    sans-serif;
-  transition: all 0.3s ease;
-  box-sizing: border-box;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
-.admin-input::placeholder,
-.admin-textarea::placeholder {
-  color: #9ca3af;
-  opacity: 1;
-}
-
-.admin-input:focus,
-.admin-textarea:focus,
-.admin-select:focus {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.15);
-}
-
-.admin-input:disabled,
-.admin-textarea:disabled,
-.admin-select:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.admin-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.admin-select {
-  cursor: pointer;
-}
-
-/* 상태 표시 */
-.status-connected {
-  color: var(--accent-green) !important;
-}
-
-.status-disconnected {
-  color: var(--accent-red) !important;
-}
-
-/* ComfyUI 페이지 그리드 레이아웃 */
-.comfyui-grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 24px;
-}
-
-.comfyui-left-column,
-.comfyui-right-column {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
 /* 반응형 디자인 */
 @media (max-width: 968px) {
   .admin-page-container {
@@ -1273,10 +1037,6 @@
 
   .admin-search-button {
     width: 100%;
-  }
-
-  .comfyui-grid-container {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -1303,52 +1063,4 @@
   .admin-modal-content {
     padding: 24px 20px;
   }
-}
-
-/* 배지 스타일 */
-.admin-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-}
-
-.admin-badge-default {
-  background: rgba(0, 0, 0, 0.1);
-  color: var(--text-secondary);
-}
-
-.admin-badge-default:hover {
-  background: rgba(0, 0, 0, 0.15);
-}
-
-.admin-badge-success {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
-}
-
-.admin-badge-success:hover {
-  background: rgba(16, 185, 129, 0.3);
-}
-
-/* 모달 필드 스타일 */
-.admin-modal-field {
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  font-size: 15px;
-  color: var(--text-primary);
-}
-
-.admin-modal-field:last-child {
-  border-bottom: none;
-}
-
-.admin-modal-field strong {
-  color: var(--text-secondary);
-  font-weight: 600;
-  margin-right: 8px;
 }
