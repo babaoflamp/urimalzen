@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { adminAPI } from "../services/api";
 import "./AdminCommon.css";
 
@@ -37,7 +38,7 @@ const AdminUsers = () => {
       setTotalPages(response.pagination.pages);
     } catch (error) {
       console.error("Failed to load users:", error);
-      alert("사용자 로딩 실패");
+      toast.error("사용자 로딩 실패");
     } finally {
       setLoading(false);
     }
@@ -70,22 +71,22 @@ const AdminUsers = () => {
 
     try {
       // Delete API call would go here
-      alert("사용자 삭제 완료");
+      toast.success("사용자 삭제 완료");
       loadUsers();
     } catch (error) {
       console.error("Delete failed:", error);
-      alert("삭제 실패");
+      toast.error("삭제 실패");
     }
   };
 
   const handleToggleAdmin = async (userId: string, currentStatus: boolean) => {
     try {
       // Toggle admin API call would go here
-      alert("권한 변경 완료");
+      toast.success("권한 변경 완료");
       loadUsers();
     } catch (error) {
       console.error("Toggle admin failed:", error);
-      alert("권한 변경 실패");
+      toast.error("권한 변경 실패");
     }
   };
 

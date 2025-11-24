@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { useAuthStore } from "../store/useAuthStore";
 import { useLanguageStore } from "../store/useLanguageStore";
 import { translations } from "../utils/translations";
@@ -37,6 +38,7 @@ const AdminDashboard = () => {
       setStats(data);
     } catch (error) {
       console.error("Failed to load stats:", error);
+      toast.error("통계 로딩 실패");
     } finally {
       setLoading(false);
     }
