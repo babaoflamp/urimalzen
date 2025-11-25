@@ -596,3 +596,84 @@ export interface ComfyUIGenerationResponse {
   message?: string;
   error?: string;
 }
+
+// TOPIK Question Types
+export interface TOPIKOption {
+  text: string;
+  textMn: string;
+}
+
+export interface TOPIKQuestion {
+  _id: string;
+  questionNumber: number;
+  questionType: 'multiple-choice' | 'fill-in-blank' | 'essay' | 'short-answer' | 'listening-comprehension';
+  testSection: 'listening' | 'reading' | 'writing';
+  topikLevel: 1 | 2 | 3 | 4 | 5 | 6;
+
+  // Question content
+  questionText: string;
+  questionTextMn: string;
+  options: TOPIKOption[];
+  correctAnswer?: string | number;
+
+  // Explanations
+  explanation: string;
+  explanationMn: string;
+
+  // Media attachments
+  audioUrl?: string;
+  imageUrl?: string;
+
+  // Difficulty and scoring
+  points: number;
+  difficultyScore: number;
+
+  // Metadata and relationships
+  tags: string[];
+  relatedWordIds: string[];
+  grammarPattern?: string;
+
+  // Usage tracking
+  attemptCount: number;
+  correctCount: number;
+  averageScore: number;
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// TOPIK Test Session (user's test attempt)
+export interface TOPIKTestSession {
+  _id: string;
+  userId: string;
+  testSection: 'listening' | 'reading' | 'writing';
+  topikLevel: 1 | 2 | 3 | 4 | 5 | 6;
+  questions: TOPIKQuestion[];
+  answers: {
+    questionId: string;
+    userAnswer: string | number;
+    isCorrect: boolean;
+    timeSpent: number;  // seconds
+  }[];
+  totalScore: number;
+  maxScore: number;
+  startedAt: Date;
+  completedAt?: Date;
+  status: 'in-progress' | 'completed' | 'abandoned';
+}
+
+// TOPIK Progress Tracking
+export interface TOPIKProgress {
+  _id: string;
+  userId: string;
+  topikLevel: 1 | 2 | 3 | 4 | 5 | 6;
+  listeningScore: number;
+  readingScore: number;
+  writingScore: number;
+  totalTests: number;
+  completedTests: number;
+  averageScore: number;
+  lastTestDate?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}

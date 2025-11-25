@@ -26,6 +26,10 @@ import Categories from "./pages/Categories";
 import Levels from "./pages/Levels";
 import Pronunciation from "./pages/Pronunciation";
 import Units from "./pages/Units";
+import TOPIKHome from "./pages/TOPIKHome";
+import TOPIKLevels from "./pages/TOPIKLevels";
+import TOPIKTest from "./pages/TOPIKTest";
+import TOPIKProgress from "./pages/TOPIKProgress";
 
 function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -88,6 +92,24 @@ function App() {
         <Route
           path="/units"
           element={isAuthenticated ? <Units /> : <Navigate to="/login" />}
+        />
+
+        {/* TOPIK 라우트 */}
+        <Route
+          path="/topik/home"
+          element={isAuthenticated ? <TOPIKHome /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/topik/levels"
+          element={isAuthenticated ? <TOPIKLevels /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/topik/test"
+          element={isAuthenticated ? <TOPIKTest /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/topik/progress"
+          element={isAuthenticated ? <TOPIKProgress /> : <Navigate to="/login" />}
         />
 
         {/* 관리자 라우트 */}

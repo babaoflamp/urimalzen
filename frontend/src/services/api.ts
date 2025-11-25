@@ -11,6 +11,9 @@ import type {
   PronunciationAnalysis,
   Unit,
   ApiResponse,
+  TOPIKQuestion,
+  TOPIKTestSession,
+  TOPIKProgress,
 } from '../types';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -674,6 +677,102 @@ export const adminStatsAPI = {
       params: { type, format },
       responseType: format === 'csv' ? 'blob' : 'json',
     });
+    return response.data;
+  },
+};
+
+// TOPIK API
+export const topikAPI = {
+  // Get all TOPIK questions with optional filters
+  getAllQuestions: async (
+    topikLevel?: 1 | 2 | 3 | 4 | 5 | 6,
+    testSection?: 'listening' | 'reading' | 'writing'
+  ): Promise<ApiResponse<TOPIKQuestion[]>> => {
+    const params: any = {};
+    if (topikLevel) params.topikLevel = topikLevel;
+    if (testSection) params.testSection = testSection;
+    const response = await api.get('/topik/questions', { params });
+    return response.data;
+  },
+
+  // Get questions by level
+  getQuestionsByLevel: async (
+    topikLevel: 1 | 2 | 3 | 4 | 5 | 6
+  ): Promise<ApiResponse<TOPIKQuestion[]>> => {
+    const response = await api.get(`/topik/questions/level/${topikLevel}`);
+    return response.data;
+  },
+
+  // Get questions by section
+  getQuestionsBySection: async (
+    testSection: 'listening' | 'reading' | 'writing',
+    topikLevel?: 1 | 2 | 3 | 4 | 5 | 6
+  ): Promise<ApiResponse<TOPIKQuestion[]>> => {
+    const params = topikLevel ? { topikLevel } : {};
+    const response = await api.get(`/topik/questions/section/${testSection}`, { params });
+    return response.data;
+  },
+
+  // Get single question by ID
+  getQuestionById: async (id: string): Promise<ApiResponse<TOPIKQuestion>> => {
+    const response = await api.get(`/topik/questions/${id}`);
+    return response.data;
+  },
+
+  // Start a new test session
+  startTestSession: async (data: {
+    testSection: 'listening' | 'reading' | 'writing';
+    topikLevel: 1 | 2 | 3 | 4 | 5 | 6;
+  }): Promise<ApiResponse<TOPIKTestSession>> => {
+    const response = await api.post('/topik/sessions/start', data);
+    return response.data;
+  },
+
+  // Submit answer for a question in the session
+  submitAnswer: async (
+    sessionId: string,
+    data: {
+      questionId: string;
+      userAnswer: string | number;
+      timeSpent: number;
+    }
+  ): Promise<ApiResponse<TOPIKTestSession>> => {
+    const response = await api.post(`/topik/sessions/${sessionId}/answer`, data);
+    return response.data;
+  },
+
+  // Complete test session
+  completeSession: async (sessionId: string): Promise<ApiResponse<TOPIKTestSession>> => {
+    const response = await api.post(`/topik/sessions/${sessionId}/complete`);
+    return response.data;
+  },
+
+  // Get session by ID
+  getSessionById: async (sessionId: string): Promise<ApiResponse<TOPIKTestSession>> => {
+    const response = await api.get(`/topik/sessions/${sessionId}`);
+    return response.data;
+  },
+
+  // Get all sessions for current user
+  getUserSessions: async (
+    status?: 'in-progress' | 'completed' | 'abandoned'
+  ): Promise<ApiResponse<TOPIKTestSession[]>> => {
+    const params = status ? { status } : {};
+    const response = await api.get('/topik/sessions', { params });
+    return response.data;
+  },
+
+  // Get TOPIK progress for current user
+  getProgress: async (): Promise<ApiResponse<TOPIKProgress>> => {
+    const response = await api.get('/topik/progress');
+    return response.data;
+  },
+
+  // Get progress by level
+  getProgressByLevel: async (
+    topikLevel: 1 | 2 | 3 | 4 | 5 | 6
+  ): Promise<ApiResponse<TOPIKProgress>> => {
+    const response = await api.get(`/topik/progress/level/${topikLevel}`);
     return response.data;
   },
 };
