@@ -66,7 +66,7 @@ const AdminUsers = () => {
     }
   };
 
-  const handleDelete = async (userId: string) => {
+  const handleDelete = async (_userId: string) => {
     if (!confirm("정말 이 사용자를 삭제하시겠습니까?")) return;
 
     try {
@@ -79,16 +79,17 @@ const AdminUsers = () => {
     }
   };
 
-  const handleToggleAdmin = async (userId: string, currentStatus: boolean) => {
-    try {
-      // Toggle admin API call would go here
-      toast.success("권한 변경 완료");
-      loadUsers();
-    } catch (error) {
-      console.error("Toggle admin failed:", error);
-      toast.error("권한 변경 실패");
-    }
-  };
+  // TODO: Implement handleToggleAdmin when backend API is ready
+  // const handleToggleAdmin = async (_userId: string, _currentStatus: boolean) => {
+  //   try {
+  //     // Toggle admin API call would go here
+  //     toast.success("권한 변경 완료");
+  //     loadUsers();
+  //   } catch (error) {
+  //     console.error("Toggle admin failed:", error);
+  //     toast.error("권한 변경 실패");
+  //   }
+  // };
 
   return (
     <div className="admin-page-container">

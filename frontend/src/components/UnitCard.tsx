@@ -16,7 +16,8 @@ export const UnitCard = ({ unit, onClick, isSelected = false }: UnitCardProps) =
     5: '#f87171',
   };
 
-  const levelColor = levelColors[unit.kiipLevel] || '#667eea';
+  const kiipLevel = unit.kiipLevel ?? 0;
+  const levelColor = levelColors[kiipLevel] || '#667eea';
 
   return (
     <div
@@ -87,14 +88,13 @@ export const LessonCard = ({
       <div style={styles.lessonTitle}>{lesson.title}</div>
       <div style={styles.lessonTitleMn}>{lesson.titleMn}</div>
 
-      <div style={styles.objectiveContainer}>
-        <div style={styles.objectiveLabel}>학습 목표:</div>
-        <div style={styles.objectiveText}>{lesson.learningObjective}</div>
-        <div style={styles.objectiveTextMn}>{lesson.learningObjectiveMn}</div>
-      </div>
-
-      <div style={styles.exerciseInfo}>
-        {lesson.exercises?.length || 0}개 연습 문제
+      <div style={styles.lessonInfo}>
+        <div style={styles.wordCount}>
+          📚 {lesson.wordIds?.length || 0}개 단어
+        </div>
+        {lesson.isReview && (
+          <div style={styles.reviewBadge}>🔄 복습</div>
+        )}
       </div>
     </div>
   );
@@ -252,35 +252,24 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: 'rgba(255, 255, 255, 0.85)',
     fontSize: '15px',
   },
-  objectiveContainer: {
-    background: 'rgba(0, 0, 0, 0.1)',
-    borderRadius: '10px',
-    padding: '12px',
-    marginTop: '4px',
+  lessonInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: '8px',
   },
-  objectiveLabel: {
-    color: 'rgba(255, 255, 255, 0.7)',
+  wordCount: {
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontSize: '13px',
+    fontWeight: 'bold',
+  },
+  reviewBadge: {
+    background: 'rgba(251, 191, 36, 0.5)',
+    color: 'white',
+    padding: '4px 10px',
+    borderRadius: '6px',
     fontSize: '11px',
     fontWeight: 'bold',
-    marginBottom: '6px',
-    textTransform: 'uppercase',
-  },
-  objectiveText: {
-    color: 'white',
-    fontSize: '13px',
-    lineHeight: '1.4',
-    marginBottom: '4px',
-  },
-  objectiveTextMn: {
-    color: 'rgba(255, 255, 255, 0.75)',
-    fontSize: '12px',
-    lineHeight: '1.4',
-  },
-  exerciseInfo: {
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontSize: '12px',
-    fontWeight: 'bold',
-    marginTop: '4px',
   },
 };
 

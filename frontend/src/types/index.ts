@@ -2,9 +2,11 @@ export interface User {
   _id: string;
   username: string;
   email: string;
+  programType: 'kiip' | 'topik';  // NEW: 프로그램 타입
   level: {
     cefr: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
-    kiip: 0 | 1 | 2 | 3 | 4 | 5;
+    kiip?: 0 | 1 | 2 | 3 | 4 | 5;    // KIIP 사용자만 (선택적)
+    topik?: 1 | 2 | 3 | 4 | 5 | 6;   // TOPIK 사용자만 (선택적)
   };
   totalScore: number;
   region: string;
@@ -33,11 +35,17 @@ export interface Word {
   synonyms: string[];
   videoUrl?: string;
   readingContent?: string;
-  // New KIIP fields
+
+  // Program type for KIIP/TOPIK separation
+  programType: 'kiip' | 'topik' | 'common';
+
+  // Level fields
   level: {
-    kiip: 0 | 1 | 2 | 3 | 4 | 5;
+    kiip?: 0 | 1 | 2 | 3 | 4 | 5;    // KIIP 사용자만 (선택적)
     cefr: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+    topik?: 1 | 2 | 3 | 4 | 5 | 6;   // TOPIK 사용자만 (선택적)
   };
+
   mainCategory: string;
   subCategory: string;
   phonemeRules: string[];
@@ -50,6 +58,12 @@ export interface Word {
   wordType: 'noun' | 'verb' | 'adjective' | 'adverb' | 'particle' | 'other';
   formalityLevel: 'informal' | 'neutral' | 'formal';
   culturalNote?: string;
+
+  // TOPIK-specific fields
+  testSection?: 'listening' | 'reading' | 'writing';
+  grammarPattern?: string;
+  questionType?: string;
+
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -160,30 +174,18 @@ export interface PronunciationAnalysis {
   }>;
 }
 
-// Unit and Lesson types
-export interface Exercise {
-  exerciseType: 'vocabulary' | 'listening' | 'pronunciation' | 'reading' | 'writing';
-  wordIds: string[];
-  instructions: string;
-  instructionsMn: string;
-}
-
+// Unit and Lesson types (matching backend schema)
 export interface Lesson {
   lessonNumber: number;
   title: string;
   titleMn: string;
-  exercises: Exercise[];
-  learningObjective: string;
-  learningObjectiveMn: string;
+  wordIds: string[];
+  isReview: boolean;
 }
 
 export interface Challenge {
-  challengeType: 'mixed' | 'speed' | 'accuracy';
   wordIds: string[];
-  timeLimit?: number;
   passingScore: number;
-  instructions: string;
-  instructionsMn: string;
 }
 
 export interface Unit {
@@ -191,7 +193,10 @@ export interface Unit {
   unitNumber: number;
   title: string;
   titleMn: string;
-  kiipLevel: number;
+  programType: 'kiip' | 'topik';  // NEW: 프로그램 타입
+  kiipLevel?: number;              // KIIP 유닛만 (선택적)
+  topikLevel?: number;             // NEW: TOPIK 유닛만 (선택적)
+  testSection?: 'listening' | 'reading' | 'writing';  // NEW: TOPIK 시험 영역
   mainCategory: string;
   lessons: Lesson[];
   challenge: Challenge;

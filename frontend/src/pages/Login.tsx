@@ -13,6 +13,7 @@ const Login = () => {
     username: "",
     email: "",
     password: "",
+    programType: "kiip" as "kiip" | "topik",
     region: "",
     country: "",
   });
@@ -155,6 +156,34 @@ const Login = () => {
 
             {isRegister && (
               <>
+                <div className="login-program-type-section">
+                  <label className="login-program-type-label">학습 프로그램</label>
+                  <div className="login-program-type-options">
+                    <label className="login-radio-label">
+                      <input
+                        type="radio"
+                        name="programType"
+                        value="kiip"
+                        checked={formData.programType === "kiip"}
+                        onChange={handleChange}
+                        className="login-radio"
+                      />
+                      <span>KIIP (사회통합프로그램)</span>
+                    </label>
+                    <label className="login-radio-label">
+                      <input
+                        type="radio"
+                        name="programType"
+                        value="topik"
+                        checked={formData.programType === "topik"}
+                        onChange={handleChange}
+                        className="login-radio"
+                      />
+                      <span>TOPIK (한국어능력시험)</span>
+                    </label>
+                  </div>
+                </div>
+
                 <input
                   type="text"
                   name="country"

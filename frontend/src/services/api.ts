@@ -38,6 +38,12 @@ export const authAPI = {
     username: string;
     email: string;
     password: string;
+    programType: 'kiip' | 'topik';
+    level?: {
+      kiip?: 0 | 1 | 2 | 3 | 4 | 5;
+      topik?: 1 | 2 | 3 | 4 | 5 | 6;
+      cefr?: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+    };
     region?: string;
     country?: string;
   }): Promise<AuthResponse> => {
@@ -58,8 +64,9 @@ export const authAPI = {
 
 // Word API
 export const wordAPI = {
-  getAllWords: async (): Promise<{ success: boolean; count: number; data: Word[] }> => {
-    const response = await api.get('/words');
+  getAllWords: async (programType?: 'kiip' | 'topik' | 'common'): Promise<{ success: boolean; count: number; data: Word[] }> => {
+    const params = programType ? { programType } : {};
+    const response = await api.get('/words', { params });
     return response.data;
   },
 
@@ -74,19 +81,23 @@ export const wordAPI = {
   },
 
   getWordsByLevel: async (
-    kiipLevel: number
+    kiipLevel: number,
+    programType?: 'kiip' | 'topik' | 'common'
   ): Promise<{ success: boolean; kiipLevel: number; count: number; data: Word[] }> => {
-    const response = await api.get(`/words/level/${kiipLevel}`);
+    const params = programType ? { programType } : {};
+    const response = await api.get(`/words/level/${kiipLevel}`, { params });
     return response.data;
   },
 
   getWordsByCategory: async (
     category: string,
-    kiipLevel?: number
+    kiipLevel?: number,
+    programType?: 'kiip' | 'topik' | 'common'
   ): Promise<{ success: boolean; category: string; count: number; data: Word[] }> => {
-    const response = await api.get(`/words/category/${category}`, {
-      params: kiipLevel !== undefined ? { kiipLevel } : {},
-    });
+    const params: any = {};
+    if (kiipLevel !== undefined) params.kiipLevel = kiipLevel;
+    if (programType) params.programType = programType;
+    const response = await api.get(`/words/category/${category}`, { params });
     return response.data;
   },
 
@@ -98,6 +109,7 @@ export const wordAPI = {
     minDifficulty?: number;
     maxDifficulty?: number;
     wordType?: string;
+    programType?: 'kiip' | 'topik' | 'common';
   }): Promise<{ success: boolean; filters: any; count: number; data: Word[] }> => {
     const response = await api.get('/words/search', { params });
     return response.data;
@@ -281,11 +293,13 @@ export const pronunciationAPI = {
 export const unitAPI = {
   getAllUnits: async (
     kiipLevel?: number,
-    category?: string
+    category?: string,
+    programType?: 'kiip' | 'topik'
   ): Promise<ApiResponse<Unit[]>> => {
     const params: any = {};
     if (kiipLevel !== undefined) params.kiipLevel = kiipLevel;
     if (category) params.category = category;
+    if (programType) params.programType = programType;
     const response = await api.get('/units', { params });
     return response.data;
   },
@@ -301,17 +315,22 @@ export const unitAPI = {
   },
 
   getUnitsByLevel: async (
-    kiipLevel: number
+    kiipLevel: number,
+    programType?: 'kiip' | 'topik'
   ): Promise<{ success: boolean; kiipLevel: number; count: number; data: Unit[] }> => {
-    const response = await api.get(`/units/level/${kiipLevel}`);
+    const params = programType ? { programType } : {};
+    const response = await api.get(`/units/level/${kiipLevel}`, { params });
     return response.data;
   },
 
   getUnitsByCategory: async (
     category: string,
-    kiipLevel?: number
+    kiipLevel?: number,
+    programType?: 'kiip' | 'topik'
   ): Promise<{ success: boolean; category: string; count: number; data: Unit[] }> => {
-    const params = kiipLevel !== undefined ? { kiipLevel } : {};
+    const params: any = {};
+    if (kiipLevel !== undefined) params.kiipLevel = kiipLevel;
+    if (programType) params.programType = programType;
     const response = await api.get(`/units/category/${category}`, { params });
     return response.data;
   },
@@ -427,6 +446,11 @@ export const adminAPI = {
     const response = await api.get('/admin/recordings', { params: { page, limit } });
     return response.data;
   },
+
+  deleteRecording: async (id: string) => {
+    const response = await api.delete(`/admin/recordings/${id}`);
+    return response.data;
+  },
 };
 
 // Admin AI API
@@ -469,7 +493,7 @@ export const adminAIAPI = {
 
 // Admin TTS API
 export const adminTTSAPI = {
-  generateWordAudio: async (wordId: string, options?: { voice?: string; speed?: number; pitch?: number }) => {
+  generateWordAudio: async (wordId: string, options?: { speaker?: string; tempo?: number; pitch?: number; gain?: number }) => {
     const response = await api.post('/admin/tts/generate-word-audio', { wordId, ...options });
     return response.data;
   },
