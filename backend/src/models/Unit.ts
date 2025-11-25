@@ -17,7 +17,10 @@ export interface IUnit extends Document {
   unitNumber: number;
   title: string;
   titleMn: string;
-  kiipLevel: number;
+  programType: 'kiip' | 'topik';  // NEW: 프로그램 타입
+  kiipLevel?: number;              // KIIP 유닛만 (선택적)
+  topikLevel?: number;             // NEW: TOPIK 유닛만 (선택적)
+  testSection?: 'listening' | 'reading' | 'writing';  // NEW: TOPIK 시험 영역
   mainCategory: string;
   lessons: ILesson[];
   challenge: IChallenge;
@@ -91,10 +94,26 @@ const unitSchema = new Schema<IUnit>(
       required: [true, 'Mongolian title is required'],
       trim: true,
     },
+    programType: {
+      type: String,
+      enum: ['kiip', 'topik'],
+      required: [true, 'Program type is required'],
+      default: 'kiip',  // 기존 유닛 호환성을 위해 기본값 kiip
+    },
     kiipLevel: {
       type: Number,
-      required: true,
+      required: false,  // 선택적 필드로 변경
       enum: [0, 1, 2, 3, 4, 5],
+    },
+    topikLevel: {
+      type: Number,
+      required: false,  // 선택적 필드
+      enum: [1, 2, 3, 4, 5, 6],
+    },
+    testSection: {
+      type: String,
+      enum: ['listening', 'reading', 'writing'],
+      required: false,  // TOPIK 유닛만 사용
     },
     mainCategory: {
       type: String,
@@ -128,5 +147,10 @@ const unitSchema = new Schema<IUnit>(
 // Note: order and unitNumber fields already have indexes due to unique: true
 unitSchema.index({ kiipLevel: 1, order: 1 });
 unitSchema.index({ mainCategory: 1 });
+
+// Index for TOPIK/KIIP separation
+unitSchema.index({ programType: 1 });
+unitSchema.index({ programType: 1, topikLevel: 1 });
+unitSchema.index({ programType: 1, testSection: 1 });
 
 export default mongoose.model<IUnit>('Unit', unitSchema);

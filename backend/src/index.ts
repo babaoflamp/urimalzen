@@ -21,6 +21,7 @@ import adminStatsRoutes from './routes/adminStatsRoutes';
 import userTTSRoutes from './routes/userTTS';
 import userSTTRoutes from './routes/userSTT';
 import comfyuiRoutes from './routes/comfyuiRoutes';
+import topikRoutes from './routes/topik';
 
 // Load environment variables
 dotenv.config();
@@ -84,6 +85,9 @@ app.use('/api/comfyui', comfyuiRoutes);
 // User TTS/STT routes
 app.use('/api/tts', userTTSRoutes);
 app.use('/api/stt', userSTTRoutes);
+
+// TOPIK routes
+app.use('/api/topik', topikRoutes);
 
 // Start server
 const startServer = async () => {

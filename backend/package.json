@@ -12,6 +12,7 @@
     "seed:categories": "ts-node src/utils/seedCategories.ts",
     "seed:phoneme-rules": "ts-node src/utils/seedPhonemeRules.ts",
     "seed:kiip-words": "ts-node src/utils/seedKiipWords.ts",
+    "seed:topik-words": "ts-node src/utils/seedTopikWords.ts",
     "seed:basic-words": "ts-node src/utils/seedBasicWords.ts",
     "seed:advanced-words": "ts-node src/utils/seedAdvancedWords.ts",
     "migrate:flowers": "ts-node src/utils/migrateFlowerWords.ts",

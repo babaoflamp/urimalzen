@@ -5,9 +5,11 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
+  programType: 'kiip' | 'topik';  // NEW: 프로그램 타입
   level: {
     cefr: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
-    kiip: 0 | 1 | 2 | 3 | 4 | 5;
+    kiip?: 0 | 1 | 2 | 3 | 4 | 5;    // KIIP 사용자만 (선택적)
+    topik?: 1 | 2 | 3 | 4 | 5 | 6;   // NEW: TOPIK 사용자만 (선택적)
   };
   totalScore: number;
   region: string;
@@ -41,6 +43,12 @@ const userSchema = new Schema<IUser>(
       minlength: [6, 'Password must be at least 6 characters'],
       select: false,
     },
+    programType: {
+      type: String,
+      enum: ['kiip', 'topik'],
+      required: [true, 'Program type is required'],
+      default: 'kiip',  // 기존 사용자 호환성을 위해 기본값 kiip
+    },
     level: {
       cefr: {
         type: String,
@@ -50,7 +58,12 @@ const userSchema = new Schema<IUser>(
       kiip: {
         type: Number,
         enum: [0, 1, 2, 3, 4, 5],
-        default: 1,
+        required: false,  // 선택적 필드로 변경
+      },
+      topik: {
+        type: Number,
+        enum: [1, 2, 3, 4, 5, 6],
+        required: false,  // 선택적 필드
       },
     },
     totalScore: {
