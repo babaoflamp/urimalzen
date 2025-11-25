@@ -13,10 +13,11 @@
     "seed:phoneme-rules": "ts-node src/utils/seedPhonemeRules.ts",
     "seed:kiip-words": "ts-node src/utils/seedKiipWords.ts",
     "seed:topik-words": "ts-node src/utils/seedTopikWords.ts",
+    "seed:topik-questions": "ts-node src/utils/seedTopikQuestions.ts",
     "seed:basic-words": "ts-node src/utils/seedBasicWords.ts",
     "seed:advanced-words": "ts-node src/utils/seedAdvancedWords.ts",
     "migrate:flowers": "ts-node src/utils/migrateFlowerWords.ts",
-    "seed:all": "npm run seed:admin && npm run seed:categories && npm run seed:phoneme-rules && npm run migrate:flowers && npm run seed:kiip-words",
+    "seed:all": "npm run seed:admin && npm run seed:categories && npm run seed:phoneme-rules && npm run migrate:flowers && npm run seed:kiip-words && npm run seed:topik-questions",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
