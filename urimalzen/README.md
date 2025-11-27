@@ -2,6 +2,8 @@
 
 **대한민국 이주민을 위한 포괄적 한국어 학습 솔루션**
 
+**저장소 URL**: https://github.com/babaoflamp/urimalzen.git
+
 KIIP(Korea Immigration & Integration Program) 프레임워크 기반으로 체계적인 한국어 교육을 제공하는 웹 기반 언어 학습 플랫폼입니다. 다양한 국가 출신 이주민들의 한국 사회 통합을 지원합니다.
 
 ## 지원 대상 국가
