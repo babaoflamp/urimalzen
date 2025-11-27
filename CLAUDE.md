@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**우리말젠 (Urimalzen)** - A Korean-Mongolian language learning web application for Mongolians learning Korean. Features vocabulary learning with KIIP (Korea Immigration & Integration Program) integration, pronunciation analysis, category-based learning, voice recording, progress tracking, and multi-level ranking system.
+**우리말젠 (Urimalzen)** - A Korean-Mongolian language learning web application for Mongolians learning Korean. Features vocabulary learning with KIIP (Korea Immigration & Integration Program) integration, pronunciation analysis, category-based learning, voice recording, progress tracking, multi-level ranking system, and advanced TTS/STT/AI capabilities.
 
 **Stack**: Full-stack TypeScript application with React 19 frontend and Express 5 backend.
 
 **Developer**: 김영훈 Manager (Kim Young-hoon Manager)
 
-**Project Evolution**: Originally a simple 9-flower vocabulary app, evolved into a comprehensive KIIP-based Korean learning platform with full curriculum support, pronunciation analysis, admin dashboard, and multi-level ranking system. Recent major features include TTS/STT integration and complete admin CRUD operations.
+**Project Evolution**: Originally a simple 9-flower vocabulary app, evolved into a comprehensive KIIP-based Korean learning platform with full curriculum support, pronunciation analysis, admin dashboard, multi-level ranking system. Recently integrated TTS (Text-to-Speech), STT (Speech-to-Text), AI image generation (ComfyUI), and linguistic analysis (VocaPro) features. **Latest addition (Phase 1-4)**: TOPIK (Test of Proficiency in Korean) exam preparation system with full question bank, test sessions, and progress tracking - separated from KIIP curriculum.
 
 ## Repository Structure
 
@@ -18,8 +18,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 urimalzen/
 ├── frontend/                   # React + Vite + TypeScript
 │   ├── src/
-│   │   ├── components/        # UI components
-│   │   ├── pages/             # Route pages
+│   │   ├── components/        # UI components (WordList, RecordingControls, etc.)
+│   │   ├── pages/             # Route pages (Admin*, Learning, Categories, etc.)
 │   │   ├── store/             # Zustand state stores
 │   │   ├── services/          # API client (api.ts)
 │   │   ├── types/             # TypeScript interfaces
@@ -30,18 +30,23 @@ urimalzen/
 │
 ├── backend/                    # Express + TypeScript + MongoDB
 │   ├── src/
-│   │   ├── controllers/       # Request handlers
-│   │   ├── models/            # Mongoose schemas
+│   │   ├── controllers/       # Request handlers (admin*, user*, word, etc.)
+│   │   ├── models/            # Mongoose schemas (Word, User, Category, etc.)
 │   │   ├── routes/            # API routes
 │   │   ├── middleware/        # Auth & file upload
-│   │   ├── services/          # Business logic
+│   │   ├── services/          # Business logic (ttsService, sttService, aiService, etc.)
 │   │   ├── utils/             # Seed scripts
 │   │   └── index.ts           # Server entry point
 │   ├── uploads/               # User-uploaded files (audio)
-│   └── .env                   # Environment config (NOT in repo)
+│   └── .env                   # Environment config (currently in repo for dev, should be gitignored in production)
 │
-└── requirements/               # Requirements documentation
-    └── screen/                # UI screenshots
+├── requirements/               # Requirements documentation
+│   └── screen/                # UI screenshots
+│
+├── COMFYUI_GUIDE.md           # ComfyUI integration guide
+├── MzTTS_API_Interface.md     # MzTTS API documentation
+├── VocaPro_API_Interface.md   # VocaPro API documentation
+└── SPEECHPRO_API_Interface.md # SpeechPro API documentation
 ```
 
 ## Quick Start
@@ -75,6 +80,8 @@ npm run dev                   # Starts on http://localhost:5173
 
 ### Backend (Express + TypeScript + MongoDB)
 
+**Note**: Currently working on Phase 4 TOPIK implementation. Many models and controllers have recent modifications.
+
 ```bash
 cd backend
 
@@ -102,7 +109,7 @@ npm run seed:advanced-words    # Seed advanced vocabulary
 **Prerequisites**:
 - MongoDB running on `localhost:27017` or via Docker
 - Check MongoDB with: `docker ps --filter "name=mongo"`
-- Create `.env` file (not in repository) - see Environment Configuration section below
+- Create `.env` file (see backend/.env for example configuration)
 
 ### Frontend (React + Vite + TypeScript)
 
@@ -124,14 +131,16 @@ npm run lint             # ESLint
 
 ### Core Data Models
 
-**Word Model** - Comprehensive vocabulary data with KIIP integration:
-- Basic fields: `koreanWord`, `mongolianWord`, `pronunciation`, `imageUrl`, `description`
+**Word Model** - Comprehensive vocabulary data with KIIP integration and external API data:
+- Basic fields: `koreanWord`, `mongolianWord`, `chineseWord`, `pronunciation`, `imageUrl`, `description`
 - KIIP/CEFR levels: `level.kiip` (0-5), `level.cefr` (A1-C2)
 - 14-category system: `mainCategory`, `subCategory`
 - Pronunciation: `phonemeRules[]`, `standardPronunciation`
 - Vocabulary relationships: `synonyms[]`, `antonyms[]`, `collocations[]`, `relatedWords[]`
 - Learning metadata: `wordType`, `formalityLevel`, `difficultyScore`, `frequencyRank`
 - Examples array with Korean-Mongolian pairs
+- **SpeechPro data** (pronunciation model): `syllLtrs`, `syllPhns`, `fst`, `lastUpdated`, `errorCode`
+- **VocaPro data** (linguistic analysis): `morphemes[]`, `definitions[]`, `cefrAnalysis`, `synonymsExtended[]`, `antonymsExtended[]`, `lastUpdated`, `errorCode`
 - Indexes on: `order`, `category`, `level.kiip`, `mainCategory`
 
 **Unit Model** - KIIP curriculum organization:
@@ -170,6 +179,70 @@ npm run lint             # ESLint
 **Ranking Model** - Leaderboard system:
 - Per-user document with `userId`, `rank`
 - Scores organized by level
+
+**TOPIKQuestion Model** - TOPIK exam questions:
+- Question metadata: `questionNumber`, `questionType`, `testSection`, `topikLevel` (1-6)
+- Content: `questionText`, `questionTextMn`, `options[]`, `correctAnswer`
+- Media: `audioUrl`, `imageUrl` (for listening/visual questions)
+- Relationships: `relatedWordIds[]`, `grammarPattern`, `tags[]`
+- Usage tracking: `attemptCount`, `correctCount`, `averageScore`
+
+**TOPIKTestSession Model** - User test sessions:
+- Test metadata: `userId`, `topikLevel`, `testSection`, `startTime`, `endTime`
+- Answers: `userAnswers[]` array with question ID, user answer, correct answer, time spent
+- Scoring: `score`, `totalQuestions`, `correctCount`
+- Status: `status` (in-progress, completed, abandoned)
+
+**TOPIKProgress Model** - Long-term TOPIK progress tracking:
+- Per-user document with `userId`, `currentLevel`, `targetLevel`
+- Section scores: `listeningScore`, `readingScore`, `writingScore`
+- History: `testHistory[]`, `weakAreas[]`, `strongAreas[]`
+
+### External API Services
+
+The application integrates with three external AI/voice services:
+
+**1. MzTTS (Text-to-Speech)**
+- Location: `backend/src/services/ttsService.ts`
+- API: `http://112.220.79.218:56014` (configured via `MZTTS_API_URL`)
+- Function: `requestMzTTS(text, options)`
+- Features: Multi-speaker Korean TTS with emotion control (neutral, pleasure, anger, sadness)
+- Output formats: `file` (WAV direct), `pcm` (base64), `path` (server path)
+- Parameters: `DEFAULTSPEAKER` (0-7), `DEFAULTTEMPO` (0.1-2.0), `DEFAULTPITCH` (0.1-2.0), `DEFAULTGAIN` (0.1-2.0)
+- Documentation: `MzTTS_API_Interface.md`
+
+**2. SpeechPro (Pronunciation Evaluation)**
+- Location: `backend/src/services/speechproService.ts` (recently added)
+- API: `http://112.220.79.222:33005/speechpro` (configured via `SPEECHPRO_API_URL`)
+- Three-step workflow:
+  1. **GTP (Grapheme-to-Phoneme)**: Convert Korean text to phonemes → `callGTP()`
+  2. **Model**: Generate FST pronunciation model → `callModel()`
+  3. **Score**: Evaluate user pronunciation against model → `callScore()`
+- Data stored in Word model's `speechPro` field: `syllLtrs`, `syllPhns`, `fst`
+- Documentation: `SPEECHPRO_API_Interface.md`
+
+**3. VocaPro (Linguistic Analysis)**
+- Location: `backend/src/services/vocaproService.ts` (recently added)
+- API: `https://api.vocapro.example.com` (configured via `VOCAPRO_API_URL`)
+- Features: Word analysis (morphemes, POS tagging), CEFR level prediction, synonyms/antonyms extraction
+- Supports 4 languages: Korean (`kor`), Chinese (`chi`), Japanese (`jap`), English (`eng`)
+- Data stored in Word model's `vocaPro` field
+- Documentation: `VocaPro_API_Interface.md`
+
+**4. ComfyUI (AI Image Generation)**
+- Location: `backend/src/services/comfyuiService.ts`
+- API: `http://localhost:8188` (configured via `COMFYUI_API_URL`)
+- Features: Stable Diffusion XL-based word illustration generation
+- Workflow: Submit prompt → Poll queue status → Download generated image
+- Used for generating educational word images automatically
+- Requires local ComfyUI installation with SDXL models
+- Documentation: `COMFYUI_GUIDE.md`
+
+**5. Ollama (Local LLM)**
+- Used for AI text generation features
+- API: `http://localhost:11434/api` (configured via `OLLAMA_API_URL`)
+- Default model: `exaone3.5:7.8b`
+- Location: `backend/src/services/aiService.ts`
 
 ### Controller Patterns
 
@@ -220,11 +293,26 @@ All routes prefixed with `/api`:
 /api/recordings    - Audio recording upload/retrieval
 /api/progress      - User learning progress tracking
 /api/rankings      - Leaderboards (global/country/region)
-/api/admin         - Admin-only operations (all require authenticate + requireAdmin)
-```
+/api/admin         - Admin-only operations
 
-**Admin routes** (all require both `authenticate` and `requireAdmin`):
-- Dashboard stats, user management, word CRUD, recording management
+Admin-only routes (require authenticate + requireAdmin):
+/api/admin/ai      - AI content generation (Ollama)
+/api/admin/tts     - TTS management (MzTTS, SpeechPro)
+/api/admin/stt     - STT/pronunciation evaluation (SpeechPro)
+/api/admin/stats   - Dashboard statistics
+/api/admin/comfyui - ComfyUI image generation
+/api/admin/topik   - TOPIK question management
+
+User routes (require authenticate):
+/api/user/tts      - User TTS requests
+/api/user/stt      - User pronunciation evaluation
+
+TOPIK routes (require authenticate):
+/api/topik/questions         - TOPIK questions by level/section
+/api/topik/test/start        - Start new test session
+/api/topik/test/:id/submit   - Submit test answers
+/api/topik/progress          - User TOPIK progress
+```
 
 ## Frontend Architecture
 
@@ -233,20 +321,42 @@ All routes prefixed with `/api`:
 ### Routing Structure
 
 Protected routes using `isAuthenticated` check:
+
+**KIIP Learning Routes**:
 - `/login` - User login
 - `/` and `/learning` - Main learning interface (original 9 flowers)
 - `/categories` - Browse 14 KIIP categories
 - `/levels` - KIIP level selection (0-5)
 - `/pronunciation` - Phoneme rules and pronunciation practice
 - `/units` - KIIP curriculum units and lessons
+- `/sentence-learning` - Sentence-based learning (stories, contextual examples)
+
+**TOPIK Exam Routes**:
+- `/topik` - TOPIK home page
+- `/topik/levels` - TOPIK level selection (1-6)
+- `/topik/test` - Take TOPIK practice test
+- `/topik/progress` - View TOPIK progress and history
+
+**Admin Routes**:
 - `/admin/login` - Admin authentication
-- `/admin/dashboard` - Admin panel
+- `/admin/dashboard` - Admin panel home
+- `/admin/users` - User management
+- `/admin/words` - Word CRUD
+- `/admin/recordings` - Recording management
+- `/admin/statistics` - System statistics
+- `/admin/ai-content` - AI content generation
+- `/admin/tts` - TTS management
+- `/admin/stt` - STT/pronunciation management
+- `/admin/comfyui` - ComfyUI image generation
+- `/admin/kiip` - KIIP curriculum management
+- `/admin/system` - System configuration and API settings
 
 All user routes redirect to `/login` if not authenticated.
+All admin routes redirect to `/admin/login` if not authenticated or not admin.
 
 ### State Management (Zustand)
 
-**Six main stores** with persist middleware:
+**Seven main stores** with persist middleware:
 
 1. **useAuthStore** - Authentication state:
    - State: `user`, `token`, `isAuthenticated`
@@ -270,10 +380,17 @@ All user routes redirect to `/login` if not authenticated.
    - Used by `/units` and `/levels` routes
 
 6. **useLanguageStore** - UI language switching:
-   - State: `language` (type: `'ko' | 'mn'`)
+   - State: `language` (type: `'ko' | 'mn' | 'zh'`)
    - Action: `setLanguage(lang)`
    - Does NOT persist (defaults to 'ko' on refresh)
    - Used by Header and other UI components for translation display
+   - Supports Korean, Mongolian, and Chinese (recently added)
+
+7. **useTOPIKStore** - TOPIK exam system:
+   - Test session state, questions, user answers
+   - Progress tracking, test history
+   - Used by `/topik/*` routes
+   - Persists active test session to prevent data loss
 
 **Pattern**:
 ```typescript
@@ -291,11 +408,12 @@ export const useStore = create<State>()(
 
 **Location**: `frontend/src/utils/translations.ts`
 
-**Structure**: Object-based translations with Korean (`ko`) and Mongolian (`mn`) support:
+**Structure**: Object-based translations with Korean (`ko`), Mongolian (`mn`), and Chinese (`zh`) support:
 ```typescript
 export const translations = {
   ko: { appName: 'KIIP 기반 AI 한국어 학습 플랫폼', ... },
-  mn: { appName: 'KIIP суурьтай AI Солонгос хэл сургалтын платформ', ... }
+  mn: { appName: 'KIIP суурьтай AI Солонгос хэл сургалтын платформ', ... },
+  zh: { appName: 'KIIP AI 韩语学习平台', ... }  // Recently added
 };
 ```
 
@@ -312,20 +430,28 @@ const t = translations[language];
 ```
 
 **Language Switching**:
-- UI includes Korean and Mongolian flag icons in Header component
-- Clicking flags calls `setLanguage('ko')` or `setLanguage('mn')`
-- Flags located at: `/public/images/flags/korea.png`, `/public/images/flags/mongol.png`
+- UI includes Korean, Mongolian, and Chinese flag icons in Header component
+- Clicking flags calls `setLanguage('ko')`, `setLanguage('mn')`, or `setLanguage('zh')`
+- Flags located at: `/public/images/flags/korea.png`, `/public/images/flags/mongol.png`, `/public/images/flags/china.webp`
+- Chinese language support recently added to support expanding user base
 
-**Translation Keys**: All UI text must use translation keys from `translations.ts`. Do NOT hardcode Korean or Mongolian text in components.
+**Translation Keys**: All UI text must use translation keys from `translations.ts`. Do NOT hardcode Korean, Mongolian, or Chinese text in components.
 
 ### API Layer (services/api.ts)
 
 **Centralized axios instance** with:
 - Base URL from `VITE_API_URL` env var
 - Request interceptor adds `Authorization: Bearer ${token}` from localStorage
-- Organized by domain: `authAPI`, `wordAPI`, `categoryAPI`, `pronunciationAPI`, `unitAPI`, `recordingAPI`, `progressAPI`, `rankingAPI`, `adminAPI`
+- Organized by domain: `authAPI`, `wordAPI`, `categoryAPI`, `pronunciationAPI`, `unitAPI`, `recordingAPI`, `progressAPI`, `rankingAPI`, `adminAPI`, `aiAPI`, `ttsAPI`, `sttAPI`, `comfyuiAPI`, `topikAPI`
 
 Each API module exports typed functions matching backend endpoints.
+
+**TOPIK API module** includes:
+- `getQuestions(level, section)` - Fetch TOPIK questions
+- `startTest(level, section)` - Create new test session
+- `submitAnswer(sessionId, questionId, answer)` - Submit individual answer
+- `finishTest(sessionId)` - Complete test and get score
+- `getProgress()` - Get user's TOPIK progress
 
 ### Audio Recording
 
@@ -337,6 +463,66 @@ Uses browser **MediaRecorder API**:
 
 ## Development Workflow
 
+### System Overview for Developers
+
+**The platform has two main learning tracks**:
+1. **KIIP Track** - Vocabulary-based learning with categories, units, lessons (data model: Word, Category, Unit)
+2. **TOPIK Track** - Exam preparation with questions, test sessions, scoring (data model: TOPIKQuestion, TOPIKTestSession)
+
+**External integrations**:
+- **MzTTS** - Korean TTS for word pronunciation
+- **SpeechPro** - Pronunciation evaluation (GTP → Model → Score workflow)
+- **VocaPro** - Linguistic analysis (morphemes, CEFR levels)
+- **ComfyUI** - AI image generation for vocabulary
+- **Ollama** - Local LLM for content generation
+
+**Admin features** (12 pages):
+- Dashboard, Users, Words, Recordings, Statistics
+- AI Content, TTS, STT, ComfyUI, KIIP, System
+
+**Development mode tips**:
+- Use separate terminals for frontend and backend
+- MongoDB must be running before backend starts
+- Check `.env` files for correct API URLs
+- Use `npm run seed:all` for initial data setup
+
+### Working with External APIs (TTS/STT/AI)
+
+**Testing MzTTS locally**:
+```bash
+# Test MzTTS API is accessible
+curl http://112.220.79.218:56014
+
+# Test TTS generation
+curl -X POST http://112.220.79.218:56014 \
+  -H "Content-Type: application/json" \
+  -d '{"output_type":"path","_TEXT":"안녕하세요","_SPEAKER":0}'
+```
+
+**Testing SpeechPro locally**:
+```bash
+# Test GTP endpoint
+curl -X POST http://112.220.79.222:33005/speechpro/gtp \
+  -H "Content-Type: application/json" \
+  -d '{"id":"test","text":"안녕하세요"}'
+```
+
+**Setting up ComfyUI** (see `COMFYUI_GUIDE.md` for full instructions):
+```bash
+# 1. Clone ComfyUI
+git clone https://github.com/comfyanonymous/ComfyUI.git
+cd ComfyUI
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Download SDXL model to ComfyUI/models/checkpoints/
+# wget https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors
+
+# 4. Start ComfyUI
+python main.py --listen 0.0.0.0 --port 8188
+```
+
 ### Adding a new KIIP unit or lesson
 
 1. Create unit via admin API: `POST /api/units`
@@ -345,6 +531,41 @@ Uses browser **MediaRecorder API**:
    - **Match ILesson interface**: Do NOT use `exercises`, `learningObjective` (not in schema)
 3. Add challenge to unit: `POST /api/units/:id/challenge`
 4. Update frontend `useUnitStore` to fetch and display
+
+### Adding TOPIK questions
+
+**Via Admin UI** (`/admin/system`):
+1. Navigate to TOPIK Questions section
+2. Select level (1-6) and section (listening/reading/writing)
+3. Enter question text in Korean and Mongolian
+4. Add options for multiple-choice questions
+5. Set correct answer, points, and difficulty score
+6. Optionally add audio/image URLs and related word IDs
+
+**Via Seed Script**:
+1. Edit `backend/src/utils/seedTopikQuestions.ts`
+2. Add question data to the questions array:
+   ```typescript
+   {
+     questionNumber: 1,
+     questionType: 'multiple-choice',
+     testSection: 'reading',
+     topikLevel: 2,
+     questionText: '다음 빈칸에 알맞은 것을 고르십시오.',
+     questionTextMn: 'Дараах хоосон зайг бөглөнө үү.',
+     options: [
+       { text: '가다', textMn: 'явах' },
+       { text: '오다', textMn: 'ирэх' }
+     ],
+     correctAnswer: 0,
+     explanation: '...',
+     explanationMn: '...',
+     points: 2,
+     difficultyScore: 30,
+     tags: ['grammar', 'verbs']
+   }
+   ```
+3. Run `npm run seed:topik-questions`
 
 ### Adding a new API endpoint
 
@@ -363,10 +584,11 @@ Uses browser **MediaRecorder API**:
 ### Adding new UI translations
 
 1. Open `frontend/src/utils/translations.ts`
-2. Add new key to BOTH `ko` and `mn` objects:
+2. Add new key to ALL language objects (`ko`, `mn`, `zh`):
    ```typescript
    ko: { newKey: '한국어 텍스트', ... },
-   mn: { newKey: 'Монгол текст', ... }
+   mn: { newKey: 'Монгол текст', ... },
+   zh: { newKey: '中文文本', ... }
    ```
 3. Use in components:
    ```typescript
@@ -374,7 +596,7 @@ Uses browser **MediaRecorder API**:
    const t = translations[language];
    // <div>{t.newKey}</div>
    ```
-4. TypeScript will enforce that all keys exist in both languages via `TranslationKey` type
+4. TypeScript will enforce that all keys exist in all languages via `TranslationKey` type
 
 ### Seeding the database
 
@@ -391,7 +613,11 @@ npm run seed:categories        # 14 KIIP categories
 npm run seed:phoneme-rules     # Korean pronunciation rules
 npm run migrate:flowers        # Migrate 9 flower words to new schema
 npm run seed:kiip-words        # KIIP vocabulary by level
+npm run seed:topik-words       # TOPIK-specific vocabulary
+npm run seed:topik-questions   # TOPIK exam questions (Phase 4)
 ```
+
+**Note**: The `seed:all` script automatically runs all seeders including TOPIK questions.
 
 **Important**: `seed:all` includes admin user creation. Default admin credentials:
 - Email: `admin@urimalzen.com`
@@ -400,15 +626,54 @@ npm run seed:kiip-words        # KIIP vocabulary by level
 
 ## Environment Configuration
 
-**Backend** (`backend/.env` - NOT in repository, create manually):
+**Backend** (`backend/.env` - currently in repository for development, should be gitignored in production):
 ```bash
+# Core Server Configuration
 PORT=5000
 NODE_ENV=development
 MONGODB_URI=mongodb://localhost:27017/urimalzen
 JWT_SECRET=your-secret-key-change-this-in-production
-JWT_EXPIRE=7d
+
+# SpeechPro API (pronunciation evaluation/TTS/STT)
+SPEECHPRO_API_URL=http://112.220.79.222:33005/speechpro
+
+# MzTTS API (Korean multi-speaker TTS)
+MZTTS_API_URL=http://112.220.79.218:56014
+TTS_API_URL=http://112.220.79.218:56014
+TTS_API_KEY=
+TTS_DEFAULT_VOICE=ko-KR-Wavenet-A
+TTS_DEFAULT_SPEED=1.0
+TTS_DEFAULT_PITCH=0.0
+TTS_OUTPUT_FORMAT=mp3
+
+# STT Configuration
+STT_API_URL=${SPEECHPRO_API_URL}/stt
+STT_API_KEY=
+STT_LANGUAGE=ko-KR
+STT_ACCURACY_THRESHOLD=0.7
+
+# VocaPro API (linguistic analysis)
+VOCAPRO_API_URL=https://api.vocapro.example.com
+VOCAPRO_API_KEY=
+
+# Ollama Configuration (local LLM)
+OLLAMA_API_URL=http://localhost:11434/api
+OLLAMA_MODEL=exaone3.5:7.8b
+OLLAMA_TEMPERATURE=0.7
+OLLAMA_MAX_TOKENS=2000
+
+# ComfyUI Configuration (image generation)
+COMFYUI_API_URL=http://localhost:8188
+
+# Optional: OpenAI API (alternative to Ollama)
+OPENAI_API_KEY=
+
+# Optional: Google Cloud (alternative TTS/STT)
+GOOGLE_APPLICATION_CREDENTIALS=
+
+# File Upload
 MAX_FILE_SIZE=10485760
-UPLOAD_PATH=./uploads
+UPLOAD_DIR=uploads
 ```
 
 **Frontend** (`frontend/.env` - in repository):
@@ -420,10 +685,12 @@ VITE_API_URL=http://localhost:5000/api
 ```
 
 **First-time setup**:
-1. Create `backend/.env` with the configuration above
-2. Update `JWT_SECRET` to a random secure string
+1. Backend `.env` exists in development - review and update values as needed
+2. **IMPORTANT**: Update `JWT_SECRET` to a random secure string in production
 3. Verify `MONGODB_URI` matches your MongoDB installation
-4. Update `frontend/.env` VITE_API_URL if accessing from external devices
+4. Update API URLs if services are on different hosts/ports
+5. Update `frontend/.env` VITE_API_URL if accessing from external devices
+6. **Production**: Add `.env` to `.gitignore` and never commit production secrets
 
 ## TypeScript Configuration
 
@@ -461,16 +728,41 @@ VITE_API_URL=http://localhost:5000/api
    - Serve frontend static files with `try_files $uri /index.html` for SPA routing
    - CORS handled by backend (allows all origins in development)
 
-## KIIP Integration
+## KIIP vs TOPIK: Two Learning Tracks
 
-**Korea Immigration & Integration Program** (KIIP) integration features:
+The platform now supports **two separate but complementary** Korean learning systems:
 
+### KIIP (Korea Immigration & Integration Program)
+**Purpose**: Government-mandated integration program for immigrants
+**Focus**: Practical daily life Korean for social integration
+**Structure**:
 - **6 levels**: 0 (초급), 1-5 (중급-고급)
 - **14 categories**: 인사, 자기소개, 음식, 쇼핑, 교통, etc.
 - **CEFR mapping**: A1, A2, B1, B2, C1, C2
 - **Curriculum**: Units → Lessons → Words → Challenges
 - **Phoneme rules**: Korean pronunciation rules with examples
 - **Progressive learning**: Difficulty scores, frequency ranks, word types
+
+**Routes**: `/learning`, `/categories`, `/levels`, `/pronunciation`, `/units`, `/sentence-learning`
+
+**Recent additions**:
+- Story-based learning components (`FunStoryContent.tsx`, `StoryList.tsx`)
+- Contextual sentence learning page (`SentenceLearning.tsx`)
+- Story images for visual learning aids
+
+### TOPIK (Test of Proficiency in Korean)
+**Purpose**: Standardized Korean proficiency test for academic/professional purposes
+**Focus**: Formal language assessment and exam preparation
+**Structure**:
+- **6 levels**: 1 (초급), 2 (초급), 3 (중급), 4 (중급), 5 (고급), 6 (고급)
+- **3 sections**: Listening, Reading, Writing
+- **Question types**: Multiple-choice, fill-in-blank, essay, short-answer, listening comprehension
+- **Test sessions**: Timed tests with scoring and analytics
+- **Progress tracking**: Historical performance, weak/strong areas, improvement trends
+
+**Routes**: `/topik`, `/topik/levels`, `/topik/test`, `/topik/progress`
+
+**Key Difference**: KIIP is for learning practical Korean for daily life, while TOPIK is for formal proficiency certification and exam preparation. Users can use both tracks simultaneously.
 
 ## Technology Versions
 
@@ -481,6 +773,7 @@ VITE_API_URL=http://localhost:5000/api
 - bcrypt: ^6.0.0
 - jsonwebtoken: ^9.0.2
 - multer: ^2.0.2
+- axios: ^1.13.2
 
 **Frontend**:
 - React: ^19.2.0
@@ -510,17 +803,33 @@ VITE_API_URL=http://localhost:5000/api
 
 9. **Mongoose index warnings**: Duplicate index warnings are expected due to both `unique: true` and explicit `schema.index()`. Safe to ignore in development.
 
-10. **Translation completeness**: When adding UI text, ALWAYS add to both `ko` and `mn` objects in `translations.ts`. Missing translations will cause runtime errors.
+10. **Translation completeness**: When adding UI text, ALWAYS add to all language objects (`ko`, `mn`, `zh`) in `translations.ts`. Missing translations will cause runtime errors.
 
-11. **Language store persistence**: `useLanguageStore` does NOT persist to localStorage (unlike other stores). Language resets to `'ko'` on page refresh. This is intentional design.
+11. **Language store persistence**: `useLanguageStore` does NOT persist to localStorage (unlike other stores). Language resets to `'ko'` on page refresh. This is intentional design to ensure users always start with Korean (as the learning target language).
 
-12. **Backend .env missing**: Backend `.env` is NOT in the repository (gitignored). You MUST create it manually on first setup. Without it, the server will fail to start or use incorrect defaults.
+12. **Backend .env security**: Backend `.env` is currently in the repository for development convenience. In production, this file should be gitignored and created manually with secure credentials. Never commit production secrets to version control.
 
 13. **Admin credentials**: Default admin user created by `seed:all` or `seed:admin` with email `admin@urimalzen.com` and password `admin123!@#`. These are hardcoded in the seed script for development.
 
 14. **External access**: Both frontend and backend listen on `0.0.0.0` (all interfaces). To access from other devices, update `VITE_API_URL` in `frontend/.env` to use server's IP address instead of localhost.
 
 15. **Uploads directory**: `backend/uploads/` directory must exist for audio recording uploads. Created automatically by Multer, but if deleted, will cause upload failures.
+
+16. **External API dependencies**: MzTTS, SpeechPro, and VocaPro are external services. If these services are down or URLs are incorrect in `.env`, related features will fail. Check API connectivity with curl commands (see Development Workflow section).
+
+17. **ComfyUI model size**: Stable Diffusion XL models are ~6-7GB. Ensure sufficient disk space in `ComfyUI/models/checkpoints/` directory before downloading.
+
+18. **SpeechPro workflow**: Pronunciation model generation (`callGTP` → `callModel`) must be done once per word and stored in database. Don't regenerate models on every pronunciation evaluation request - use stored `fst` data.
+
+19. **Word model extended fields**: When adding/updating words, `speechPro` and `vocaPro` fields are optional. These are populated by admin TTS/STT/analysis features, not required for basic word CRUD.
+
+20. **TOPIK vs KIIP confusion**: TOPIK and KIIP are separate systems with different level numbering (KIIP: 0-5, TOPIK: 1-6). Do not mix their data models or APIs. Check routes and models carefully - use `TOPIKQuestion` model for TOPIK, `Word` model for KIIP.
+
+21. **TOPIK test session persistence**: Active TOPIK test sessions are stored in both database (TOPIKTestSession) and Zustand store (useTOPIKStore with persist). When resuming a test, check store first, then database. Do NOT create duplicate sessions.
+
+22. **Test answer time tracking**: Each answer in TOPIK test sessions includes `timeSpent` field. The frontend must track and submit this data for analytics. Missing time data will affect progress analysis.
+
+23. **TOPIK question seeding**: The `seed:topik-questions` script is included in `seed:all`. TOPIK questions require proper Korean-Mongolian translations in both `questionText` and `questionTextMn` fields. Audio/image URLs are optional but should be validated if provided.
 
 ## Troubleshooting
 
@@ -591,3 +900,64 @@ docker exec -it urimalzen-mongodb mongosh urimalzen
 # Then re-run seeders
 npm run seed:all
 ```
+
+### External API Connection Issues
+
+```bash
+# Test MzTTS connectivity
+curl http://112.220.79.218:56014
+
+# Test SpeechPro connectivity
+curl http://112.220.79.222:33005/speechpro/gtp
+
+# Test ComfyUI connectivity
+curl http://localhost:8188/system_stats
+
+# Test Ollama connectivity
+curl http://localhost:11434/api/tags
+```
+
+### ComfyUI Issues
+
+```bash
+# Check if ComfyUI is running
+curl http://localhost:8188/system_stats
+
+# Start ComfyUI if not running
+cd /path/to/ComfyUI
+python main.py --listen 0.0.0.0 --port 8188
+
+# Check if SDXL model exists
+ls -lh ComfyUI/models/checkpoints/sd_xl_base_1.0.safetensors
+
+# Check ComfyUI logs for errors
+# (visible in terminal where ComfyUI is running)
+```
+
+### TOPIK Test Issues
+
+```bash
+# Check if TOPIK questions are seeded
+docker exec -it urimalzen-mongodb mongosh urimalzen
+# In MongoDB shell:
+# db.topikquestions.countDocuments()
+# db.topikquestions.find({ topikLevel: 2 }).limit(5)
+# exit
+
+# Re-seed TOPIK questions if empty
+cd backend
+npm run seed:topik-questions
+
+# Check active test sessions
+# In MongoDB shell:
+# db.topiktestsessions.find({ status: 'in-progress' })
+
+# Clear abandoned test sessions (if stuck)
+# db.topiktestsessions.deleteMany({ status: 'in-progress', startTime: { $lt: new Date(Date.now() - 24*60*60*1000) } })
+```
+
+**Common TOPIK frontend issues**:
+- **Test not resuming**: Check if `useTOPIKStore` has persisted session data in localStorage
+- **Questions not loading**: Verify API endpoint `/api/topik/questions?level=X&section=Y` returns data
+- **Timer not working**: Ensure test session has valid `startTime` and check browser Date API
+- **Answers not saving**: Check network tab for failed PUT requests to `/api/topik/test/:id/submit`
