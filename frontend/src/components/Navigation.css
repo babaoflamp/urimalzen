@@ -3,9 +3,26 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
+  width: 100%;
   margin-top: 2px;
   position: relative;
   z-index: 1;
+}
+.nav-button-sentence {
+  background: linear-gradient(135deg, #ffe082 0%, #ffd54f 100%);
+  color: #3e2723;
+  font-weight: 700;
+  border: 2px solid #ffd54f;
+  box-shadow: 0 2px 8px rgba(255, 215, 64, 0.15);
+  font-size: 20px;
+}
+
+.nav-button-sentence:hover {
+  background: linear-gradient(135deg, #ffd54f 0%, #ffe082 100%);
+  border-color: #ffb300;
+  color: #bf360c;
+  box-shadow: 0 4px 16px rgba(255, 215, 64, 0.25);
+  transform: translateY(-4px) scale(1.04);
 }
 
 .nav-button {

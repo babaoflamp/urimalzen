@@ -1,0 +1,8 @@
+.category-badge {
+  font-size: 16px;
+  color: #26a69a;
+  font-weight: 600;
+  margin-left: 16px;
+  align-self: flex-start;
+  white-space: nowrap;
+}

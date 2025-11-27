@@ -30,12 +30,9 @@ const Categories = () => {
 
       <div className="categories-content">
         <div className="categories-hero">
-          <h1 className="categories-hero-title">카테고리별 학습</h1>
+          <h1 className="categories-hero-title">카테고리 학습</h1>
           <p className="categories-hero-subtitle">
             14가지 주제로 체계적으로 한국어를 배워보세요
-          </p>
-          <p className="categories-hero-subtitle-mn">
-            14 сэдвээр эмх цэгцтэй солонгос хэл сурах
           </p>
         </div>
 

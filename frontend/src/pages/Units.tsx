@@ -32,36 +32,31 @@ const Units = () => {
           <p className="units-hero-subtitle">
             체계적인 유닛과 레슨으로 구성된 학습 경로를 따라가세요
           </p>
-          <p className="units-hero-subtitle-mn">
-            Систематик нэгж, хичээлээр бүрдсэн сургалтын замыг дагаарай
-          </p>
         </div>
 
-        {/* Filter Section */}
-        <div className="units-filter-section">
-          <div className="units-filter-group">
-            <div className="units-filter-label">KIIP 레벨:</div>
-            <div className="units-filter-buttons">
+        {/* Filter Section 복구 및 스타일 클래스 적용 */}
+        <div className="units-filter-card">
+          <div className="units-filter-card-title">KIIP 레벨</div>
+          <div className="units-filter-card-buttons">
+            <button
+              onClick={() => setFilterLevel(null)}
+              className={`units-filter-card-button${
+                filterLevel === null ? " active" : ""
+              }`}
+            >
+              전체
+            </button>
+            {levels.map((level) => (
               <button
-                onClick={() => setFilterLevel(null)}
-                className={`units-filter-button ${
-                  filterLevel === null ? "active" : ""
+                key={level}
+                onClick={() => setFilterLevel(level)}
+                className={`units-filter-card-button${
+                  filterLevel === level ? " active" : ""
                 }`}
               >
-                전체
+                {level}
               </button>
-              {levels.map((level) => (
-                <button
-                  key={level}
-                  onClick={() => setFilterLevel(level)}
-                  className={`units-filter-button ${
-                    filterLevel === level ? "active" : ""
-                  }`}
-                >
-                  {level}
-                </button>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
 

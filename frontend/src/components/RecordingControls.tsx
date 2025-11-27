@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { useLearningStore } from "../store/useLearningStore";
 import { useLanguageStore } from "../store/useLanguageStore";
-import { translations } from "../utils/translations";
 import { sttAPI, progressAPI } from "../services/api";
 import "./RecordingControls.css";
 
@@ -9,7 +8,6 @@ const RecordingControls = () => {
   const { currentWord, isRecording, setIsRecording, setUserProgress } =
     useLearningStore();
   const { language } = useLanguageStore();
-  const t = translations[language];
 
   const [recordingTime, setRecordingTime] = useState(0);
   const [evaluationResult, setEvaluationResult] = useState<any>(null);
@@ -219,7 +217,11 @@ const RecordingControls = () => {
           disabled={isRecording || isEvaluating}
           className="recording-button"
         >
-          녹음 시작
+          {language === "zh"
+            ? "开始录音"
+            : language === "mn"
+            ? "Бичлэг эхлүүлэх"
+            : "녹음 시작"}
         </button>
 
         <button
@@ -227,7 +229,11 @@ const RecordingControls = () => {
           disabled={!isRecording}
           className="recording-button"
         >
-          녹음 종료
+          {language === "zh"
+            ? "停止录音"
+            : language === "mn"
+            ? "Бичлэг дуусгах"
+            : "녹음 종료"}
         </button>
       </div>
     </div>

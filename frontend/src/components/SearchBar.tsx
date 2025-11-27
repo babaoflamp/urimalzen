@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLearningStore } from "../store/useLearningStore";
+import { useLanguageStore } from "../store/useLanguageStore";
+import { translations } from "../utils/translations";
 import "./SearchBar.css";
 
 const SearchBar = () => {
   const { searchQuery, setSearchQuery, isLoading } = useLearningStore();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [localQuery, setLocalQuery] = useState(searchQuery);
 
   useEffect(() => {
@@ -36,7 +40,13 @@ const SearchBar = () => {
           value={localQuery}
           onChange={(e) => setLocalQuery(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="한국어 또는 몽골어로 검색..."
+          placeholder={
+            language === "ko"
+              ? "한국어로 검색"
+              : language === "mn"
+              ? "Солонгосоор хайх"
+              : "搜索韩语"
+          }
           className="search-input"
         />
         <div className="search-clear-container">
@@ -51,13 +61,28 @@ const SearchBar = () => {
           disabled={isLoading}
           className="search-button"
         >
-          {isLoading ? "검색 중..." : "검색"}
+          {isLoading
+            ? language === "ko"
+              ? "검색 중..."
+              : language === "mn"
+              ? "Хайж байна..."
+              : "搜索中..."
+            : language === "ko"
+            ? "검색"
+            : language === "mn"
+            ? "Хайх"
+            : "搜索"}
         </button>
       </div>
 
       {searchQuery && (
         <div className="search-active">
-          검색 중: <strong>{searchQuery}</strong>
+          {language === "ko"
+            ? "검색 중: "
+            : language === "mn"
+            ? "Хайлтын утга: "
+            : "搜索内容："}
+          <strong>{searchQuery}</strong>
         </div>
       )}
     </div>

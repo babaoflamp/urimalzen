@@ -1,3 +1,12 @@
+/* 공통 카드 타이틀 스타일 */
+.card-title {
+  color: var(--text-primary);
+  text-align: left;
+  font-size: 18px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
 /* 자기 주도 학습 컴포넌트 스타일 - Dandelion Theme */
 .self-study-container {
   background: var(--glass-bg);
@@ -7,6 +16,7 @@
   border-radius: 20px;
   padding: 24px;
   box-shadow: var(--shadow-lg);
+  min-height: 170px;
 }
 
 .self-study-menu-title {

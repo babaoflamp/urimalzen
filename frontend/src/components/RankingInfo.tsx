@@ -27,6 +27,7 @@ const RankingInfo = () => {
 
   return (
     <div className="ranking-info-container">
+      <div className="card-title">{t.rankingInfo}</div>
       <div className="ranking-info-grid">
         {rankingItems.map((item) => (
           <div key={item.id} className="ranking-box">

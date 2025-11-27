@@ -1,3 +1,135 @@
+.levels-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* 반응형 - 태블릿 */
+@media screen and (max-width: 1024px) {
+  .levels-feature-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 반응형 - 모바일 */
+@media screen and (max-width: 640px) {
+  .levels-feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+.levels-feature-card {
+  background: var(--glass-bg-light, #fff8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border, #e0e7ef);
+  border-radius: 16px;
+  padding: 24px 18px 18px 18px;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(31, 38, 135, 0.08));
+  position: relative;
+  cursor: pointer;
+  border-top: 4px solid var(--accent-primary, #4fc3f7);
+}
+.levels-feature-card.selected {
+  background: linear-gradient(
+    135deg,
+    rgba(79, 195, 247, 0.15) 0%,
+    rgba(38, 198, 218, 0.08) 100%
+  );
+  border: 2px solid var(--accent-primary, #4fc3f7);
+  transform: scale(1.04);
+  box-shadow: 0 8px 24px rgba(79, 195, 247, 0.15),
+    var(--shadow-md, 0 4px 16px rgba(31, 38, 135, 0.12));
+}
+.levels-feature-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.levels-feature-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  background: var(--accent-primary, #4fc3f7);
+}
+.levels-feature-cefr {
+  background: #f3f4f6;
+  color: #222;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.levels-feature-name {
+  color: var(--text-primary, #222);
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+.levels-feature-name-mn {
+  color: var(--text-secondary, #4a4a4a);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.levels-feature-desc {
+  color: var(--text-secondary, #757575);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.levels-feature-desc-mn {
+  color: #b0b0b0;
+  font-size: 12px;
+  margin-top: 2px;
+}
+.levels-feature-info-box {
+  background: var(--glass-bg, #f0f4ff);
+  border: 1px solid var(--glass-border, #e0e7ef);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.levels-feature-info-text {
+  color: var(--accent-primary, #4fc3f7);
+  font-size: 15px;
+  font-weight: 600;
+}
+.levels-feature-clear-button {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.15) 0%,
+    rgba(239, 68, 68, 0.08) 100%
+  );
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 14px;
+  padding: 10px 24px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(31, 38, 135, 0.08);
+}
+.levels-feature-clear-button:hover {
+  background: #fff0f0;
+  color: #b91c1c;
+}
 /* Levels Page - Dandelion Theme */
 
 .levels-container {
@@ -160,18 +292,25 @@
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 16px;
   padding: 20px;
   margin-bottom: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 12px rgba(31, 38, 135, 0.1);
+}
+
+.levels-info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(31, 38, 135, 0.2);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .levels-info-paragraph {
   color: var(--text-secondary);
-  font-size: 15px;
-  line-height: 1.8;
-  margin: 0 0 16px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0 0 20px 0;
 }
 
 .levels-info-paragraph:last-child {
@@ -179,8 +318,11 @@
 }
 
 .levels-info-paragraph strong {
-  color: var(--text-primary);
+  color: var(--accent-primary);
   font-weight: 600;
+  font-size: 16px;
+  display: block;
+  margin-bottom: 8px;
 }
 
 /* Level Goals */

@@ -34,7 +34,7 @@
   flex-direction: column;
   gap: 8px;
   margin-bottom: 20px;
-  max-height: 440px;
+  max-height: 352px; /* 약 8개 단어만 보이도록 조정 */
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 8px;

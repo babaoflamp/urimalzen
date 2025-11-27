@@ -9,6 +9,7 @@ import SearchBar from "../components/SearchBar";
 import FilterPanel from "../components/FilterPanel";
 import WordList from "../components/WordList";
 import LearningArea from "../components/LearningArea";
+import FunStoryContent from "../components/FunStoryContent";
 import SelfStudy from "../components/SelfStudy";
 import RankingInfo from "../components/RankingInfo";
 import Navigation from "../components/Navigation";
@@ -73,13 +74,14 @@ const Learning = () => {
           </div>
 
           <div className="learning-center-area">
-            <LearningArea />
             <Navigation />
+            {/* 단어가 선택되어 있으면 LearningArea */}
+            <LearningArea />
           </div>
 
           <div className="learning-right-panel">
-            <SelfStudy />
             <RankingInfo />
+            <SelfStudy />
           </div>
         </div>
       </div>

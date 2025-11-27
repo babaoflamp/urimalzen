@@ -1,20 +1,25 @@
 import { useAuthStore } from "../store/useAuthStore";
+import { useLanguageStore } from "../store/useLanguageStore";
+import { translations } from "../utils/translations";
 import "./SelfStudy.css";
 
 const SelfStudy = () => {
   const { user } = useAuthStore();
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   const menuItems = [
-    { id: 1, label: "CEFR Level" },
-    { id: 2, label: "KIIP Level" },
-    { id: 3, label: "예문" },
-    { id: 4, label: "유의어" },
-    { id: 5, label: "영상 자료" },
-    { id: 6, label: "외부 콘텐츠" },
+    { id: 1, label: t.cefrLevel },
+    { id: 2, label: t.kiipLevelMenu },
+    { id: 3, label: t.examples },
+    { id: 4, label: t.synonyms },
+    { id: 5, label: t.videoMaterial },
+    { id: 6, label: t.externalContent },
   ];
 
   return (
     <div className="self-study-container">
+      <div className="card-title">{t.selfStudy}</div>
       <div className="self-study-grid">
         {menuItems.map((item) => (
           <button key={item.id} className="self-study-menu-button">

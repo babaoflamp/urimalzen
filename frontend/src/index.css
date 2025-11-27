@@ -1,5 +1,5 @@
-/* Import Pretendard Font - Variable Weight */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css");
+/* Import Source Han Sans (Noto Sans CJK KR) */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap");
 
 * {
   margin: 0;
@@ -91,8 +91,8 @@
 }
 
 body {
-  /* Pretendard Variable for body text - best Korean readability */
-  font-family: "Pretendard Variable", "Pretendard", -apple-system,
+  /* Source Han Sans (Noto Sans KR) for body text */
+  font-family: "Noto Sans KR", "Source Han Sans", -apple-system,
     BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕",
     sans-serif;
   margin: 0;

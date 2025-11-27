@@ -4,6 +4,7 @@ import { useLanguageStore } from "../store/useLanguageStore";
 import { translations } from "../utils/translations";
 import { ttsAPI } from "../services/api";
 import RecordingControls from "./RecordingControls";
+import stylesModule from "./LearningArea.module.css";
 
 const LearningArea = () => {
   const { currentWord } = useLearningStore();
@@ -23,12 +24,16 @@ const LearningArea = () => {
       const response = await ttsAPI.getWordAudio(currentWord._id);
 
       if (response.success && response.data.audioUrl) {
-        // Create audio element and play
-        const audio = new Audio(
-          `${import.meta.env.VITE_API_URL?.replace("/api", "")}${
-            response.data.audioUrl
-          }`
-        );
+        // 오디오 URL이 절대경로인지 상대경로인지 판별
+        let audioUrl = response.data.audioUrl;
+        if (!/^https?:\/\//.test(audioUrl)) {
+          // 상대경로면 API 서버 주소를 붙임
+          audioUrl = `${import.meta.env.VITE_API_URL?.replace(
+            "/api",
+            ""
+          )}${audioUrl}`;
+        }
+        const audio = new Audio(audioUrl);
 
         audio.onended = () => setIsPlaying(false);
         audio.onerror = () => {
@@ -51,19 +56,32 @@ const LearningArea = () => {
   };
 
   if (!currentWord) {
-    return (
-      <div style={styles.container}>
-        <div style={styles.emptyState}>{t.selectWord}</div>
-      </div>
-    );
+    // 단어가 선택되지 않았을 때 아무것도 렌더링하지 않음 (FunStoryContent가 대신 표시됨)
+    return null;
   }
 
   return (
     <div style={styles.container}>
+      {/* 최상단 카테고리 바 */}
+      {currentWord.mainCategory && (
+        <div className={stylesModule["category-bar"]}>
+          <span className={stylesModule["category-badge"]}>
+            {currentWord.mainCategory}
+          </span>
+        </div>
+      )}
       <div style={styles.titleBar}>
-        <div style={styles.wordTitleContainer}>
+        <div style={{ ...styles.wordTitleContainer, flex: 1 }}>
           <div style={styles.wordTitle}>{currentWord.koreanWord}</div>
-          <div style={styles.mongolianText}>[{currentWord.mongolianWord}]</div>
+          {language !== "ko" && (
+            <div style={styles.mongolianText}>
+              [
+              {language === "zh"
+                ? currentWord.chineseWord || currentWord.mongolianWord
+                : currentWord.mongolianWord}
+              ]
+            </div>
+          )}
         </div>
         <button
           style={{
@@ -112,12 +130,12 @@ const LearningArea = () => {
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
     background:
-      "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(135, 206, 235, 0.15) 50%, rgba(38, 198, 218, 0.1) 100%)",
+      "linear-gradient(135deg, rgba(38, 50, 56, 0.85) 0%, rgba(135, 206, 235, 0.15) 50%, rgba(38, 198, 218, 0.1) 100%)",
     backdropFilter: "blur(20px)",
     WebkitBackdropFilter: "blur(20px)",
     border: "1px solid rgba(79, 195, 247, 0.3)",
     borderRadius: "24px",
-    padding: "32px",
+    padding: "12px",
     boxShadow:
       "0 8px 32px 0 rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
     position: "relative",
@@ -147,7 +165,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     gap: "8px",
   },
   wordTitle: {
-    color: "#1a1a1a",
+    color: "#fff",
     fontSize: "28px",
     fontWeight: "bold",
   },

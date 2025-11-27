@@ -1,8 +1,10 @@
 import { useLearningStore } from "../store/useLearningStore";
+import { useLanguageStore } from "../store/useLanguageStore";
 import "./Navigation.css";
 
 const Navigation = () => {
   const { previousWord, nextWord, setCurrentWordIndex } = useLearningStore();
+  const { language } = useLanguageStore();
 
   const goToHome = () => {
     setCurrentWordIndex(0);
@@ -11,15 +13,29 @@ const Navigation = () => {
   return (
     <div className="navigation-container">
       <button onClick={previousWord} className="nav-button">
-        ◀ 이전 학습
+        {"◀ "}
+        {language === "zh"
+          ? "上一个学习"
+          : language === "mn"
+          ? "Өмнөх хичээл"
+          : "이전 학습"}
       </button>
 
-      <button onClick={goToHome} className="nav-button nav-button-home">
-        처음 화면
+      <button className="nav-button nav-button-sentence">
+        {language === "zh"
+          ? "句子学习"
+          : language === "mn"
+          ? "Өгүүлбэрийн хичээл"
+          : "문장학습"}
       </button>
 
       <button onClick={nextWord} className="nav-button">
-        다음 학습 ▶
+        {language === "zh"
+          ? "下一个学习"
+          : language === "mn"
+          ? "Дараагийн хичээл"
+          : "다음 학습"}
+        {" ▶"}
       </button>
     </div>
   );

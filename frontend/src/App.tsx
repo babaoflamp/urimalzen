@@ -25,11 +25,13 @@ import Learning from "./pages/Learning";
 import Categories from "./pages/Categories";
 import Levels from "./pages/Levels";
 import Pronunciation from "./pages/Pronunciation";
+import PronunciationTest from "./pages/PronunciationTest";
 import Units from "./pages/Units";
 import TOPIKHome from "./pages/TOPIKHome";
 import TOPIKLevels from "./pages/TOPIKLevels";
 import TOPIKTest from "./pages/TOPIKTest";
 import TOPIKProgress from "./pages/TOPIKProgress";
+import SentenceLearning from "./pages/SentenceLearning";
 
 function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -41,24 +43,24 @@ function App() {
         toastOptions={{
           duration: 3000,
           style: {
-            background: 'rgba(255, 255, 255, 0.95)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            borderRadius: '12px',
-            color: '#202124',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            background: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            borderRadius: "12px",
+            color: "#202124",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           },
           success: {
             iconTheme: {
-              primary: '#34a853',
-              secondary: '#fff',
+              primary: "#34a853",
+              secondary: "#fff",
             },
           },
           error: {
             iconTheme: {
-              primary: '#ea4335',
-              secondary: '#fff',
+              primary: "#ea4335",
+              secondary: "#fff",
             },
           },
         }}
@@ -90,8 +92,20 @@ function App() {
           }
         />
         <Route
+          path="/pronunciation/test"
+          element={
+            isAuthenticated ? <PronunciationTest /> : <Navigate to="/login" />
+          }
+        />
+        <Route
           path="/units"
           element={isAuthenticated ? <Units /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/sentence-learning"
+          element={
+            isAuthenticated ? <SentenceLearning /> : <Navigate to="/login" />
+          }
         />
 
         {/* TOPIK 라우트 */}
@@ -109,7 +123,9 @@ function App() {
         />
         <Route
           path="/topik/progress"
-          element={isAuthenticated ? <TOPIKProgress /> : <Navigate to="/login" />}
+          element={
+            isAuthenticated ? <TOPIKProgress /> : <Navigate to="/login" />
+          }
         />
 
         {/* 관리자 라우트 */}

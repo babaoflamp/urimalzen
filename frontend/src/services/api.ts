@@ -535,6 +535,11 @@ export const adminTTSAPI = {
     const response = await api.get('/admin/tts/test-connection');
     return response.data;
   },
+
+  testTTS: async (options: { text: string; speaker?: string; tempo?: number; pitch?: number; gain?: number }) => {
+    const response = await api.post('/admin/tts/test', options);
+    return response.data;
+  },
 };
 
 // Admin STT API
@@ -807,6 +812,70 @@ export const comfyuiAPI = {
     height: number;
   }): Promise<{ success: boolean; imagePath: string; message?: string }> => {
     const response = await api.post('/comfyui/theme-image', data);
+    return response.data;
+  },
+};
+
+// Pronunciation Test API
+export const pronunciationTestAPI = {
+  // Get all test sentences
+  getAllSentences: async (kiipLevel?: number, difficultyLevel?: number) => {
+    const params: any = {};
+    if (kiipLevel !== undefined) params.kiipLevel = kiipLevel;
+    if (difficultyLevel !== undefined) params.difficultyLevel = difficultyLevel;
+    const response = await api.get('/pronunciation/test/sentences', { params });
+    return response.data;
+  },
+
+  // Get single sentence
+  getSentenceById: async (id: string) => {
+    const response = await api.get(`/pronunciation/test/sentences/${id}`);
+    return response.data;
+  },
+
+  // Start test session
+  startSession: async (data: { userName: string; sentenceIds?: string[] }) => {
+    const response = await api.post('/pronunciation/test/session/start', data);
+    return response.data;
+  },
+
+  // Evaluate pronunciation
+  evaluatePronunciation: async (formData: FormData) => {
+    const response = await api.post('/pronunciation/test/evaluate', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  },
+
+  // Get session details
+  getSession: async (sessionId: string) => {
+    const response = await api.get(`/pronunciation/test/session/${sessionId}`);
+    return response.data;
+  },
+
+  // Get session answers
+  getSessionAnswers: async (sessionId: string) => {
+    const response = await api.get(`/pronunciation/test/session/${sessionId}/answers`);
+    return response.data;
+  },
+
+  // Export session to Excel
+  exportToExcel: async (sessionId: string) => {
+    const response = await api.get(`/pronunciation/test/session/${sessionId}/export`, {
+      responseType: 'blob',
+    });
+    return response.data;
+  },
+
+  // Get test history
+  getHistory: async (limit = 10) => {
+    const response = await api.get('/pronunciation/test/history', { params: { limit } });
+    return response.data;
+  },
+
+  // Admin: Generate SpeechPro model for sentence
+  generateModel: async (sentenceId: string) => {
+    const response = await api.post(`/pronunciation/test/sentences/${sentenceId}/generate-model`);
     return response.data;
   },
 };

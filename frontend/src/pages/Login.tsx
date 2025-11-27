@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLanguageStore } from "../store/useLanguageStore";
 import { useNavigate } from "react-router-dom";
 import { authAPI } from "../services/api";
 import { useAuthStore } from "../store/useAuthStore";
@@ -7,6 +8,7 @@ import "./Login.css";
 const Login = () => {
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
+  const setLanguage = useLanguageStore((state) => state.setLanguage);
 
   const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({
@@ -16,6 +18,7 @@ const Login = () => {
     programType: "kiip" as "kiip" | "topik",
     region: "",
     country: "",
+    language: "ko" as "ko" | "zh",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,6 +39,8 @@ const Login = () => {
         });
         login(response.user, response.token);
       }
+      // 언어 선택 반영 (중국어면 글로벌 상태도 변경)
+      setLanguage(formData.language);
       navigate("/");
     } catch (err: any) {
       setError(err.response?.data?.message || "오류가 발생했습니다");
@@ -44,7 +49,9 @@ const Login = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -56,61 +63,36 @@ const Login = () => {
       <div className="login-content-wrapper">
         {/* 왼쪽: 솔루션 설명 */}
         <div className="login-info-section">
-          <h1 className="login-main-title">KIIP 기반 AI 한국어 학습 플랫폼</h1>
-          <p className="login-description">
-            이주민의 성공적인 사회통합을 위한 맞춤형 한국어 교육 솔루션
+          <h1 className="login-main-title">한국어 배우기</h1>
+          <h2 className="login-main-title login-main-title-sub">
+            AI-Powered Korean Learning
+          </h2>
+          <p className="login-description login-description-sub">
+            AI로 배우는 <b>스마트한 한국어 학습</b>
+            <br />
+            인공지능이 생성하는 이미지와 콘텐츠로
+            <br />
+            효율적인 한국어 학습을 경험하세요.
           </p>
-
-          <div className="login-section-block">
-            <h3 className="login-section-title">
-              🎯 이런 분들을 위한 서비스입니다
-            </h3>
-            <ul className="login-list">
-              <li className="login-list-item">한국에서 생활하는 이주민</li>
-              <li className="login-list-item">사회통합프로그램(KIIP) 학습자</li>
-              <li className="login-list-item">
-                한국어 어휘 학습이 필요한 외국인
-              </li>
-              <li className="login-list-item">
-                체계적인 발음 연습을 원하는 학습자
-              </li>
-            </ul>
-          </div>
 
           <div className="login-section-block">
             <h3 className="login-section-title">✨ 주요 특징</h3>
             <ul className="login-list">
               <li className="login-list-item">
-                <strong>KIIP 단계별 학습:</strong> 입문부터 고급까지 체계적
-                커리큘럼
+                <strong>AI 자동 생성</strong>
+                <br />
+                단어마다 자동으로 이미지와 예문을 생성합니다
               </li>
               <li className="login-list-item">
-                <strong>AI 발음 분석:</strong> 실시간 발음 교정 및 피드백
+                <strong>간격 반복 학습</strong>
+                <br />
+                과학적인 복습 알고리즘으로 장기 기억을 향상시킵니다
               </li>
               <li className="login-list-item">
-                <strong>카테고리별 어휘:</strong> 주제별로 분류된 맞춤 학습
+                <strong>학습 진도 추적</strong>
+                <br />
+                상세한 통계로 학습 성과를 확인하세요
               </li>
-              <li className="login-list-item">
-                <strong>게임화 학습:</strong> 순위 시스템으로 재미있게 학습
-              </li>
-              <li className="login-list-item">
-                <strong>다국어 지원:</strong> 중국어, 일본어, 필리핀어,
-                베트남어, 인도네시아어, 몽골어 등 번역으로 쉬운 이해
-              </li>
-            </ul>
-          </div>
-
-          <div className="login-section-block">
-            <h3 className="login-section-title">🌟 학습 효과</h3>
-            <ul className="login-list">
-              <li className="login-list-item">
-                일상생활에 필요한 실용적인 어휘 습득
-              </li>
-              <li className="login-list-item">
-                정확한 발음으로 자신감 있는 의사소통
-              </li>
-              <li className="login-list-item">사회통합프로그램 시험 준비</li>
-              <li className="login-list-item">한국 사회 적응력 향상</li>
             </ul>
           </div>
         </div>
@@ -122,6 +104,22 @@ const Login = () => {
           </h2>
 
           <form onSubmit={handleSubmit} className="login-form">
+            {/* 언어 선택: 로그인/회원가입 모두 노출 */}
+            <div className="login-language-section">
+              <label htmlFor="language" className="login-language-label">
+                언어 선택
+              </label>
+              <select
+                id="language"
+                name="language"
+                value={formData.language}
+                onChange={handleChange}
+                className="login-language-select"
+              >
+                <option value="ko">한국어</option>
+                <option value="zh">中文 (중국어)</option>
+              </select>
+            </div>
             {isRegister && (
               <input
                 type="text"
@@ -157,7 +155,9 @@ const Login = () => {
             {isRegister && (
               <>
                 <div className="login-program-type-section">
-                  <label className="login-program-type-label">학습 프로그램</label>
+                  <label className="login-program-type-label">
+                    학습 프로그램
+                  </label>
                   <div className="login-program-type-options">
                     <label className="login-radio-label">
                       <input
