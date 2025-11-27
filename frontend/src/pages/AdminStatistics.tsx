@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import "./AdminCommon.css";
 import { adminStatsAPI } from "../services/api";
+import AdminLayout from "../components/AdminLayout";
 import StatCard from "../components/charts/StatCard";
 import MetricTile from "../components/charts/MetricTile";
 import {
@@ -31,7 +32,6 @@ import type {
 } from "../types";
 
 const AdminStatistics = () => {
-  const navigate = useNavigate();
 
   // State for all statistics data
   const [dashboardStats, setDashboardStats] =
@@ -44,7 +44,7 @@ const AdminStatistics = () => {
   const [contentStats, setContentStats] = useState<ContentStatsResponse | null>(
     null
   );
-  const [trendStats, setTrendStats] = useState<TrendStatsResponse | null>(null);
+  const [_trendStats, _setTrendStats] = useState<TrendStatsResponse | null>(null);
 
   // Loading and error states
   const [loading, setLoading] = useState(true);
@@ -55,7 +55,7 @@ const AdminStatistics = () => {
   const [selectedLevel, setSelectedLevel] = useState<number | undefined>(
     undefined
   );
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
+  const [_selectedCategory, _setSelectedCategory] = useState<string | undefined>(
     undefined
   );
 
@@ -74,7 +74,7 @@ const AdminStatistics = () => {
           adminStatsAPI.getUserStats(dateRange.startDate, dateRange.endDate),
           adminStatsAPI.getLearningStats(
             selectedLevel,
-            selectedCategory,
+            _selectedCategory,
             dateRange.startDate,
             dateRange.endDate
           ),
@@ -91,7 +91,7 @@ const AdminStatistics = () => {
       setLearningStats(learning);
       setPronunciationStats(pronunciation);
       setContentStats(content);
-      setTrendStats(trends);
+      _setTrendStats(trends);
     } catch (err: any) {
       console.error("Error loading statistics:", err);
       setError(err.response?.data?.message || "통계 데이터 로딩 실패");
@@ -131,7 +131,7 @@ const AdminStatistics = () => {
       window.URL.revokeObjectURL(url);
     } catch (err: any) {
       console.error("Export error:", err);
-      alert("엑스포트 실패");
+      toast.error("엑스포트 실패");
     }
   };
 
@@ -167,29 +167,15 @@ const AdminStatistics = () => {
   }
 
   return (
-    <div className="admin-page-container">
-      {/* Header */}
-      <div
-        className="admin-page-header"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <div>
-          <button
-            className="admin-back-button"
-            onClick={() => navigate("/admin/dashboard")}
-          >
-            ← 뒤로
-          </button>
+    <AdminLayout>
+      <div className="admin-page-container">
+        {/* Header */}
+        <div className="admin-page-header">
           <h1 className="admin-page-title">📊 통계 현황 대시보드</h1>
+          <button className="admin-refresh-button" onClick={handleRefresh}>
+            🔄 새로고침
+          </button>
         </div>
-        <button className="admin-refresh-button" onClick={handleRefresh}>
-          🔄 새로고침
-        </button>
-      </div>
 
       {/* Filter Bar */}
       <div className="admin-filter-bar">
@@ -406,28 +392,28 @@ const AdminStatistics = () => {
 
           {/* Most Practiced Words */}
           {learningStats.data.mostPracticedWords.length > 0 && (
-            <div style={styles.wordList}>
-              <h3 style={styles.chartTitle}>가장 많이 학습된 단어 TOP 10</h3>
-              <div style={styles.tableContainer}>
-                <table style={styles.table}>
+            <div className="admin-stats-word-list">
+              <h3 className="admin-stats-chart-title">가장 많이 학습된 단어 TOP 10</h3>
+              <div className="admin-stats-table-container">
+                <table className="admin-stats-table">
                   <thead>
                     <tr>
-                      <th style={styles.th}>한국어</th>
-                      <th style={styles.th}>몽골어</th>
-                      <th style={styles.th}>시도 횟수</th>
-                      <th style={styles.th}>평균 점수</th>
+                      <th>한국어</th>
+                      <th>몽골어</th>
+                      <th>시도 횟수</th>
+                      <th>평균 점수</th>
                     </tr>
                   </thead>
                   <tbody>
                     {learningStats.data.mostPracticedWords.map((word, idx) => (
                       <tr
                         key={word.wordId}
-                        style={idx % 2 === 0 ? styles.trEven : styles.trOdd}
+                        className={idx % 2 === 0 ? "admin-stats-table-row-even" : "admin-stats-table-row-odd"}
                       >
-                        <td style={styles.td}>{word.koreanWord}</td>
-                        <td style={styles.td}>{word.mongolianWord}</td>
-                        <td style={styles.td}>{word.totalAttempts}</td>
-                        <td style={styles.td}>{word.avgScore.toFixed(0)}</td>
+                        <td>{word.koreanWord}</td>
+                        <td>{word.mongolianWord}</td>
+                        <td>{word.totalAttempts}</td>
+                        <td>{word.avgScore.toFixed(0)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -440,10 +426,10 @@ const AdminStatistics = () => {
 
       {/* Pronunciation Statistics Section */}
       {pronunciationStats && (
-        <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🎤 발음 평가 통계</h2>
+        <div className="admin-stats-section">
+          <h2 className="admin-stats-section-title">🎤 발음 평가 통계</h2>
 
-          <div style={styles.metricsGrid}>
+          <div className="admin-stats-metrics-grid">
             <MetricTile
               label="평균 발음 점수"
               value={pronunciationStats.data.overview.avgPronunciation}
@@ -467,9 +453,9 @@ const AdminStatistics = () => {
           </div>
 
           {/* Score Distribution */}
-          <div style={styles.twoColumnGrid}>
-            <div style={styles.chartContainer}>
-              <h3 style={styles.chartTitle}>점수 분포</h3>
+          <div className="admin-stats-two-column-grid">
+            <div className="admin-stats-chart-container">
+              <h3 className="admin-stats-chart-title">점수 분포</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -479,10 +465,10 @@ const AdminStatistics = () => {
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
-                    label={(entry) => `${entry.range}: ${entry.count}`}
+                    label
                   >
                     {pronunciationStats.data.scoreDistribution.map(
-                      (entry, index) => (
+                      (_entry, index) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={PIE_COLORS[index % PIE_COLORS.length]}
@@ -502,8 +488,8 @@ const AdminStatistics = () => {
             </div>
 
             {/* Score Trends */}
-            <div style={styles.chartContainer}>
-              <h3 style={styles.chartTitle}>평균 점수 추이</h3>
+            <div className="admin-stats-chart-container">
+              <h3 className="admin-stats-chart-title">평균 점수 추이</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={pronunciationStats.data.scoreTrends}>
                   <CartesianGrid
@@ -533,7 +519,7 @@ const AdminStatistics = () => {
           </div>
 
           {/* Storage Info */}
-          <div style={styles.metricsGrid}>
+          <div className="admin-stats-metrics-grid">
             <MetricTile
               label="총 평가 횟수"
               value={pronunciationStats.data.overview.totalEvaluations.toLocaleString()}
@@ -560,10 +546,10 @@ const AdminStatistics = () => {
 
       {/* Content Statistics Section */}
       {contentStats && (
-        <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>📦 컨텐츠 현황</h2>
+        <div className="admin-stats-section">
+          <h2 className="admin-stats-section-title">📦 컨텐츠 현황</h2>
 
-          <div style={styles.metricsGrid}>
+          <div className="admin-stats-metrics-grid">
             <MetricTile
               label="총 단어 수"
               value={contentStats.data.overview.totalWords.toLocaleString()}
@@ -587,9 +573,9 @@ const AdminStatistics = () => {
           </div>
 
           {/* Words by Level and Category */}
-          <div style={styles.twoColumnGrid}>
-            <div style={styles.chartContainer}>
-              <h3 style={styles.chartTitle}>레벨별 단어 분포</h3>
+          <div className="admin-stats-two-column-grid">
+            <div className="admin-stats-chart-container">
+              <h3 className="admin-stats-chart-title">레벨별 단어 분포</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={contentStats.data.wordsByLevel}>
                   <CartesianGrid
@@ -614,8 +600,8 @@ const AdminStatistics = () => {
               </ResponsiveContainer>
             </div>
 
-            <div style={styles.chartContainer}>
-              <h3 style={styles.chartTitle}>카테고리별 단어 분포</h3>
+            <div className="admin-stats-chart-container">
+              <h3 className="admin-stats-chart-title">카테고리별 단어 분포</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={contentStats.data.wordsByCategory.slice(0, 10)}>
                   <CartesianGrid
@@ -646,18 +632,19 @@ const AdminStatistics = () => {
       )}
 
       {/* Export Buttons */}
-      <div style={styles.exportBar}>
-        <button style={styles.exportButton} onClick={() => handleExport("csv")}>
+      <div className="admin-stats-export-bar">
+        <button className="admin-stats-export-button" onClick={() => handleExport("csv")}>
           📥 CSV 다운로드
         </button>
         <button
-          style={styles.exportButton}
+          className="admin-stats-export-button"
           onClick={() => handleExport("json")}
         >
           📥 JSON 다운로드
         </button>
       </div>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 

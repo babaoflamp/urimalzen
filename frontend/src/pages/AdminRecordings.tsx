@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import "./AdminCommon.css";
 import { adminAPI } from "../services/api";
+import AdminLayout from "../components/AdminLayout";
 
 const AdminRecordings = () => {
-  const navigate = useNavigate();
   const [recordings, setRecordings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -22,35 +22,31 @@ const AdminRecordings = () => {
       setTotalPages(response.pagination.pages);
     } catch (error) {
       console.error("Failed to load recordings:", error);
-      alert("녹음 로딩 실패");
+      toast.error("녹음 로딩 실패");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("정말 이 녹음을 삭제하시겠습니까?")) return;
+  const handleDelete = async (_id: string) => {
+    if (!window.confirm("정말 이 녹음을 삭제하시겠습니까?")) return;
     try {
-      // Delete API call would go here
-      alert("녹음 삭제 완료");
+      await adminAPI.deleteRecording(_id);
+      toast.success("녹음 삭제 완료");
       loadRecordings();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Delete failed:", error);
-      alert("삭제 실패");
+      toast.error(`삭제 실패: ${error.response?.data?.message || error.message}`);
     }
   };
 
   return (
-    <div className="admin-page-container">
-      <div className="admin-page-header">
-        <button
-          className="admin-back-button"
-          onClick={() => navigate("/admin/dashboard")}
-        >
-          ← 뒤로
-        </button>
-        <h1 className="admin-page-title">🎤 녹음 관리</h1>
-      </div>
+    <AdminLayout>
+      <div className="admin-page-container">
+        <div className="admin-page-header">
+          <h1 className="admin-page-title">🎤 녹음 관리</h1>
+          <div className="admin-page-info">총 {recordings.length}개</div>
+        </div>
 
       {loading ? (
         <div className="admin-loading">로딩 중...</div>
@@ -116,7 +112,8 @@ const AdminRecordings = () => {
           </div>
         </>
       )}
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 

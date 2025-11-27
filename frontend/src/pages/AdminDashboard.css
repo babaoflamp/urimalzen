@@ -1,7 +1,5 @@
 /* Admin Dashboard Dandelion Theme */
 .admin-dashboard-container {
-  min-height: 100vh;
-  padding: 16px;
   max-width: 1600px;
   margin: 0 auto;
 }
@@ -36,12 +34,12 @@
   font-size: 13px;
 }
 
-.admin-logout-btn {
-  background: var(--glass-bg);
+.admin-refresh-btn {
+  background: var(--gradient-primary);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: var(--text-primary);
-  border: 1px solid var(--glass-border);
+  color: var(--text-inverse);
+  border: 1px solid var(--accent-primary);
   padding: 10px 24px;
   border-radius: 12px;
   cursor: pointer;
@@ -51,12 +49,9 @@
   box-shadow: var(--shadow-sm);
 }
 
-.admin-logout-btn:hover {
-  background: var(--glass-bg-strong);
-  box-shadow: var(--shadow-md);
+.admin-refresh-btn:hover {
+  box-shadow: var(--shadow-glow-strong);
   transform: translateY(-2px);
-  border-color: var(--accent-red);
-  color: var(--accent-red);
 }
 
 .admin-section-title {
@@ -111,30 +106,27 @@
 
 .admin-menu-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 12px;
   margin-bottom: 16px;
 }
 
 .admin-menu-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
-  padding: 20px 16px;
+  padding: 16px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-lg);
 }
 
 .admin-menu-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 48px rgba(31, 38, 135, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: var(--shadow-xl);
 }
 
 .admin-menu-icon {
@@ -165,6 +157,12 @@
 }
 
 /* Responsive */
+@media (max-width: 1400px) {
+  .admin-menu-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 1200px) {
   .admin-stats-grid {
     grid-template-columns: repeat(2, 1fr);

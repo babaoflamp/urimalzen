@@ -1,0 +1,88 @@
+/* Admin Layout - Dandelion Theme */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+.admin-sidebar-wrapper {
+  position: relative;
+}
+
+.admin-main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 32px;
+  min-height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 101;
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-sidebar-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.admin-sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 968px) {
+  .admin-main-content {
+    margin-left: 0;
+    padding: 80px 24px 24px;
+  }
+
+  .admin-sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .admin-sidebar-overlay {
+    display: block;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-main-content {
+    padding: 70px 16px 16px;
+  }
+
+  .admin-sidebar-toggle {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    top: 16px;
+    left: 16px;
+  }
+}

@@ -5,6 +5,7 @@ import "./AdminCommon.css";
 import { useAuthStore } from "../store/useAuthStore";
 import { adminTTSAPI, wordAPI } from "../services/api";
 import type { Word } from "../types";
+import AdminLayout from "../components/AdminLayout";
 
 const AdminTTS = () => {
   const navigate = useNavigate();
@@ -99,6 +100,37 @@ const AdminTTS = () => {
       loadAudioLibrary(libraryPage);
     } catch (error: any) {
       toast.error(`삭제 실패: ${error.response?.data?.message || error.message}`);
+    }
+  };
+
+  const handleTestTTS = async () => {
+    setLoading(true);
+    setResult(null);
+    setAudioUrl("");
+
+    try {
+      // 테스트용 텍스트로 간단한 오디오 생성
+      const testText = "안녕하세요";
+      const response = await adminTTSAPI.testTTS({
+        text: testText,
+        speaker,
+        tempo,
+        pitch,
+        gain,
+      });
+
+      setResult(response);
+
+      if (response.data?.audioUrl) {
+        const baseUrl = import.meta.env.VITE_API_URL.replace('/api', '');
+        setAudioUrl(`${baseUrl}${response.data.audioUrl}`);
+      }
+
+      toast.success("테스트 오디오 생성 완료!");
+    } catch (error: any) {
+      toast.error(`테스트 실패: ${error.response?.data?.message || error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -248,6 +280,17 @@ const AdminTTS = () => {
       </div>
 
       <div className="admin-action-grid">
+        <button
+          onClick={handleTestTTS}
+          disabled={loading}
+          className="admin-action-button"
+          style={{
+            background: "rgba(59, 130, 246, 0.5)",
+            borderColor: "rgba(59, 130, 246, 0.7)"
+          }}
+        >
+          {loading ? "테스트 중..." : "🔊 TTS 테스트"}
+        </button>
         <button
           onClick={handleGenerateWordAudio}
           disabled={loading || !selectedWord}
@@ -402,16 +445,11 @@ const AdminTTS = () => {
   );
 
   return (
-    <div className="admin-page-container">
-      <div className="admin-page-header">
-        <button
-          onClick={() => navigate("/admin/dashboard")}
-          className="admin-back-button"
-        >
-          ← 대시보드로
-        </button>
-        <h1 className="admin-page-title">TTS 오디오 관리</h1>
-      </div>
+    <AdminLayout>
+      <div className="admin-page-container">
+        <div className="admin-page-header">
+          <h1 className="admin-page-title">🔊 TTS 오디오 관리</h1>
+        </div>
 
       <div className="admin-status-card">
         <div className="admin-status-label">MzTTS 서비스 연결 상태:</div>
@@ -461,7 +499,8 @@ const AdminTTS = () => {
         {activeTab === "batch" && renderBatchGeneration()}
         {activeTab === "dictionary" && renderWordDictionary()}
       </div>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 

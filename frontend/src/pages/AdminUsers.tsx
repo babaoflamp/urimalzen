@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { adminAPI } from "../services/api";
+import AdminLayout from "../components/AdminLayout";
 import "./AdminCommon.css";
 
 interface User {
@@ -17,7 +17,6 @@ interface User {
 }
 
 const AdminUsers = () => {
-  const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -66,11 +65,11 @@ const AdminUsers = () => {
     }
   };
 
-  const handleDelete = async (_userId: string) => {
+  const handleDelete = async (userId: string) => {
     if (!confirm("정말 이 사용자를 삭제하시겠습니까?")) return;
 
     try {
-      // Delete API call would go here
+      await adminAPI.deleteUser(userId);
       toast.success("사용자 삭제 완료");
       loadUsers();
     } catch (error) {
@@ -92,16 +91,12 @@ const AdminUsers = () => {
   // };
 
   return (
-    <div className="admin-page-container">
-      <div className="admin-page-header">
-        <button
-          className="admin-back-button"
-          onClick={() => navigate("/admin/dashboard")}
-        >
-          ← 뒤로
-        </button>
-        <h1 className="admin-page-title">👥 사용자 관리</h1>
-      </div>
+    <AdminLayout>
+      <div className="admin-page-container">
+        <div className="admin-page-header">
+          <h1 className="admin-page-title">👥 사용자 관리</h1>
+          <div className="admin-page-info">총 {users.length}명</div>
+        </div>
 
       <div className="admin-search-bar">
         <input
@@ -218,7 +213,8 @@ const AdminUsers = () => {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 

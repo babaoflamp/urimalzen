@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import "./AdminCommon.css";
 import { useAuthStore } from "../store/useAuthStore";
 import { adminAIAPI, wordAPI } from "../services/api";
 import type { Word } from "../types";
+import AdminLayout from "../components/AdminLayout";
 
 const AdminAIContent = () => {
   const navigate = useNavigate();
@@ -44,7 +46,7 @@ const AdminAIContent = () => {
 
   const handleGenerateDescription = async () => {
     if (!selectedWord) {
-      alert("단어를 선택해주세요");
+      toast.error("단어를 선택해주세요");
       return;
     }
 
@@ -54,9 +56,9 @@ const AdminAIContent = () => {
     try {
       const response = await adminAIAPI.generateDescription(selectedWord);
       setResult(response);
-      alert("설명 생성 완료!");
+      toast.success("설명 생성 완료!");
     } catch (error: any) {
-      alert(`오류: ${error.response?.data?.message || error.message}`);
+      toast.error(`오류: ${error.response?.data?.message || error.message}`);
     } finally {
       setLoading(false);
     }
@@ -64,7 +66,7 @@ const AdminAIContent = () => {
 
   const handleGenerateExamples = async () => {
     if (!selectedWord) {
-      alert("단어를 선택해주세요");
+      toast.error("단어를 선택해주세요");
       return;
     }
 
@@ -74,9 +76,9 @@ const AdminAIContent = () => {
     try {
       const response = await adminAIAPI.generateExamples(selectedWord, 3);
       setResult(response);
-      alert("예문 생성 완료!");
+      toast.success("예문 생성 완료!");
     } catch (error: any) {
-      alert(`오류: ${error.response?.data?.message || error.message}`);
+      toast.error(`오류: ${error.response?.data?.message || error.message}`);
     } finally {
       setLoading(false);
     }
@@ -84,7 +86,7 @@ const AdminAIContent = () => {
 
   const handleGeneratePronunciationTips = async () => {
     if (!selectedWord) {
-      alert("단어를 선택해주세요");
+      toast.error("단어를 선택해주세요");
       return;
     }
 
@@ -94,9 +96,9 @@ const AdminAIContent = () => {
     try {
       const response = await adminAIAPI.generatePronunciationTips(selectedWord);
       setResult(response);
-      alert("발음 팁 생성 완료!");
+      toast.success("발음 팁 생성 완료!");
     } catch (error: any) {
-      alert(`오류: ${error.response?.data?.message || error.message}`);
+      toast.error(`오류: ${error.response?.data?.message || error.message}`);
     } finally {
       setLoading(false);
     }
@@ -104,7 +106,7 @@ const AdminAIContent = () => {
 
   const handleGenerateFullContent = async () => {
     if (!selectedWord) {
-      alert("단어를 선택해주세요");
+      toast.error("단어를 선택해주세요");
       return;
     }
 
@@ -114,26 +116,21 @@ const AdminAIContent = () => {
     try {
       const response = await adminAIAPI.generateFullContent(selectedWord);
       setResult(response);
-      alert("전체 컨텐츠 생성 완료!");
+      toast.success("전체 컨텐츠 생성 완료!");
       await loadWords(); // Reload words to show updated content
     } catch (error: any) {
-      alert(`오류: ${error.response?.data?.message || error.message}`);
+      toast.error(`오류: ${error.response?.data?.message || error.message}`);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="admin-page-container">
-      <div className="admin-page-header">
-        <button
-          onClick={() => navigate("/admin/dashboard")}
-          className="admin-back-button"
-        >
-          ← 대시보드로
-        </button>
-        <h1 className="admin-page-title">AI 컨텐츠 생성</h1>
-      </div>
+    <AdminLayout>
+      <div className="admin-page-container">
+        <div className="admin-page-header">
+          <h1 className="admin-page-title">🤖 AI 컨텐츠 생성</h1>
+        </div>
 
       {/* Connection Status */}
       <div className="admin-status-card">
@@ -210,7 +207,8 @@ const AdminAIContent = () => {
           </pre>
         </div>
       )}
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 

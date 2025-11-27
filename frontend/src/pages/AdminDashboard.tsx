@@ -5,11 +5,12 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useLanguageStore } from "../store/useLanguageStore";
 import { translations } from "../utils/translations";
 import { adminAPI } from "../services/api";
+import AdminLayout from "../components/AdminLayout";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
   const { language } = useLanguageStore();
   const t = translations[language];
 
@@ -44,23 +45,19 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate("/admin/login");
-  };
-
   return (
-    <div className="admin-dashboard-container">
-      {/* 헤더 */}
-      <div className="admin-header">
-        <div className="admin-header-content">
-          <h1>👨‍💼 {t.adminDashboard}</h1>
-          <p>우리말젠 Admin</p>
+    <AdminLayout>
+      <div className="admin-dashboard-container">
+        {/* 헤더 */}
+        <div className="admin-header">
+          <div className="admin-header-content">
+            <h1>👨‍💼 {t.adminDashboard}</h1>
+            <p>우리말젠 관리자 대시보드</p>
+          </div>
+          <button onClick={() => loadStats()} className="admin-refresh-btn">
+            🔄 새로고침
+          </button>
         </div>
-        <button onClick={handleLogout} className="admin-logout-btn">
-          {t.logout}
-        </button>
-      </div>
 
       {/* 통계 카드 */}
       <div className="admin-section-title">📊 통계 현황</div>
@@ -179,7 +176,8 @@ const AdminDashboard = () => {
           <div className="admin-menu-description">환경 설정 및 API 관리</div>
         </div>
       </div>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 

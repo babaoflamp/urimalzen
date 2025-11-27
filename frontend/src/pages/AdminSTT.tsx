@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./AdminCommon.css";
 import { useAuthStore } from "../store/useAuthStore";
 import { adminSTTAPI } from "../services/api";
+import AdminLayout from "../components/AdminLayout";
 
 const AdminSTT = () => {
   const navigate = useNavigate();
@@ -54,16 +55,11 @@ const AdminSTT = () => {
   };
 
   return (
-    <div className="admin-page-container">
-      <div className="admin-page-header">
-        <button
-          onClick={() => navigate("/admin/dashboard")}
-          className="admin-back-button"
-        >
-          ← 대시보드로
-        </button>
-        <h1 className="admin-page-title">STT 발음 평가 관리</h1>
-      </div>
+    <AdminLayout>
+      <div className="admin-page-container">
+        <div className="admin-page-header">
+          <h1 className="admin-page-title">🎙️ STT 발음 평가 관리</h1>
+        </div>
 
       <div className="admin-status-card">
         <div className="admin-status-label">STT 서비스 연결 상태:</div>
@@ -119,7 +115,8 @@ const AdminSTT = () => {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 

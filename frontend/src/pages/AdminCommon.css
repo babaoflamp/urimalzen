@@ -1,3 +1,101 @@
+/* 음성 엔진 설정 카드 스타일 */
+.admin-form-inline-box {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  border: 1.5px solid var(--glass-border, #e0e7ef);
+  box-shadow: 0 4px 24px rgba(31, 38, 135, 0.08);
+  padding: 28px 24px 12px 24px;
+  margin-bottom: 24px;
+  margin-top: 8px;
+}
+/* 시스템 설정 인라인 상태 및 버튼 min-width */
+.admin-form-inline-status {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+.admin-form-inline-minwidth {
+  min-width: 120px;
+  justify-content: center;
+}
+/* 인라인 카드(큐 상태 등) 높이 통일 */
+.admin-form-inline-card {
+  margin-bottom: 0 !important;
+  flex: 1 1 0;
+  min-width: 120px;
+  height: 48px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  gap: 8px;
+  padding-left: 16px;
+}
+
+.admin-form-inline-card .admin-card-label,
+.admin-form-inline-card .admin-card-value {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  line-height: 48px;
+}
+.admin-form-inline-card .admin-card-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.admin-form-inline-card .admin-card-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+/* 인라인 입력폼 및 버튼 일치 스타일 */
+.admin-form-inline-group {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.admin-form-inline-label {
+  margin-bottom: 0;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+  margin-right: 8px;
+}
+.admin-form-inline-input {
+  flex: 1 1 0;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid #a5b4fc;
+  color: #222;
+  border-radius: 8px;
+  padding: 0 16px;
+  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.08);
+  transition: border 0.2s;
+}
+.admin-form-input-strong {
+  font-weight: 700;
+  border: 2px solid #60a5fa;
+}
+.admin-form-inline-button {
+  height: 48px;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 0 24px;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* AdminCommon.css - 모든 관리자 페이지에서 사용하는 공통 스타일 - Dandelion Theme */
 
 /* 컨테이너 */
@@ -11,6 +109,21 @@
 /* 헤더 */
 .admin-page-header {
   margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-page-info {
+  color: var(--text-secondary);
+  font-size: 16px;
+  font-weight: 600;
+  background: var(--glass-bg-light);
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
 }
 
 .admin-back-button {
@@ -751,6 +864,63 @@
   gap: 16px;
   align-items: center;
   flex-wrap: wrap;
+}
+
+/* 탭 네비게이션 */
+.admin-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.admin-tab {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 12px 24px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+}
+
+.admin-tab:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
+}
+
+.admin-tab-active {
+  background: var(--gradient-primary);
+  border: 1px solid var(--accent-primary);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-glow);
+}
+
+.admin-tab-active:hover {
+  box-shadow: var(--shadow-glow-strong);
+}
+
+.admin-tab-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .admin-status-label {

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import "./AdminCommon.css";
 import { unitAPI } from "../services/api";
+import AdminLayout from "../components/AdminLayout";
 
 const AdminKIIP = () => {
-  const navigate = useNavigate();
   const [units, setUnits] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -16,26 +16,21 @@ const AdminKIIP = () => {
     try {
       setLoading(true);
       const response = await unitAPI.getAllUnits();
-      setUnits(response.data);
+      setUnits(response.data || []);
     } catch (error) {
       console.error("Failed to load units:", error);
-      alert("유닛 로딩 실패");
+      toast.error("유닛 로딩 실패");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="admin-page-container">
-      <div className="admin-page-header">
-        <button
-          className="admin-back-button"
-          onClick={() => navigate("/admin/dashboard")}
-        >
-          ← 뒤로
-        </button>
-        <h1 className="admin-page-title">🎓 KIIP 컨텐츠 관리</h1>
-      </div>
+    <AdminLayout>
+      <div className="admin-page-container">
+        <div className="admin-page-header">
+          <h1 className="admin-page-title">🎓 KIIP 컨텐츠 관리</h1>
+        </div>
 
       <div className="admin-info-box">
         <h3 className="admin-info-title">KIIP 커리큘럼</h3>
@@ -74,7 +69,8 @@ const AdminKIIP = () => {
         <button className="admin-primary-button">+ 새 유닛 추가</button>
         <button className="admin-secondary-button">카테고리 관리</button>
       </div>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 
