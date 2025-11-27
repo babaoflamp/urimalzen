@@ -4,10 +4,12 @@ export interface ICategory extends Document {
   name: string;
   nameEn: string;
   nameMn: string;
+  nameCn: string;
   order: number;
   icon: string;
   description: string;
   descriptionMn: string;
+  descriptionCn: string;
   subCategories: string[];
   color: string;
   createdAt: Date;
@@ -32,6 +34,12 @@ const categorySchema = new Schema<ICategory>(
       required: [true, 'Mongolian name is required'],
       trim: true,
     },
+    nameCn: {
+      type: String,
+      required: false,
+      trim: true,
+      default: '',
+    },
     order: {
       type: Number,
       required: true,
@@ -51,6 +59,11 @@ const categorySchema = new Schema<ICategory>(
     descriptionMn: {
       type: String,
       required: true,
+    },
+    descriptionCn: {
+      type: String,
+      required: false,
+      default: '',
     },
     subCategories: [
       {

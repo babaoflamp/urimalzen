@@ -33,10 +33,10 @@ const Header = () => {
             onClick={() => setLanguage("ko")}
           />
           <img
-            src="/images/flags/mongol.png"
-            alt="몽골"
+            src="/images/flags/china.webp"
+            alt="중국"
             className="flag-image"
-            onClick={() => setLanguage("mn")}
+            onClick={() => setLanguage("zh")}
           />
         </div>
         <h1 className="app-name">{t.appName}</h1>

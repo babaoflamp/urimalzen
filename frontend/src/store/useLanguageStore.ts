@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type Language = 'ko' | 'mn';
+type Language = 'ko' | 'mn' | 'zh';
 
 interface LanguageState {
   language: Language;

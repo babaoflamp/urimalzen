@@ -3,7 +3,8 @@ import mongoose, { Document, Schema } from 'mongoose';
 export interface IWord extends Document {
   koreanWord: string;
   mongolianWord: string;
-  imageUrl: string;
+    imageUrl: string;
+    chineseWord: string;
   description: string;
   pronunciation: string;
   category: string;
@@ -11,6 +12,7 @@ export interface IWord extends Document {
   examples: Array<{
     korean: string;
     mongolian: string;
+    chinese?: string;
   }>;
   synonyms: string[];
   videoUrl?: string;
@@ -100,6 +102,12 @@ const wordSchema = new Schema<IWord>(
       required: [true, 'Mongolian word is required'],
       trim: true,
     },
+      chineseWord: {
+        type: String,
+        required: false,
+        trim: true,
+        default: '',
+      },
     imageUrl: {
       type: String,
       required: [true, 'Image URL is required'],
@@ -130,6 +138,11 @@ const wordSchema = new Schema<IWord>(
         mongolian: {
           type: String,
           required: true,
+        },
+        chinese: {
+          type: String,
+          required: false,
+          default: '',
         },
       },
     ],
