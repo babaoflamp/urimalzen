@@ -1,0 +1,283 @@
+/* 학습 단어 목록 스타일 - Dandelion Theme */
+.word-list-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  position: relative;
+  z-index: 1;
+}
+
+.word-list-title {
+  color: var(--text-primary);
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.word-list-count {
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.word-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  max-height: 352px; /* 약 8개 단어만 보이도록 조정 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+}
+
+/* 글래스모피즘 스크롤바 스타일 */
+.word-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.word-list::-webkit-scrollbar-track {
+  background: var(--glass-bg-light);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.word-list::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 10px;
+  border: 1px solid var(--accent-primary);
+}
+
+.word-list::-webkit-scrollbar-thumb:hover {
+  background: var(--gradient-secondary);
+}
+
+.word-item {
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-light);
+  padding: 10px;
+  border-radius: 16px;
+  display: grid;
+  grid-template-columns: 40px 1fr 40px 35px;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+}
+
+.word-item:hover {
+  background: var(--glass-bg);
+  transform: translateX(2px);
+  box-shadow: var(--shadow-md);
+}
+
+.word-item.active {
+  background: var(--gradient-primary);
+  border: 1px solid var(--accent-primary);
+  transform: scale(1.03) translateX(4px);
+  box-shadow: var(--shadow-glow-strong);
+}
+
+.word-item.active .word-name,
+.word-item.active .word-mongolian,
+.word-item.active .word-category,
+.word-item.active .word-attempts {
+  color: var(--text-inverse);
+}
+
+.word-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: var(--shadow-sm);
+  color: white;
+}
+
+.word-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.word-name {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.word-mongolian {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.word-category {
+  color: var(--text-tertiary);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.word-attempts {
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  padding: 4px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--accent-primary);
+}
+
+.word-play-button {
+  background: var(--gradient-primary);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-inverse);
+  border: 1px solid var(--accent-primary);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 32px;
+  height: 32px;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.word-play-button:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-glow);
+}
+
+.word-list-footer {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 10px 16px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+  margin: 0 auto;
+  max-width: fit-content;
+  min-width: 200px;
+}
+
+.word-list-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.word-list-empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.word-list-empty-text {
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+/* KIIP 레벨별 색상 */
+.word-number.level-0 {
+  background: #b0bec5;
+}
+
+.word-number.level-1 {
+  background: #64b5f6;
+}
+
+.word-number.level-2 {
+  background: #4db6ac;
+}
+
+.word-number.level-3 {
+  background: var(--accent-primary);
+}
+
+.word-number.level-4 {
+  background: var(--accent-warning);
+}
+
+.word-number.level-5 {
+  background: #ff8a65;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .word-item {
+    grid-template-columns: 36px 1fr 36px 32px;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .word-number {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .word-name {
+    font-size: 14px;
+  }
+
+  .word-mongolian {
+    font-size: 11px;
+  }
+
+  .word-attempts {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .word-play-button {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .word-list-container {
+    padding: 16px;
+  }
+
+  .word-list-title {
+    font-size: 20px;
+  }
+
+  .word-item {
+    grid-template-columns: 32px 1fr 32px 28px;
+    gap: 6px;
+  }
+}

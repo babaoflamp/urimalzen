@@ -1,0 +1,223 @@
+/* 녹음 컨트롤 컴포넌트 스타일 */
+.recording-controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 녹음 중 인디케이터 */
+.recording-indicator {
+  background: var(--gradient-error);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--accent-red);
+  color: var(--text-primary);
+  padding: 16px;
+  border-radius: 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* 평가 중 인디케이터 */
+.evaluating-indicator {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--accent-primary);
+  color: var(--text-primary);
+  padding: 16px;
+  border-radius: 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  box-shadow: 0 4px 16px var(--shadow-glow);
+}
+
+/* 평가 결과 */
+.evaluation-result {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.15) 0%,
+    rgba(16, 185, 129, 0.1) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.evaluation-header {
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.score-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.score-card.score-excellent {
+  background: var(--gradient-success);
+  border-color: var(--accent-green);
+}
+
+.score-card.score-good {
+  background: var(--gradient-primary);
+  border-color: var(--accent-primary);
+}
+
+.score-card.score-poor {
+  background: var(--gradient-error);
+  border-color: var(--accent-red);
+}
+
+.score-label {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.score-value {
+  color: var(--text-primary);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* 텍스트 인식 결과 */
+.transcription {
+  background: linear-gradient(
+    135deg,
+    rgba(129, 199, 132, 0.15) 0%,
+    rgba(129, 199, 132, 0.1) 100%
+  );
+  border: 1px solid rgba(129, 199, 132, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.transcription-label {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.transcription-text {
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* 피드백 */
+.feedback {
+  background: linear-gradient(
+    135deg,
+    rgba(129, 199, 132, 0.15) 0%,
+    rgba(129, 199, 132, 0.1) 100%
+  );
+  border: 1px solid rgba(129, 199, 132, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.feedback-label {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.feedback-text {
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* 버튼 그룹 */
+.button-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.recording-button {
+  background: var(--gradient-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--accent-primary);
+  color: var(--text-inverse);
+  border-radius: 16px;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-md);
+}
+
+.recording-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--accent-primary);
+}
+
+.recording-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.recording-button:disabled {
+  background: linear-gradient(
+    135deg,
+    rgba(156, 163, 175, 0.2) 0%,
+    rgba(156, 163, 175, 0.15) 100%
+  );
+  border-color: rgba(156, 163, 175, 0.3);
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.5;
+}

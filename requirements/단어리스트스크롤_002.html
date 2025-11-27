@@ -1,0 +1,696 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>KIIP 초급 단어 학습 보드</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+      background: radial-gradient(circle at top left, #eef2ff, #f9fafb);
+      color: #111827;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      padding: 24px;
+    }
+
+    .app-shell {
+      max-width: 1200px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .app-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #111827;
+    }
+
+    .app-subtitle {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: #eef2ff;
+      color: #4f46e5;
+    }
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: 330px 1fr;
+      gap: 22px;
+      min-height: 480px;
+    }
+
+    /* Word list panel (left) */
+    .word-panel {
+      background: linear-gradient(180deg, #f9fafb, #f3f4ff);
+      border-radius: 16px;
+      padding: 16px 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .panel-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #111827;
+    }
+
+    .panel-title span {
+      font-size: 11px;
+      font-weight: 500;
+      color: #6b7280;
+    }
+
+    .word-list-header {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.6fr;
+      font-size: 11px;
+      color: #6b7280;
+      padding: 4px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .word-list {
+      margin-top: 4px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 6px;
+      max-height: 420px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #9ca3af #e5e7eb;
+    }
+    .word-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .word-list::-webkit-scrollbar-thumb {
+      background: #9ca3af;
+      border-radius: 999px;
+    }
+    .word-list::-webkit-scrollbar-track {
+      background: #e5e7eb;
+      border-radius: 999px;
+    }
+
+    .word-row {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.6fr;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 10px;
+      transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    }
+
+    .word-row:hover {
+      background: #eef2ff;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 10px rgba(148, 163, 184, 0.35);
+    }
+
+    .word-row.active {
+      background: #e0e7ff;
+      box-shadow: 0 0 0 1px #4f46e5;
+    }
+
+    .word-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      color: #111827;
+      font-weight: 600;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .word-row:hover .word-btn {
+      background: #4f46e5;
+      color: #f9fafb;
+    }
+
+    .word-row.active .word-btn {
+      background: #4f46e5;
+      color: #f9fafb;
+    }
+
+    .score-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #4b5563;
+      text-align: center;
+      background: #f3f4f6;
+      padding: 4px 6px;
+      border-radius: 999px;
+    }
+
+    .attr-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 5px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      background: #e0f2fe;
+      color: #0369a1;
+      text-transform: uppercase;
+      transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
+    }
+
+    .attr-btn:hover {
+      background: #0ea5e9;
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 10px rgba(56, 189, 248, 0.6);
+    }
+
+    /* Study + chart panel (right) */
+    .study-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .study-card {
+      background: radial-gradient(circle at top left, #eef2ff, #ffffff);
+      border-radius: 16px;
+      padding: 18px 20px;
+      box-shadow: inset 0 0 0 1px rgba(129, 140, 248, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .study-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .current-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6366f1;
+      font-weight: 700;
+    }
+
+    .current-word {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.06em;
+      color: #111827;
+    }
+
+    .current-score-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.08);
+      color: #16a34a;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
+    }
+
+    .study-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .input-row label {
+      font-size: 13px;
+      color: #4b5563;
+      font-weight: 500;
+    }
+
+    .score-input {
+      width: 120px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      font-size: 13px;
+      outline: none;
+      transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .score-input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.3);
+      background: #ffffff;
+    }
+
+    .submit-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #f9fafb;
+      box-shadow: 0 8px 16px rgba(99, 102, 241, 0.6);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.1s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(79, 70, 229, 0.75);
+      filter: brightness(1.03);
+    }
+
+    .submit-btn span {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .hint-text {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    /* Chart card */
+    .chart-card {
+      background: #f9fafb;
+      border-radius: 16px;
+      padding: 16px 18px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .chart-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .chart-subtitle {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    #historyChart {
+      width: 100%;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: inset 0 0 0 1px rgba(209, 213, 219, 0.7);
+    }
+
+    .empty-msg {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    @media (max-width: 900px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <div class="app-title">KIIP 초급 한국어 단어 학습</div>
+        <div class="app-subtitle">단어별 점수를 입력하고 자동 정렬 · 히스토리 그래프를 확인해 보세요.</div>
+      </div>
+      <div class="badge">Live Score Board</div>
+    </header>
+
+    <section class="main-layout">
+      <!-- 단어 리스트 패널 (왼쪽) -->
+      <aside class="word-panel">
+        <div class="panel-title">
+          단어 리스트
+          <span>점수 높은 순 정렬</span>
+        </div>
+
+        <div class="word-list-header">
+          <div>단어</div>
+          <div style="text-align:center;">점수</div>
+          <div style="text-align:center;">속성</div>
+        </div>
+
+        <div class="word-list" id="wordList"></div>
+      </aside>
+
+      <!-- 학습 패널 (오른쪽) -->
+      <section class="study-panel">
+        <!-- 현재 학습 단어 & 점수 입력 -->
+        <div class="study-card">
+          <div class="study-header">
+            <div>
+              <div class="current-label">Current Word</div>
+              <div class="current-word" id="currentWord">?</div>
+            </div>
+            <div class="current-score-pill" id="currentScore">점수: ?</div>
+          </div>
+
+          <div class="study-body">
+            <div class="input-row">
+              <label for="scoreInput">새 점수 (0?100):</label>
+              <input
+                id="scoreInput"
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                class="score-input"
+                placeholder="예: 85"
+              />
+              <button id="submitScore" class="submit-btn">
+                <span>●</span> 입력 & 정렬
+              </button>
+            </div>
+            <p class="hint-text">
+              점수를 입력하면 해당 단어의 점수가 업데이트되고, 단어 리스트가 자동으로 다시 정렬됩니다.
+              (단어 이름을 클릭하면 학습 단어를 바꿀 수 있습니다.)
+            </p>
+          </div>
+        </div>
+
+        <!-- 히스토리 그래프 -->
+        <div class="chart-card" id="chartContainer">
+          <div class="chart-header">
+            <div class="chart-title" id="historyTitle">점수 히스토리</div>
+            <div class="chart-subtitle">단어 옆의 [속성] 버튼을 눌러 그래프를 확인하세요.</div>
+          </div>
+          <canvas id="historyChart" height="260"></canvas>
+          <p id="historyEmpty" class="empty-msg">
+            아직 아무 단어도 선택되지 않았습니다. 단어의 <strong>[속성]</strong> 버튼을 눌러 점수 변화를 확인해 보세요.
+          </p>
+        </div>
+      </section>
+    </section>
+  </div>
+
+  <script>
+    // ===== 데이터 초기화 =====
+    function randomScore() {
+      return Math.floor(Math.random() * 51) + 50; // 50 ~ 100
+    }
+
+    const baseWords = [
+      "학교", "사람", "음식", "책", "친구",
+      "가족", "집", "시간", "나라", "일",
+      "공부", "사랑", "시장", "버스", "날씨",
+      "영화", "음악", "질문", "대답", "생각"
+    ];
+
+    let words = baseWords.map((text, idx) => {
+      const score = randomScore();
+      return {
+        id: idx + 1,
+        text,
+        score,
+        history: [score]
+      };
+    });
+
+    let currentWord = null;
+    let lastHistoryWord = null;
+
+    const wordListEl = document.getElementById("wordList");
+    const currentWordEl = document.getElementById("currentWord");
+    const currentScoreEl = document.getElementById("currentScore");
+    const scoreInputEl = document.getElementById("scoreInput");
+    const submitScoreBtn = document.getElementById("submitScore");
+
+    const historyTitleEl = document.getElementById("historyTitle");
+    const historyEmptyEl = document.getElementById("historyEmpty");
+    const chartCanvas = document.getElementById("historyChart");
+    const chartCtx = chartCanvas.getContext("2d");
+    const chartContainer = document.getElementById("chartContainer");
+
+    // ===== 렌더링 함수 =====
+    function sortWords() {
+      words.sort((a, b) => b.score - a.score);
+    }
+
+    function renderWordList() {
+      sortWords();
+      wordListEl.innerHTML = "";
+
+      words.forEach(word => {
+        const row = document.createElement("div");
+        row.className = "word-row";
+        if (currentWord && word.id === currentWord.id) {
+          row.classList.add("active");
+        }
+
+        const wordBtn = document.createElement("button");
+        wordBtn.className = "word-btn";
+        wordBtn.textContent = word.text;
+        wordBtn.addEventListener("click", () => {
+          currentWord = word;
+          updateStudyPanel();
+          renderWordList();
+        });
+
+        const scoreSpan = document.createElement("span");
+        scoreSpan.className = "score-label";
+        scoreSpan.textContent = word.score + "점";
+
+        const attrBtn = document.createElement("button");
+        attrBtn.className = "attr-btn";
+        attrBtn.textContent = "속성";
+        attrBtn.addEventListener("click", () => {
+          showHistory(word);
+        });
+
+        row.appendChild(wordBtn);
+        row.appendChild(scoreSpan);
+        row.appendChild(attrBtn);
+
+        wordListEl.appendChild(row);
+      });
+    }
+
+    function updateStudyPanel() {
+      if (!currentWord) return;
+      currentWordEl.textContent = currentWord.text;
+      currentScoreEl.textContent = "점수: " + currentWord.score + "점";
+    }
+
+    // ===== 그래프 그리기 =====
+function showHistory(word) {
+  lastHistoryWord = word;
+  historyTitleEl.textContent = `「${word.text}」 점수 히스토리`;
+  historyEmptyEl.style.display = "none";
+
+  const width = chartContainer.clientWidth - 36;
+  chartCanvas.width = width > 280 ? width : 280;
+  chartCanvas.height = 260;
+
+  const ctx = chartCtx;
+  ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+
+  const data = word.history;
+  if (!data || data.length === 0) {
+    historyEmptyEl.style.display = "block";
+    return;
+  }
+
+  const paddingLeft = 40;
+  const paddingRight = 20;
+  const paddingTop = 30;
+  const paddingBottom = 40;
+  const chartWidth = chartCanvas.width - paddingLeft - paddingRight;
+  const chartHeight = chartCanvas.height - paddingTop - paddingBottom;
+
+  const maxScore = Math.max(100, ...data);
+  const minScore = Math.min(0, ...data);
+  const range = maxScore - minScore || 1;
+
+  // ---- 축 & 그리드 ----
+  ctx.save();
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "#d1d5db";
+  ctx.beginPath();
+  ctx.moveTo(paddingLeft, paddingTop);
+  ctx.lineTo(paddingLeft, paddingTop + chartHeight);
+  ctx.lineTo(paddingLeft + chartWidth, paddingTop + chartHeight);
+  ctx.stroke();
+
+  const yTicks = [50, 60, 70, 80, 90, 100];
+  ctx.font = "12px system-ui";
+  ctx.fillStyle = "#9ca3af";
+
+  yTicks.forEach(tick => {
+    const y = paddingTop + (maxScore - tick) / range * chartHeight;
+    if (y < paddingTop || y > paddingTop + chartHeight) return;
+
+    ctx.strokeStyle = "#e5e7eb";
+    ctx.beginPath();
+    ctx.moveTo(paddingLeft, y);
+    ctx.lineTo(paddingLeft + chartWidth, y);
+    ctx.stroke();
+
+    ctx.fillText(String(tick), 8, y + 4);
+  });
+
+  // ---- 데이터 라인 ----
+  const stepX = data.length === 1 ? 0 : chartWidth / (data.length - 1);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#4f46e5";
+  ctx.beginPath();
+
+  data.forEach((value, index) => {
+    const x = paddingLeft + stepX * index;
+    const y = paddingTop + (maxScore - value) / range * chartHeight;
+    if (index === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // ---- 포인트 표시 ----
+  ctx.fillStyle = "#6366f1";
+  data.forEach((value, index) => {
+    const x = paddingLeft + stepX * index;
+    const y = paddingTop + (maxScore - value) / range * chartHeight;
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // ---- 점 위에 점수 숫자 표시 (추가된 부분) ----
+  ctx.fillStyle = "#374151";
+  ctx.font = "12px system-ui";
+  data.forEach((value, index) => {
+    const x = paddingLeft + stepX * index;
+    const y = paddingTop + (maxScore - value) / range * chartHeight;
+    ctx.fillText(String(value), x - 8, y - 8);
+  });
+
+  // ---- X축 레이블 (시도 번호 1,2,3…) ----
+  ctx.fillStyle = "#6b7280";
+  ctx.font = "11px system-ui";
+  data.forEach((_, index) => {
+    const x = paddingLeft + stepX * index;
+    const y = paddingTop + chartHeight + 16;
+    ctx.fillText(String(index + 1), x - 3, y + 4);
+  });
+
+  ctx.restore();
+}
+
+
+    // ===== 이벤트 =====
+    submitScoreBtn.addEventListener("click", () => {
+      if (!currentWord) return;
+
+      const value = scoreInputEl.value.trim();
+      if (value === "") {
+        alert("점수를 입력해 주세요. (0~100)");
+        scoreInputEl.focus();
+        return;
+      }
+
+      const newScore = parseInt(value, 10);
+      if (isNaN(newScore) || newScore < 0 || newScore > 100) {
+        alert("0에서 100 사이의 정수를 입력해 주세요.");
+        scoreInputEl.focus();
+        return;
+      }
+
+      // 데이터 갱신
+      currentWord.score = newScore;
+      currentWord.history.push(newScore);
+
+      // 입력창 비우기
+      scoreInputEl.value = "";
+
+      // 리스트 재렌더 + 패널 업데이트
+      renderWordList();
+      updateStudyPanel();
+
+      // 이미 이 단어의 그래프를 보고 있던 경우, 그래프도 갱신
+      if (lastHistoryWord && lastHistoryWord.id === currentWord.id) {
+        showHistory(currentWord);
+      }
+    });
+
+    // Enter 키로도 입력 가능하게
+    scoreInputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        submitScoreBtn.click();
+      }
+    });
+
+    // ===== 초기 렌더링 =====
+    (function init() {
+      sortWords();
+      // 임의의 단어 선택
+      currentWord = words[Math.floor(Math.random() * words.length)];
+      renderWordList();
+      updateStudyPanel();
+    })();
+  </script>
+</body>
+</html>

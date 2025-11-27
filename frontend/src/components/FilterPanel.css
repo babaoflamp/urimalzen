@@ -1,0 +1,116 @@
+/* FilterPanel Dandelion Theme */
+.filter-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.filter-container:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+.filter-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.filter-title {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.filter-clear-all-btn {
+  background: rgba(234, 67, 53, 0.15);
+  color: var(--accent-secondary);
+  border: 1px solid rgba(234, 67, 53, 0.3);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.filter-clear-all-btn:hover {
+  background: rgba(234, 67, 53, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(234, 67, 53, 0.2);
+}
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.filter-section-title {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-level-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.filter-level-btn {
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  color: var(--text-primary);
+  padding: 10px 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-level-btn:hover {
+  background: var(--glass-bg);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-level-btn.selected {
+  background: var(--gradient-primary);
+  border: 2px solid var(--accent-primary);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-glow);
+  font-weight: 700;
+  color: var(--text-inverse);
+}
+
+.filter-level-btn.selected:hover {
+  transform: scale(1.05) translateY(-2px);
+}

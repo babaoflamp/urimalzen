@@ -1,0 +1,133 @@
+/* SearchBar Glassmorphism Styles */
+.search-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 8px 10px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.search-box:hover {
+  background: var(--glass-bg-strong);
+  box-shadow: var(--shadow-lg);
+}
+
+.search-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.search-icon {
+  font-size: 18px;
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+  padding: 6px;
+  min-width: 0;
+}
+
+.search-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-clear-container {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.search-clear-btn {
+  background: rgba(234, 67, 53, 0.15);
+  color: var(--accent-secondary);
+  border: 1px solid rgba(234, 67, 53, 0.3);
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.search-clear-btn:hover {
+  background: rgba(234, 67, 53, 0.25);
+  transform: scale(1.1);
+}
+
+.search-button {
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 10px;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  white-space: nowrap;
+  min-width: 70px;
+  flex-shrink: 0;
+}
+
+.search-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.search-button:active {
+  transform: translateY(0);
+}
+
+.search-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.search-active {
+  color: var(--text-primary);
+  font-size: 13px;
+  padding: 8px 16px;
+  background: rgba(66, 133, 244, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(66, 133, 244, 0.3);
+  font-weight: 400;
+}
+
+.search-active strong {
+  color: var(--accent-primary);
+  font-weight: 600;
+}

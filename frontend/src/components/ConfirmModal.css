@@ -1,0 +1,111 @@
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.confirm-modal-content {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+}
+
+.confirm-modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary, #202124);
+  margin: 0 0 16px 0;
+}
+
+.confirm-modal-message {
+  font-size: 15px;
+  color: var(--text-secondary, #5f6368);
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.confirm-modal-cancel,
+.confirm-modal-confirm {
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+}
+
+.confirm-modal-cancel {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary, #202124);
+}
+
+.confirm-modal-cancel:hover {
+  background: rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.confirm-modal-confirm {
+  background: linear-gradient(135deg, #4285f4 0%, #9334e9 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+}
+
+.confirm-modal-confirm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(66, 133, 244, 0.4);
+}
+
+.confirm-modal-confirm.dangerous {
+  background: linear-gradient(135deg, #ea4335 0%, #d33b2c 100%);
+  box-shadow: 0 2px 8px rgba(234, 67, 53, 0.3);
+}
+
+.confirm-modal-confirm.dangerous:hover {
+  box-shadow: 0 4px 16px rgba(234, 67, 53, 0.4);
+}
+
+.confirm-modal-cancel:active,
+.confirm-modal-confirm:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

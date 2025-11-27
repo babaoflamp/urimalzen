@@ -1,0 +1,131 @@
+/* MainNav Dandelion Theme */
+.main-nav {
+  display: flex;
+  gap: 12px;
+  padding: 12px 24px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  max-width: 1600px;
+  margin: 0 auto 16px auto;
+  box-shadow: var(--shadow-lg);
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-nav:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  color: var(--text-primary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+.nav-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 212, 77, 0.15),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.nav-item:hover::before {
+  left: 100%;
+}
+
+.nav-item:hover {
+  background: var(--glass-bg);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--accent-primary);
+}
+
+.nav-item:active {
+  transform: translateY(0);
+}
+
+.nav-item.active {
+  background: var(--gradient-primary);
+  border: 1px solid var(--accent-primary);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-glow);
+  color: var(--text-inverse);
+  font-weight: 700;
+}
+
+.nav-item.active:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: var(--shadow-glow-strong);
+}
+
+.nav-icon {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.nav-item:hover .nav-icon {
+  transform: scale(1.1);
+}
+
+.nav-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .main-nav {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .nav-item {
+    padding: 10px 16px;
+    gap: 6px;
+  }
+
+  .nav-icon {
+    font-size: 20px;
+  }
+
+  .nav-label {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-item {
+    flex: 1;
+    justify-content: center;
+    min-width: calc(50% - 8px);
+  }
+}

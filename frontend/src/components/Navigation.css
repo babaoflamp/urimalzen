@@ -1,0 +1,68 @@
+/* 네비게이션 버튼 컴포넌트 스타일 - Dandelion Theme */
+.navigation-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  margin-top: 2px;
+  position: relative;
+  z-index: 1;
+}
+.nav-button-sentence {
+  background: linear-gradient(135deg, #ffe082 0%, #ffd54f 100%);
+  color: #3e2723;
+  font-weight: 700;
+  border: 2px solid #ffd54f;
+  box-shadow: 0 2px 8px rgba(255, 215, 64, 0.15);
+  font-size: 20px;
+}
+
+.nav-button-sentence:hover {
+  background: linear-gradient(135deg, #ffd54f 0%, #ffe082 100%);
+  border-color: #ffb300;
+  color: #bf360c;
+  box-shadow: 0 4px 16px rgba(255, 215, 64, 0.25);
+  transform: translateY(-4px) scale(1.04);
+}
+
+.nav-button {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  border-radius: 20px;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-md);
+  line-height: 1.2;
+  min-height: auto;
+}
+
+.nav-button:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--accent-primary);
+  background: var(--glass-bg-strong);
+}
+
+.nav-button:active {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-button-home {
+  background: var(--gradient-primary);
+  border-color: var(--accent-primary);
+  color: var(--text-inverse);
+  font-weight: 700;
+}
+
+.nav-button-home:hover {
+  box-shadow: var(--shadow-glow-strong);
+  border-color: var(--accent-secondary);
+  transform: translateY(-4px) scale(1.02);
+}

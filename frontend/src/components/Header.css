@@ -1,0 +1,206 @@
+/* Header Dandelion Theme */
+.header-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  padding: 12px 32px;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 24px;
+  align-items: center;
+  box-shadow: var(--shadow-lg);
+  border-radius: 20px;
+  max-width: 1600px;
+  margin: 0 auto 24px auto;
+  position: relative;
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header-container:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+/* Header Sections */
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-right {
+  justify-content: flex-end;
+}
+
+/* App Name */
+.app-name {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px var(--shadow-glow);
+}
+
+/* Flag Container */
+.flag-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px;
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  transition: all 0.3s ease;
+}
+
+.flag-container:hover {
+  background: var(--glass-bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.flag-image {
+  width: 52px;
+  height: 30px;
+  border-radius: 6px;
+  object-fit: contain;
+  background-color: var(--glass-bg-strong);
+  display: block;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.9;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.flag-image:hover {
+  opacity: 1;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--accent-primary);
+}
+
+.flag-image:active {
+  transform: translateY(0) scale(1);
+}
+
+/* Center Info Box */
+.info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+  transition: all 0.3s ease;
+}
+
+.info-box:hover {
+  background: var(--glass-bg);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.info-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.info-text {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.separator {
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+.rank-text {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Score Badge */
+.score-badge {
+  color: var(--text-inverse);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 8px 16px;
+  background: var(--gradient-primary);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 12px;
+  border: 1px solid var(--accent-primary);
+  transition: all 0.3s ease;
+  cursor: default;
+  box-shadow: var(--shadow-glow);
+}
+
+.score-badge:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-glow-strong);
+}
+
+/* Logout Button */
+.logout-btn {
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  padding: 10px 24px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+}
+
+.logout-btn:hover {
+  background: var(--glass-bg-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .header-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+
+  .header-left,
+  .header-right {
+    justify-content: center;
+  }
+
+  .flag-image {
+    width: 56px;
+    height: 32px;
+  }
+}

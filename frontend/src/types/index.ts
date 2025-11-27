@@ -1,0 +1,679 @@
+export interface User {
+  _id: string;
+  username: string;
+  email: string;
+  programType: 'kiip' | 'topik';  // NEW: 프로그램 타입
+  level: {
+    cefr: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+    kiip?: 0 | 1 | 2 | 3 | 4 | 5;    // KIIP 사용자만 (선택적)
+    topik?: 1 | 2 | 3 | 4 | 5 | 6;   // TOPIK 사용자만 (선택적)
+  };
+  totalScore: number;
+  region: string;
+  country: string;
+  isAdmin: boolean;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+}
+
+// Alias for consistency with backend naming
+export type IUser = User;
+
+export interface Word {
+  _id: string;
+  koreanWord: string;
+  mongolianWord: string;
+  imageUrl: string;
+  description: string;
+  pronunciation: string;
+  category: string; // Legacy field
+  order: number;
+  examples: Array<{
+    korean: string;
+    mongolian: string;
+  }>;
+  synonyms: string[];
+  videoUrl?: string;
+  readingContent?: string;
+
+  // Program type for KIIP/TOPIK separation
+  programType: 'kiip' | 'topik' | 'common';
+
+  // Level fields
+  level: {
+    kiip?: 0 | 1 | 2 | 3 | 4 | 5;    // KIIP 사용자만 (선택적)
+    cefr: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+    topik?: 1 | 2 | 3 | 4 | 5 | 6;   // TOPIK 사용자만 (선택적)
+  };
+
+  mainCategory: string;
+  subCategory: string;
+  phonemeRules: string[];
+  standardPronunciation: string;
+  antonyms: string[];
+  collocations: string[];
+  relatedWords: string[];
+  difficultyScore: number;
+  frequencyRank?: number;
+  wordType: 'noun' | 'verb' | 'adjective' | 'adverb' | 'particle' | 'other';
+  formalityLevel: 'informal' | 'neutral' | 'formal';
+  culturalNote?: string;
+
+  // TOPIK-specific fields
+  testSection?: 'listening' | 'reading' | 'writing';
+  grammarPattern?: string;
+  questionType?: string;
+
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface UserProgress {
+  _id: string;
+  userId: string;
+  wordId: Word | string;
+  completed: boolean;
+  score: number;
+  attempts: number;
+  lastAttemptAt: Date;
+  recordings: string[];
+}
+
+export interface Recording {
+  _id: string;
+  userId: string;
+  wordId: string;
+  fileUrl: string;
+  fileName: string;
+  fileSize: number;
+  duration: number;
+  mimeType: string;
+  createdAt: Date;
+}
+
+export interface Ranking {
+  _id: string;
+  userId: string;
+  globalRank: number;
+  countryRank: number;
+  koreaRank: number;
+  regionRank: number;
+  score: number;
+  wordsCompleted: number;
+  totalAttempts: number;
+  lastUpdated: Date;
+}
+
+export interface AuthResponse {
+  message: string;
+  token: string;
+  user: User;
+}
+
+// Category types
+export interface Category {
+  _id: string;
+  name: string;
+  nameEn: string;
+  nameMn: string;
+  order: number;
+  icon: string;
+  description: string;
+  descriptionMn: string;
+  subCategories: string[];
+  color: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CategoryStats {
+  category: string;
+  totalWords: number;
+  wordsByLevel: Array<{
+    _id: number;
+    count: number;
+  }>;
+  wordsBySubCategory: Array<{
+    _id: string;
+    count: number;
+  }>;
+}
+
+// Pronunciation types
+export interface PhonemeRule {
+  _id: string;
+  ruleName: string;
+  ruleNameEn: string;
+  ruleNameMn: string;
+  description: string;
+  descriptionMn: string;
+  pattern: string;
+  examples: Array<{
+    word: string;
+    written: string;
+    pronounced: string;
+    writtenMn: string;
+    pronouncedMn: string;
+  }>;
+  kiipLevel: number;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PronunciationAnalysis {
+  word: string;
+  rulesFound: number;
+  rules: Array<{
+    ruleId: string;
+    ruleName: string;
+    ruleNameMn: string;
+    description: string;
+    descriptionMn: string;
+    examples: PhonemeRule['examples'];
+  }>;
+}
+
+// Unit and Lesson types (matching backend schema)
+export interface Lesson {
+  lessonNumber: number;
+  title: string;
+  titleMn: string;
+  wordIds: string[];
+  isReview: boolean;
+}
+
+export interface Challenge {
+  wordIds: string[];
+  passingScore: number;
+}
+
+export interface Unit {
+  _id: string;
+  unitNumber: number;
+  title: string;
+  titleMn: string;
+  programType: 'kiip' | 'topik';  // NEW: 프로그램 타입
+  kiipLevel?: number;              // KIIP 유닛만 (선택적)
+  topikLevel?: number;             // NEW: TOPIK 유닛만 (선택적)
+  testSection?: 'listening' | 'reading' | 'writing';  // NEW: TOPIK 시험 영역
+  mainCategory: string;
+  lessons: Lesson[];
+  challenge: Challenge;
+  order: number;
+  description: string;
+  descriptionMn: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// API Response types
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  count?: number;
+  message?: string;
+  error?: string;
+}
+
+// AI/TTS/STT Configuration types
+export interface AIConfiguration {
+  _id: string;
+  serviceName: 'ollama' | 'openai' | 'claude' | 'gemini';
+  apiUrl: string;
+  apiKey?: string;
+  modelName: string;
+  temperature?: number;
+  maxTokens?: number;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface TTSConfiguration {
+  _id: string;
+  serviceName: 'google' | 'azure' | 'naver' | 'custom';
+  apiUrl: string;
+  apiKey?: string;
+  voice: string;
+  speed: number;
+  pitch: number;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface STTConfiguration {
+  _id: string;
+  serviceName: 'google' | 'azure' | 'whisper' | 'custom';
+  apiUrl: string;
+  apiKey?: string;
+  language: string;
+  accuracyThreshold: number;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// AI Generated Content types
+export interface AIGeneratedContent {
+  wordId: string;
+  aiDescription?: string;
+  aiDescriptionMn?: string;
+  aiExamples?: Array<{
+    korean: string;
+    mongolian: string;
+  }>;
+  pronunciationTips?: string;
+  pronunciationTipsMn?: string;
+  generatedAt: Date;
+}
+
+// TTS Audio Content types
+export interface AudioContent {
+  _id: string;
+  wordId: string;
+  audioType: 'word' | 'example' | 'phoneme_rule';
+  fileUrl: string;
+  fileName: string;
+  fileSize: number;
+  duration: number;
+  voice: string;
+  speed: number;
+  generatedBy: 'admin' | 'auto';
+  createdAt: Date;
+}
+
+// STT Pronunciation Evaluation types
+export interface PronunciationEvaluation {
+  _id: string;
+  userId: string;
+  wordId: string;
+  recordingId: string;
+  recognizedText: string;
+  expectedText: string;
+  accuracyScore: number;
+  feedback: string;
+  feedbackMn: string;
+  detailedScores?: {
+    pronunciation: number;
+    fluency: number;
+    completeness: number;
+  };
+  createdAt: Date;
+}
+
+// AI API Request/Response types
+export interface AIContentGenerationRequest {
+  wordId: string;
+  contentType: 'description' | 'examples' | 'tips' | 'all';
+  language: 'ko' | 'mn' | 'both';
+}
+
+export interface AIContentGenerationResponse {
+  success: boolean;
+  data?: {
+    description?: string;
+    descriptionMn?: string;
+    examples?: Array<{ korean: string; mongolian: string }>;
+    tips?: string;
+    tipsMn?: string;
+  };
+  message?: string;
+  error?: string;
+}
+
+// TTS API Request/Response types
+export interface TTSGenerationRequest {
+  wordId?: string;
+  text: string;
+  voice?: string;
+  speed?: number;
+  pitch?: number;
+  outputFormat?: 'mp3' | 'wav' | 'webm';
+}
+
+export interface TTSGenerationResponse {
+  success: boolean;
+  audioUrl?: string;
+  duration?: number;
+  fileSize?: number;
+  message?: string;
+  error?: string;
+}
+
+// STT API Request/Response types
+export interface STTEvaluationRequest {
+  audioFile: File | Blob;
+  wordId: string;
+  expectedText: string;
+}
+
+export interface STTEvaluationResponse {
+  success: boolean;
+  data?: {
+    recognizedText: string;
+    accuracyScore: number;
+    feedback: string;
+    feedbackMn: string;
+    detailedScores?: {
+      pronunciation: number;
+      fluency: number;
+      completeness: number;
+    };
+  };
+  message?: string;
+  error?: string;
+}
+
+// Admin Dashboard Stats
+export interface AdminStats {
+  totalUsers: number;
+  totalWords: number;
+  totalRecordings: number;
+  activeUsers: number;
+  aiGeneratedContent?: number;
+  ttsAudioFiles?: number;
+  sttEvaluations?: number;
+}
+
+// Comprehensive Statistics Types
+
+export interface DashboardStatsResponse {
+  success: boolean;
+  data: {
+    overview: {
+      totalUsers: number;
+      activeUsers: number;
+      totalWords: number;
+      totalRecordings: number;
+      totalProgress: number;
+      totalEvaluations: number;
+      totalAudio: number;
+      avgScore: number;
+      completionRate: number;
+    };
+  };
+}
+
+export interface UserStatsResponse {
+  success: boolean;
+  data: {
+    overview: {
+      totalUsers: number;
+      activeUsers7d: number;
+      activeUsers30d: number;
+      retentionRate: number;
+    };
+    registrationTrends: Array<{
+      _id: string;
+      count: number;
+    }>;
+    usersByCountry: Array<{
+      _id: string;
+      count: number;
+    }>;
+    usersByRegion: Array<{
+      _id: string;
+      count: number;
+    }>;
+    usersByLevel: Array<{
+      _id: number;
+      count: number;
+    }>;
+  };
+}
+
+export interface LearningStatsResponse {
+  success: boolean;
+  data: {
+    overview: {
+      completionRate: number;
+      avgScore: number;
+      avgAttempts: number;
+      totalCompleted: number;
+      totalInProgress: number;
+    };
+    completionByLevel: Array<{
+      level: number;
+      completionRate: number;
+    }>;
+    completionByCategory: Array<{
+      category: string;
+      completionRate: number;
+    }>;
+    mostPracticedWords: Array<{
+      wordId: string;
+      koreanWord: string;
+      mongolianWord: string;
+      totalAttempts: number;
+      avgScore: number;
+    }>;
+    leastPracticedWords: Array<{
+      wordId: string;
+      koreanWord: string;
+      mongolianWord: string;
+      level: number;
+      category: string;
+    }>;
+  };
+}
+
+export interface PronunciationStatsResponse {
+  success: boolean;
+  data: {
+    overview: {
+      totalEvaluations: number;
+      avgPronunciation: number;
+      avgFluency: number;
+      avgCompleteness: number;
+      avgOverall: number;
+      totalRecordings: number;
+      totalStorageMB: number;
+      avgDurationSeconds: number;
+    };
+    scoreDistribution: Array<{
+      range: string;
+      count: number;
+    }>;
+    scoreTrends: Array<{
+      _id: string;
+      avgScore: number;
+      count: number;
+    }>;
+    difficultWords: Array<{
+      wordId: string;
+      koreanWord: string;
+      mongolianWord: string;
+      recordingCount: number;
+      avgScore: number;
+    }>;
+  };
+}
+
+export interface ContentStatsResponse {
+  success: boolean;
+  data: {
+    overview: {
+      totalWords: number;
+      wordsWithImage: number;
+      wordsWithoutImage: number;
+      imageCompletionRate: number;
+      totalAudio: number;
+      audioStorageMB: number;
+      avgAudioDuration: number;
+      adminGenerated: number;
+      autoGenerated: number;
+    };
+    wordsByLevel: Array<{
+      _id: number;
+      count: number;
+    }>;
+    wordsByCategory: Array<{
+      _id: string;
+      count: number;
+    }>;
+    audioByType: Array<{
+      _id: string;
+      count: number;
+    }>;
+    wordsByDifficulty: Array<{
+      range: string;
+      count: number;
+    }>;
+  };
+}
+
+export interface TrendStatsResponse {
+  success: boolean;
+  data: {
+    dailyActiveUsers: Array<{
+      _id: string;
+      count: number;
+    }>;
+    dailyRegistrations: Array<{
+      _id: string;
+      count: number;
+    }>;
+    dailyCompletion: Array<{
+      _id: string;
+      count: number;
+      avgScore: number;
+    }>;
+    dailyRecordings: Array<{
+      _id: string;
+      count: number;
+    }>;
+  };
+}
+
+export interface GeographyStatsResponse {
+  success: boolean;
+  data: {
+    usersByCountry: Array<{
+      _id: string;
+      count: number;
+    }>;
+    usersByRegion: Array<{
+      _id: string;
+      count: number;
+    }>;
+    performanceByCountry: Array<{
+      _id: string;
+      avgScore: number;
+      userCount: number;
+    }>;
+  };
+}
+
+export interface ChartDataPoint {
+  name: string;
+  value: number;
+  [key: string]: string | number;
+}
+
+// ComfyUI Types
+export interface ComfyUIQueueStatus {
+  queue_running: number;
+  queue_pending: number;
+}
+
+export interface ComfyUIWordIllustrationRequest {
+  koreanWord: string;
+  englishDescription?: string;
+}
+
+export interface ComfyUIThemeImageRequest {
+  theme: string;
+  style: 'realistic' | 'illustration' | 'minimal';
+  width: number;
+  height: number;
+}
+
+export interface ComfyUIGenerationResponse {
+  success: boolean;
+  imagePath?: string;
+  message?: string;
+  error?: string;
+}
+
+// TOPIK Question Types
+export interface TOPIKOption {
+  text: string;
+  textMn: string;
+}
+
+export interface TOPIKQuestion {
+  _id: string;
+  questionNumber: number;
+  questionType: 'multiple-choice' | 'fill-in-blank' | 'essay' | 'short-answer' | 'listening-comprehension';
+  testSection: 'listening' | 'reading' | 'writing';
+  topikLevel: 1 | 2 | 3 | 4 | 5 | 6;
+
+  // Question content
+  questionText: string;
+  questionTextMn: string;
+  options: TOPIKOption[];
+  correctAnswer?: string | number;
+
+  // Explanations
+  explanation: string;
+  explanationMn: string;
+
+  // Media attachments
+  audioUrl?: string;
+  imageUrl?: string;
+
+  // Difficulty and scoring
+  points: number;
+  difficultyScore: number;
+
+  // Metadata and relationships
+  tags: string[];
+  relatedWordIds: string[];
+  grammarPattern?: string;
+
+  // Usage tracking
+  attemptCount: number;
+  correctCount: number;
+  averageScore: number;
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// TOPIK Test Session (user's test attempt)
+export interface TOPIKTestSession {
+  _id: string;
+  userId: string;
+  testSection: 'listening' | 'reading' | 'writing';
+  topikLevel: 1 | 2 | 3 | 4 | 5 | 6;
+  questions: TOPIKQuestion[];
+  answers: {
+    questionId: string;
+    userAnswer: string | number;
+    isCorrect: boolean;
+    timeSpent: number;  // seconds
+  }[];
+  totalScore: number;
+  maxScore: number;
+  startedAt: Date;
+  completedAt?: Date;
+  status: 'in-progress' | 'completed' | 'abandoned';
+}
+
+// TOPIK Progress Tracking
+export interface TOPIKProgress {
+  _id: string;
+  userId: string;
+  topikLevel: 1 | 2 | 3 | 4 | 5 | 6;
+  listeningScore: number;
+  readingScore: number;
+  writingScore: number;
+  totalTests: number;
+  completedTests: number;
+  averageScore: number;
+  lastTestDate?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}

@@ -1,0 +1,76 @@
+/* 공통 카드 타이틀 스타일 */
+.card-title {
+  color: var(--text-primary);
+  text-align: left;
+  font-size: 18px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+/* 자기 주도 학습 컴포넌트 스타일 - Dandelion Theme */
+.self-study-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+  min-height: 170px;
+}
+
+.self-study-menu-title {
+  color: var(--text-primary);
+  text-align: left;
+  font-size: 18px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.self-study-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.self-study-menu-button {
+  background: var(--gradient-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--accent-primary);
+  color: var(--text-inverse);
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  box-shadow: var(--shadow-md);
+}
+
+.self-study-menu-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--accent-primary);
+}
+
+.self-study-menu-button:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.self-study-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--accent-primary);
+  box-shadow: var(--shadow-sm);
+}
