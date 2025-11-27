@@ -11,7 +11,7 @@ import PhonemeRule from '../models/PhonemeRule';
  */
 export const generateWordAudio = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { wordId, voice, speed, pitch } = req.body;
+    const { wordId, speaker, tempo, pitch, gain } = req.body;
 
     if (!wordId) {
       res.status(400).json({ success: false, message: 'Word ID is required' });
@@ -25,11 +25,27 @@ export const generateWordAudio = async (req: AuthRequest, res: Response): Promis
       return;
     }
 
-    // Generate audio
+    // Map speaker string to MzTTS model/speaker numbers
+    const speakerMapping: Record<string, { model: number; speaker: number }> = {
+      'Jieun-neutral': { model: 0, speaker: 0 },
+      'Jieun-pleasure': { model: 0, speaker: 1 },
+      'Jieun-anger': { model: 0, speaker: 2 },
+      'Jieun-sadness': { model: 0, speaker: 3 },
+      'Seojun-neutral': { model: 0, speaker: 4 },
+      'Seojun-pleasure': { model: 0, speaker: 5 },
+      'Seojun-anger': { model: 0, speaker: 6 },
+      'Seojun-sadness': { model: 0, speaker: 7 },
+    };
+
+    const speakerConfig = speakerMapping[speaker] || { model: 0, speaker: 4 }; // Default to Seojun-neutral
+
+    // Generate audio using MzTTS
     const audioData = await ttsService.generateWordAudio(word.koreanWord, wordId, {
-      voice,
-      speed,
-      pitch,
+      model: speakerConfig.model,
+      speaker: speakerConfig.speaker,
+      tempo: tempo !== undefined ? tempo : 1.0,
+      pitch: pitch !== undefined ? pitch : 1.0,
+      gain: gain !== undefined ? gain : 1.0,
     });
 
     res.status(200).json({
@@ -310,11 +326,20 @@ export const getAllAudio = async (req: AuthRequest, res: Response): Promise<void
  */
 export const testTTSConnection = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    // Debug: Check environment variables
+    console.log('Environment variables check:');
+    console.log('MZTTS_API_URL:', process.env.MZTTS_API_URL);
+    console.log('TTS_API_URL:', process.env.TTS_API_URL);
+
     const result = await ttsService.testConnection();
 
     res.status(200).json({
       success: true,
       data: result,
+      debug: {
+        MZTTS_API_URL: process.env.MZTTS_API_URL || 'NOT SET',
+        TTS_API_URL: process.env.TTS_API_URL || 'NOT SET',
+      },
       message: 'TTS service connection test completed',
     });
     return;
@@ -323,6 +348,68 @@ export const testTTSConnection = async (req: AuthRequest, res: Response): Promis
     res.status(500).json({
       success: false,
       message: 'TTS service connection test failed',
+      error: error.message,
+      debug: {
+        MZTTS_API_URL: process.env.MZTTS_API_URL || 'NOT SET',
+        TTS_API_URL: process.env.TTS_API_URL || 'NOT SET',
+      },
+    });
+    return;
+  }
+};
+
+/**
+ * Test TTS with custom text and settings
+ * POST /api/admin/tts/test
+ */
+export const testTTS = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { text, speaker, tempo, pitch, gain } = req.body;
+
+    if (!text) {
+      res.status(400).json({ success: false, message: 'Text is required for TTS test' });
+      return;
+    }
+
+    // Map speaker string to MzTTS model/speaker numbers
+    const speakerMapping: Record<string, { model: number; speaker: number }> = {
+      'Jieun-neutral': { model: 0, speaker: 0 },
+      'Jieun-pleasure': { model: 0, speaker: 1 },
+      'Jieun-anger': { model: 0, speaker: 2 },
+      'Jieun-sadness': { model: 0, speaker: 3 },
+      'Seojun-neutral': { model: 0, speaker: 4 },
+      'Seojun-pleasure': { model: 0, speaker: 5 },
+      'Seojun-anger': { model: 0, speaker: 6 },
+      'Seojun-sadness': { model: 0, speaker: 7 },
+    };
+
+    const speakerConfig = speakerMapping[speaker] || { model: 0, speaker: 4 }; // Default to Seojun-neutral
+
+    // Generate test audio using MzTTS
+    const audioData = await ttsService.generateWordAudio(text, 'test', {
+      model: speakerConfig.model,
+      speaker: speakerConfig.speaker,
+      tempo: tempo !== undefined ? tempo : 1.0,
+      pitch: pitch !== undefined ? pitch : 1.0,
+      gain: gain !== undefined ? gain : 1.0,
+    });
+
+    res.json({
+      success: true,
+      data: {
+        text,
+        speaker,
+        settings: { tempo, pitch, gain },
+        audioUrl: audioData.audioUrl,
+      },
+      message: 'Test TTS audio generated successfully',
+    });
+    return;
+  } catch (error: any) {
+    console.error('Error testing TTS:', error);
+    res.status(500).json({
+      success: false,
+      message: 'TTS test failed',
       error: error.message,
     });
     return;

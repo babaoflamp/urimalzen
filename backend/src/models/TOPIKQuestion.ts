@@ -121,7 +121,7 @@ const topikQuestionSchema = new Schema<ITOPIKQuestion>(
       required: true,
       default: 1,
       min: 1,
-      max: 10,
+      max: 100,  // TOPIK writing essays can be worth 50-100 points
     },
     difficultyScore: {
       type: Number,

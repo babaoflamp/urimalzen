@@ -11,6 +11,13 @@ router.use(authenticate);
  * User STT Routes
  */
 
+// SpeechPro 기반 발음 평가
+router.post(
+  '/evaluate-speechpro',
+  userSTTController.upload.single('audio'),
+  userSTTController.evaluatePronunciationSpeechPro
+);
+
 // Evaluate pronunciation
 router.post(
   '/evaluate',

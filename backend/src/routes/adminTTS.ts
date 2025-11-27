@@ -36,4 +36,7 @@ router.delete('/audio/:audioId', adminTTSController.deleteAudio);
 // Test TTS service connection
 router.get('/test-connection', adminTTSController.testTTSConnection);
 
+// Test TTS with custom text and settings
+router.post('/test', adminTTSController.testTTS);
+
 export default router;

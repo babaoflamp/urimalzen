@@ -1,6 +1,47 @@
+console.log('TTS_API_URL:', process.env.TTS_API_URL);
+// MzTTS 연동
+
+// dotenv import/config removed (should only be in index.ts)
+// Get MZTTS_API_URL dynamically instead of at module load time
+const getMzTTSApiUrl = () => process.env.MZTTS_API_URL;
+
+/**
+ * MzTTS API에 텍스트를 보내 음성 합성 요청
+ */
+export async function requestMzTTS(text: string, options: {
+  outputtype?: 'file' | 'pcm' | 'path',
+  DEFAULTMODEL?: number,
+  DEFAULTSPEAKER?: number,
+  DEFAULTTEMPO?: number,
+  DEFAULTPITCH?: number,
+  DEFAULTGAIN?: number,
+  CONVRATE?: number,
+  CACHE?: 'on' | 'off',
+} = {}) {
+  const MZTTS_API_URL = getMzTTSApiUrl();
+  if (!MZTTS_API_URL) throw new Error('MzTTS API URL이 설정되지 않았습니다.');
+  const payload = {
+    output_type: options.outputtype || 'path',  // Changed from 'outputtype'
+    _TEXT: text,  // Changed from 'TEXT'
+    // Optional parameters - only include if they have non-default values
+    ...(options.DEFAULTMODEL !== undefined && { _MODEL: options.DEFAULTMODEL }),
+    ...(options.DEFAULTSPEAKER !== undefined && { _SPEAKER: options.DEFAULTSPEAKER }),
+    ...(options.DEFAULTTEMPO !== undefined && { _TEMPO: options.DEFAULTTEMPO }),
+    ...(options.DEFAULTPITCH !== undefined && { _PITCH: options.DEFAULTPITCH }),
+    ...(options.DEFAULTGAIN !== undefined && { _GAIN: options.DEFAULTGAIN }),
+  };
+  const res = await axios.post(MZTTS_API_URL, payload, {
+    headers: { 'Content-Type': 'application/json' },
+    responseType: options.outputtype === 'file' ? 'arraybuffer' : 'json',
+    timeout: 30000,
+  });
+  return res.data;
+}
+
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
+import AudioContent from '../models/AudioContent';
 
 const TTS_API_URL = process.env.TTS_API_URL || 'http://localhost:8000/tts';
 const TTS_API_KEY = process.env.TTS_API_KEY || '';
@@ -26,6 +67,7 @@ interface TTSRequest {
 interface TTSResponse {
   success: boolean;
   audioUrl?: string;
+  audioFile?: string;
   audioData?: Buffer;
   duration?: number;
   fileSize?: number;
@@ -117,18 +159,67 @@ export const generateAudio = async (
 };
 
 /**
- * 단어 발음 오디오 생성
+ * 단어 발음 오디오 생성 (MzTTS 사용)
  */
 export const generateWordAudio = async (
   koreanWord: string,
   wordId?: string,
-  options: { voice?: string; speed?: number; pitch?: number } = {}
+  options: { model?: number; speaker?: number; tempo?: number; pitch?: number; gain?: number } = {}
 ): Promise<TTSResponse> => {
-  return generateAudio(koreanWord, {
-    ...options,
-    wordId,
-    audioType: 'word',
-  });
+  try {
+    // Generate audio using MzTTS
+    const mzTTSResult = await requestMzTTS(koreanWord, {
+      outputtype: 'file',
+      DEFAULTMODEL: options.model !== undefined ? options.model : 0,
+      DEFAULTSPEAKER: options.speaker !== undefined ? options.speaker : 4,
+      DEFAULTTEMPO: options.tempo !== undefined ? options.tempo : 1.0,
+      DEFAULTPITCH: options.pitch !== undefined ? options.pitch : 1.0,
+      DEFAULTGAIN: options.gain !== undefined ? options.gain : 1.0,
+    });
+
+    // MzTTS returns audio data directly
+    // Save to file
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 10000);
+    const prefix = wordId || 'word';
+    const fileName = `${prefix}_${timestamp}_${random}.wav`;
+    const filePath = path.join(AI_AUDIO_UPLOAD_PATH, fileName);
+
+    // Write audio buffer
+    fs.writeFileSync(filePath, Buffer.from(mzTTSResult));
+
+    const fileSize = fs.statSync(filePath).size;
+
+    // Save to AudioContent database if wordId is provided
+    if (wordId) {
+      await AudioContent.create({
+        wordId,
+        audioType: 'word',
+        fileUrl: `/uploads/tts/${fileName}`,
+        fileName,
+        fileSize,
+        duration: 0,
+        voice: `Speaker ${options.speaker || 4}`,
+        speed: options.tempo || 1.0,
+        pitch: options.pitch || 1.0,
+        generatedBy: 'admin',
+      });
+    }
+
+    return {
+      success: true,
+      audioUrl: `/uploads/tts/${fileName}`,
+      audioFile: `uploads/tts/${fileName}`,
+      fileSize,
+      duration: 0,
+    };
+  } catch (error: any) {
+    console.error('Error generating word audio with MzTTS:', error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
 };
 
 /**
@@ -205,32 +296,33 @@ export const generateBatchAudio = async (
 };
 
 /**
- * TTS 서비스 연결 테스트
+ * TTS 서비스 연결 테스트 (MzTTS)
  */
 export const testConnection = async (): Promise<{ success: boolean; message: string }> => {
   try {
-    // Test with a simple Korean phrase
+    // Test MzTTS connection
     const testText = '안녕하세요';
-    const buffer = await callTTSAPI({
-      text: testText,
-      voice: TTS_DEFAULT_VOICE,
+    const result = await requestMzTTS(testText, {
+      outputtype: 'path',
+      DEFAULTMODEL: 0,
+      DEFAULTSPEAKER: 4,
     });
 
-    if (buffer && buffer.length > 0) {
+    if (result) {
       return {
         success: true,
-        message: `TTS 서비스 연결 성공! (테스트 오디오 크기: ${buffer.length} bytes)`,
+        message: `MzTTS 서비스 연결 성공!`,
       };
     }
 
     return {
       success: false,
-      message: 'TTS 응답이 비어있습니다.',
+      message: 'MzTTS 응답이 비어있습니다.',
     };
   } catch (error: any) {
     return {
       success: false,
-      message: `TTS 서비스 연결 실패: ${error.message}`,
+      message: `MzTTS 서비스 연결 실패: ${error.message}`,
     };
   }
 };

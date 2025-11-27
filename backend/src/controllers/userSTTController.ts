@@ -1,3 +1,101 @@
+import * as speechproService from '../services/speechproService';
+import { IWord } from '../models/Word';
+import fs from 'fs';
+/**
+ * Evaluate pronunciation using SpeechPro API (scorejson)
+ * POST /api/stt/evaluate-speechpro
+ * body: { wordId }
+ * file: audio (wav)
+ */
+export const evaluatePronunciationSpeechPro = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { wordId } = req.body;
+    const audioFile = req.file;
+
+    if (!wordId || !audioFile) {
+      res.status(400).json({ success: false, message: 'Word ID and audio file are required' });
+      return;
+    }
+    if (!req.user) {
+      res.status(401).json({ success: false, message: 'User not authenticated' });
+      return;
+    }
+
+    // Find word and check for required SpeechPro fields
+    const word = await Word.findById(wordId) as IWord | null;
+    if (!word) {
+      res.status(404).json({ success: false, message: 'Word not found' });
+      return;
+    }
+    // Assume these fields are stored in word DB (syll ltrs, syll phns, fst)
+    // If not, return error
+    // For demo, use word.standardPronunciation as text, and add custom fields if needed
+    // You may want to extend the Word schema to store these fields
+    const syllLtrs = (word as any)['syll_ltrs'] || (word as any)['syllLtrs'];
+    const syllPhns = (word as any)['syll_phns'] || (word as any)['syllPhns'];
+    const fst = (word as any)['fst'];
+    if (!syllLtrs || !syllPhns || !fst) {
+      res.status(400).json({ success: false, message: 'Word is missing SpeechPro model data (syll_ltrs, syll_phns, fst)' });
+      return;
+    }
+
+    // Read audio file as base64
+    const wavBuffer = audioFile.buffer || fs.readFileSync(audioFile.path);
+    const wavBase64 = wavBuffer.toString('base64');
+
+    // Call SpeechPro scorejson
+    const scoreRes = await speechproService.callScore({
+      id: wordId,
+      text: word.koreanWord,
+      'syll ltrs': syllLtrs,
+      'syll phns': syllPhns,
+      fst,
+      'wav usr': wavBase64,
+    });
+
+    // Save evaluation to DB
+    const recording = await Recording.create({
+      userId: req.user.id,
+      wordId,
+      fileUrl: `/uploads/recordings/${audioFile.filename}`,
+      fileName: audioFile.filename,
+      fileSize: audioFile.size,
+      duration: 0,
+      mimeType: audioFile.mimetype,
+    });
+
+    const savedEvaluation = await PronunciationEvaluation.create({
+      userId: req.user.id,
+      wordId,
+      recordingId: recording._id,
+      recognizedText: '',
+      expectedText: word.koreanWord,
+      accuracyScore: (scoreRes.score ?? 0) / 100,
+      feedback: `점수: ${scoreRes.score}`,
+      feedbackMn: `Оноо: ${scoreRes.score}`,
+      detailedScores: undefined,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: {
+        evaluation: savedEvaluation,
+        recording,
+        speechpro: scoreRes,
+      },
+      message: 'SpeechPro 발음 평가 완료',
+    });
+    return;
+  } catch (error: any) {
+    console.error('SpeechPro 발음 평가 오류:', error);
+    res.status(500).json({
+      success: false,
+      message: 'SpeechPro 발음 평가 실패',
+      error: error.message,
+    });
+    return;
+  }
+};
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import * as sttService from '../services/sttService';
