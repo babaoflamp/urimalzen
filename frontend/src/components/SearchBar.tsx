@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { useLearningStore } from "../store/useLearningStore";
 import { useLanguageStore } from "../store/useLanguageStore";
-import { translations } from "../utils/translations";
 import "./SearchBar.css";
 
 const SearchBar = () => {
   const { searchQuery, setSearchQuery, isLoading } = useLearningStore();
   const { language } = useLanguageStore();
-  const t = translations[language];
   const [localQuery, setLocalQuery] = useState(searchQuery);
 
   useEffect(() => {

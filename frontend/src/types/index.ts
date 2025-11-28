@@ -23,6 +23,7 @@ export interface Word {
   _id: string;
   koreanWord: string;
   mongolianWord: string;
+  chineseWord?: string;
   imageUrl: string;
   description: string;
   pronunciation: string;
@@ -31,6 +32,7 @@ export interface Word {
   examples: Array<{
     korean: string;
     mongolian: string;
+    chinese?: string;
   }>;
   synonyms: string[];
   videoUrl?: string;

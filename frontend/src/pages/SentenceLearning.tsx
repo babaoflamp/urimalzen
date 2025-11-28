@@ -6,8 +6,6 @@ import { useLearningStore } from "../store/useLearningStore";
 import { wordAPI, progressAPI, rankingAPI } from "../services/api";
 import Header from "../components/Header";
 import MainNav from "../components/MainNav";
-import SearchBar from "../components/SearchBar";
-import FilterPanel from "../components/FilterPanel";
 import StoryList from "../components/StoryList";
 import { useState } from "react";
 import LearningArea from "../components/LearningArea";

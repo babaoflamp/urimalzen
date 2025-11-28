@@ -18,12 +18,6 @@ const WordList = () => {
     return `level-${kiipLevel}`;
   };
 
-  const getTranslatedWord = (word: any) => {
-    if (language === "zh") return word.chineseWord || word.mongolianWord;
-    if (language === "mn") return word.mongolianWord;
-    return word.koreanWord;
-  };
-
   if (filteredWords.length === 0) {
     return (
       <div className="word-list-container">

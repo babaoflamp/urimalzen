@@ -20,34 +20,34 @@ const AdminSystem = () => {
   const [speechProStatus, setSpeechProStatus] = useState<string>("");
   const [speechProTestLoading, setSpeechProTestLoading] = useState(false);
 
-  // MzTTS API 설정 상태
-  const [mzttsUrl, setMzttsUrl] = useState<string>(
-    import.meta.env.VITE_MZTTS_API_URL || "http://192.168.123.33:7779"
-  );
-  const [mzttsStatus, setMzttsStatus] = useState<string>("");
-  const [mzttsTestLoading, setMzttsTestLoading] = useState(false);
+  // MzTTS API 설정 상태 (현재 사용되지 않음)
+  // const [mzttsUrl, setMzttsUrl] = useState<string>(
+  //   import.meta.env.VITE_MZTTS_API_URL || "http://192.168.123.33:7779"
+  // );
+  // const [mzttsStatus, setMzttsStatus] = useState<string>("");
+  // const [mzttsTestLoading, setMzttsTestLoading] = useState(false);
   const [ttsUrl, setTtsUrl] = useState<string>(
     import.meta.env.VITE_TTS_API_URL || "http://112.220.79.218:56014"
   );
-  // MzTTS API 연결 테스트
-  const handleTestMzTTS = async () => {
-    setMzttsTestLoading(true);
-    setMzttsStatus("");
-    try {
-      const res = await axios.get(`${mzttsUrl}/health`, { timeout: 5000 });
-      if (res.data && res.data.code === 200) {
-        setMzttsStatus(
-          "✅ 연결 성공: " + (res.data.message || "MzTTS 서버 정보 확인됨")
-        );
-      } else {
-        setMzttsStatus("⚠️ 연결은 되었으나 응답 오류");
-      }
-    } catch (e: any) {
-      setMzttsStatus("❌ 연결 실패: " + (e?.message || "오류"));
-    } finally {
-      setMzttsTestLoading(false);
-    }
-  };
+  // MzTTS API 연결 테스트 (현재 사용되지 않음)
+  // const handleTestMzTTS = async () => {
+  //   setMzttsTestLoading(true);
+  //   setMzttsStatus("");
+  //   try {
+  //     const res = await axios.get(`${mzttsUrl}/health`, { timeout: 5000 });
+  //     if (res.data && res.data.code === 200) {
+  //       setMzttsStatus(
+  //         "✅ 연결 성공: " + (res.data.message || "MzTTS 서버 정보 확인됨")
+  //       );
+  //     } else {
+  //       setMzttsStatus("⚠️ 연결은 되었으나 응답 오류");
+  //     }
+  //   } catch (e: any) {
+  //     setMzttsStatus("❌ 연결 실패: " + (e?.message || "오류"));
+  //   } finally {
+  //     setMzttsTestLoading(false);
+  //   }
+  // };
 
   // TTS 설정 상태
   const [ttsStatus, setTTSStatus] = useState<string>("");

@@ -3,12 +3,8 @@ import { useLanguageStore } from "../store/useLanguageStore";
 import "./Navigation.css";
 
 const Navigation = () => {
-  const { previousWord, nextWord, setCurrentWordIndex } = useLearningStore();
+  const { previousWord, nextWord } = useLearningStore();
   const { language } = useLanguageStore();
-
-  const goToHome = () => {
-    setCurrentWordIndex(0);
-  };
 
   return (
     <div className="navigation-container">

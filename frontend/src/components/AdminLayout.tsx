@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { type ReactNode, useState } from "react";
 import AdminSidebar from "./AdminSidebar";
 import "./AdminLayout.css";
 

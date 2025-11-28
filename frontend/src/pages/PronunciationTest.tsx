@@ -3,21 +3,28 @@ import Header from "../components/Header";
 import MainNav from "../components/MainNav";
 import { useLanguageStore } from "../store/useLanguageStore";
 import { useAuthStore } from "../store/useAuthStore";
-import { translations } from "../utils/translations";
 import { pronunciationTestAPI } from "../services/api";
 import "./PronunciationTest.css";
 
 interface TestSentence {
   _id: string;
-  sentenceNumber: number;
-  koreanText: string;
-  mongolianText: string;
-  chineseText?: string;
-  difficultyLevel: number;
-  kiipLevel: number;
-  category: string;
-  grammarPoints: string[];
+  sentence: string;          // Korean sentence
+  sentenceMn?: string;       // Mongolian translation
+  sentenceCn?: string;       // Chinese translation
   order: number;
+  level?: {
+    kiip?: 0 | 1 | 2 | 3 | 4 | 5;
+    cefr?: string;
+  };
+  speechPro?: {
+    syllLtrs: string;
+    syllPhns: string;
+    fst: string;
+  };
+  difficultyScore?: number;
+  category?: string;
+  tags?: string[];
+  isActive?: boolean;
 }
 
 interface TestSession {
@@ -47,7 +54,6 @@ interface Answer {
 const PronunciationTest = () => {
   const { language } = useLanguageStore();
   const { user } = useAuthStore();
-  const t = translations[language];
 
   const [sentences, setSentences] = useState<TestSentence[]>([]);
   const [loading, setLoading] = useState(true);
@@ -65,7 +71,7 @@ const PronunciationTest = () => {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
-  const [recordingTimer, setRecordingTimer] = useState<NodeJS.Timeout | null>(
+  const [recordingTimer, setRecordingTimer] = useState<number | null>(
     null
   );
 
@@ -286,26 +292,28 @@ const PronunciationTest = () => {
                       }
                     >
                       <div className="pronunciation-test-sentence-number">
-                        #{sentence.sentenceNumber}
+                        #{sentence.order}
                       </div>
                       <div className="pronunciation-test-sentence-korean">
-                        {sentence.koreanText}
+                        {sentence.sentence}
                       </div>
                       <div className="pronunciation-test-sentence-translation">
                         {language === "mn"
-                          ? sentence.mongolianText
-                          : sentence.chineseText || sentence.mongolianText}
+                          ? sentence.sentenceMn
+                          : sentence.sentenceCn || sentence.sentenceMn}
                       </div>
                       <div className="pronunciation-test-sentence-meta">
                         <span className="pronunciation-test-badge">
-                          KIIP {sentence.kiipLevel}
+                          KIIP {sentence.level?.kiip ?? 0}
                         </span>
                         <span className="pronunciation-test-badge">
-                          난이도 {sentence.difficultyLevel}
+                          난이도 {sentence.difficultyScore ?? 50}
                         </span>
-                        <span className="pronunciation-test-badge">
-                          {sentence.category}
-                        </span>
+                        {sentence.category && (
+                          <span className="pronunciation-test-badge">
+                            {sentence.category}
+                          </span>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -338,21 +346,21 @@ const PronunciationTest = () => {
 
             <div className="pronunciation-test-current-sentence">
               <div className="pronunciation-test-sentence-number-large">
-                #{currentSentence.sentenceNumber}
+                #{currentSentence.order}
               </div>
               <h2 className="pronunciation-test-sentence-korean-large">
-                {currentSentence.koreanText}
+                {currentSentence.sentence}
               </h2>
               <p className="pronunciation-test-sentence-translation-large">
                 {language === "mn"
-                  ? currentSentence.mongolianText
-                  : currentSentence.chineseText ||
-                    currentSentence.mongolianText}
+                  ? currentSentence.sentenceMn
+                  : currentSentence.sentenceCn ||
+                    currentSentence.sentenceMn}
               </p>
               <div className="pronunciation-test-sentence-meta">
-                {currentSentence.grammarPoints.map((point, idx) => (
+                {currentSentence.tags?.map((tag, idx) => (
                   <span key={idx} className="pronunciation-test-badge">
-                    {point}
+                    {tag}
                   </span>
                 ))}
               </div>
