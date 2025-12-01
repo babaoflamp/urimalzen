@@ -6,6 +6,18 @@ export interface IPronunciationTestSentence extends Document {
   sentenceCn?: string;       // Chinese translation
   order: number;             // Display order
 
+  // backward-compatible / legacy fields used by controllers
+  koreanText?: string;
+  mongolianText?: string;
+  chineseText?: string;
+  sentenceNumber?: number;
+  isActive?: boolean;
+
+  // flattened SpeechPro fields (legacy access)
+  syllLtrs?: string;
+  syllPhns?: string;
+  fst?: string;
+
   // KIIP/CEFR level
   level?: {
     kiip?: 0 | 1 | 2 | 3 | 4 | 5;
@@ -15,6 +27,9 @@ export interface IPronunciationTestSentence extends Document {
   // SpeechPro pronunciation model data
   speechPro: {
     syllLtrs: string;        // Syllable letters from GTP API
+
+// Virtuals for backward compatibility with older controller field names
+// e.g., controller code expects `koreanText`, `syllLtrs` etc. on the document
     syllPhns: string;        // Syllable phonemes from GTP API
     fst: string;             // FST model from Model API
     lastUpdated: Date;       // Model generation timestamp
@@ -22,6 +37,7 @@ export interface IPronunciationTestSentence extends Document {
   };
 
   // Difficulty metrics
+
   difficultyScore?: number;  // 1-100 difficulty rating
 
   // Metadata
@@ -29,6 +45,7 @@ export interface IPronunciationTestSentence extends Document {
   tags?: string[];           // Additional tags for filtering
 
   createdAt: Date;
+
   updatedAt: Date;
 }
 
@@ -36,6 +53,7 @@ const pronunciationTestSentenceSchema = new Schema<IPronunciationTestSentence>(
   {
     sentence: {
       type: String,
+
       required: [true, 'Sentence is required'],
       trim: true,
     },
@@ -43,6 +61,7 @@ const pronunciationTestSentenceSchema = new Schema<IPronunciationTestSentence>(
       type: String,
       trim: true,
       default: '',
+
     },
     sentenceCn: {
       type: String,
@@ -51,6 +70,7 @@ const pronunciationTestSentenceSchema = new Schema<IPronunciationTestSentence>(
     },
     order: {
       type: Number,
+
       required: true,
       unique: true,
     },
@@ -60,6 +80,7 @@ const pronunciationTestSentenceSchema = new Schema<IPronunciationTestSentence>(
         enum: [0, 1, 2, 3, 4, 5],
         required: false,
       },
+
       cefr: {
         type: String,
         enum: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'],
@@ -68,6 +89,7 @@ const pronunciationTestSentenceSchema = new Schema<IPronunciationTestSentence>(
     },
     speechPro: {
       syllLtrs: {
+
         type: String,
         required: true,
       },
@@ -76,6 +98,7 @@ const pronunciationTestSentenceSchema = new Schema<IPronunciationTestSentence>(
         required: true,
       },
       fst: {
+
         type: String,
         required: true,
       },
@@ -110,7 +133,8 @@ const pronunciationTestSentenceSchema = new Schema<IPronunciationTestSentence>(
 );
 
 // Indexes for faster queries
-pronunciationTestSentenceSchema.index({ order: 1 });
+// `order` field is declared `unique: true` which creates a unique index,
+// so we avoid creating a duplicate index here.
 pronunciationTestSentenceSchema.index({ 'level.kiip': 1 });
 pronunciationTestSentenceSchema.index({ category: 1 });
 pronunciationTestSentenceSchema.index({ difficultyScore: 1 });

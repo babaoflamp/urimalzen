@@ -358,7 +358,8 @@ const wordSchema = new Schema<IWord>(
 );
 
 // Index for faster queries
-// Note: order field already has index due to unique: true
+// `order` field is declared `unique: true` which creates a unique index,
+// so we avoid creating a duplicate index here.
 wordSchema.index({ category: 1 });
 
 // New indexes for KIIP integration
