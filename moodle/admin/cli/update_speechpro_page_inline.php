@@ -24,14 +24,30 @@ $content = <<<HTML
 
             <div class="form-group mb-3">
                 <label for="speechpro-text">평가할 텍스트</label>
-                <input id="speechpro-text" type="text" class="form-control" placeholder="예: 안녕하세요" value="안녕하세요">
+              <select id="speechpro-text" class="form-control">
+                <option value="완벽을 기다리면 영원히 시작 못 한다.">완벽을 기다리면 영원히 시작 못 한다.</option>
+                <option value="생각은 무료지만, 행동은 인생을 바꾼다.">생각은 무료지만, 행동은 인생을 바꾼다.</option>
+                <option value="오늘 안 하면 내일도 안 한다.">오늘 안 하면 내일도 안 한다.</option>
+                <option value="의욕이 생겨서 하는 게 아니라, 하다 보면 의욕이 생긴다.">의욕이 생겨서 하는 게 아니라, 하다 보면 의욕이 생긴다.</option>
+                <option value="실패는 데이터고, 포기는 종료다.">실패는 데이터고, 포기는 종료다.</option>
+                <option value="결정이 빠른 사람이 결국 멀리 간다.">결정이 빠른 사람이 결국 멀리 간다.</option>
+                <option value="환경을 탓하기 전에, 루틴을 먼저 바꿔라.">환경을 탓하기 전에, 루틴을 먼저 바꿔라.</option>
+                <option value="머릿속 시뮬레이션은 아무도 안 알아준다.">머릿속 시뮬레이션은 아무도 안 알아준다.</option>
+                <option value="작게 시작해도 좋다. 안 시작하는 게 문제다.">작게 시작해도 좋다. 안 시작하는 게 문제다.</option>
+                <option value="지금의 귀찮음이 미래의 자유를 만든다.">지금의 귀찮음이 미래의 자유를 만든다.</option>
+              </select>
             </div>
 
             <div class="d-flex gap-2 mb-3">
                 <button id="speechpro-record" class="btn btn-primary">🎤 녹음 시작</button>
                 <button id="speechpro-stop" class="btn btn-secondary" disabled>⏹️ 녹음 중지</button>
+                <button id="speechpro-play" class="btn btn-warning" disabled title="녹음한 파일을 재생합니다">▶️ 재생</button>
                 <button id="speechpro-evaluate" class="btn btn-success" disabled>✅ 평가하기</button>
-                <button id="speechpro-test" class="btn btn-info" title="마이크가 없을 때 테스트용 음성 생성">🔊 테스트 음성</button>
+            </div>
+
+            <div id="speechpro-audio-player" style="display: none; margin-bottom: 15px;">
+                <audio id="speechpro-audio" style="width: 100%; margin-bottom: 10px;" controls></audio>
+                <p class="text-muted text-sm">녹음된 음성입니다. 재생 후 평가하기 버튼을 클릭하세요.</p>
             </div>
 
             <div id="speechpro-status" class="alert alert-info">준비 완료</div>
@@ -47,11 +63,14 @@ document.addEventListener('DOMContentLoaded', function() {
   const textInput = document.getElementById("speechpro-text");
   const recordBtn = document.getElementById("speechpro-record");
   const stopBtn = document.getElementById("speechpro-stop");
+  const playBtn = document.getElementById("speechpro-play");
   const evalBtn = document.getElementById("speechpro-evaluate");
   const statusEl = document.getElementById("speechpro-status");
   const resultEl = document.getElementById("speechpro-result");
+  const audioPlayer = document.getElementById("speechpro-audio-player");
+  const audioElement = document.getElementById("speechpro-audio");
 
-  if (!textInput || !recordBtn || !stopBtn || !evalBtn || !statusEl || !resultEl) {
+  if (!textInput || !recordBtn || !stopBtn || !playBtn || !evalBtn || !statusEl || !resultEl) {
     console.error('SpeechPro: Required elements not found');
     return;
   }
@@ -61,6 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
   let mediaRecorder = null;
   let recordedChunks = [];
   let recordedBlob = null;
+  let countdownTimer = null;
+  let isCountingDown = false;
 
   const setStatus = (msg) => {
     statusEl.className = "alert alert-info";
@@ -72,9 +93,10 @@ document.addEventListener('DOMContentLoaded', function() {
     statusEl.textContent = msg;
   };
 
-  const enableButtons = (rec, stp, evl) => {
+  const enableButtons = (rec, stp, ply, evl) => {
     recordBtn.disabled = !rec;
     stopBtn.disabled = !stp;
+    playBtn.disabled = !ply;
     evalBtn.disabled = !evl;
   };
 
@@ -125,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  recordBtn.addEventListener("click", async () => {
+  const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorder = new MediaRecorder(stream);
@@ -138,22 +160,58 @@ document.addEventListener('DOMContentLoaded', function() {
       mediaRecorder.onstop = () => {
         recordedBlob = new Blob(recordedChunks, { type: "audio/webm" });
         stream.getTracks().forEach((t) => t.stop());
-        setStatus("녹음 완료. 평가하기 버튼을 클릭하세요.");
-        enableButtons(true, false, true);
+        
+        // 오디오 플레이어에 녹음 파일 설정
+        const audioUrl = URL.createObjectURL(recordedBlob);
+        audioElement.src = audioUrl;
+        audioPlayer.style.display = "block";
+        
+        setStatus("녹음 완료. 재생 또는 평가하기 버튼을 클릭하세요.");
+        enableButtons(true, false, true, true);
       };
 
       mediaRecorder.start();
       setStatus("🔴 녹음 중...");
-      enableButtons(false, true, false);
+      enableButtons(false, true, false, false);
     } catch (err) {
       setError("마이크 권한을 허용해주세요: " + err.message);
+      enableButtons(true, false, false, false);
     }
+  };
+
+  recordBtn.addEventListener("click", async () => {
+    if (isCountingDown) return;
+    isCountingDown = true;
+    enableButtons(false, false, false, false);
+    let remaining = 3;
+    setStatus("녹음 시작까지 " + remaining + "초...");
+    countdownTimer = setInterval(() => {
+      remaining -= 1;
+      if (remaining > 0) {
+        setStatus("녹음 시작까지 " + remaining + "초...");
+        return;
+      }
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+      isCountingDown = false;
+      startRecording();
+    }, 1000);
   });
 
   stopBtn.addEventListener("click", () => {
     if (mediaRecorder && mediaRecorder.state === "recording") {
       mediaRecorder.stop();
     }
+  });
+
+  playBtn.addEventListener("click", () => {
+    if (!audioElement || !audioElement.src) {
+      setError("재생할 녹음 파일이 없습니다.");
+      return;
+    }
+    audioElement.play().catch((err) => {
+      setError("오디오 재생 오류: " + err.message);
+    });
   });
 
   evalBtn.addEventListener("click", async () => {
@@ -168,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     setStatus("⏳ 평가 중...");
-    enableButtons(false, false, false);
+    enableButtons(false, false, false, false);
 
     try {
       const wavBlob = await convertToWav(recordedBlob);
@@ -178,26 +236,61 @@ document.addEventListener('DOMContentLoaded', function() {
       formData.append("text", text);
       formData.append("audio", wavBlob, "recording.wav");
 
+      console.log("FormData contents:");
+      for (let [key, value] of formData.entries()) {
+        if (value instanceof Blob) {
+          console.log("  " + key + ": Blob(" + value.size + " bytes, type: " + value.type + ")");
+        } else {
+          console.log("  " + key + ": " + value);
+        }
+      }
+
       const resp = await fetch("/local/speechpro/ajax.php", {
         method: "POST",
         body: formData,
       });
 
-      const data = await resp.json();
-      if (data.success) {
+      console.log("Response status:", resp.status);
+      const responseText = await resp.text();
+      console.log("Response body:", responseText);
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        setError("서버 응답 파싱 오류: " + responseText);
+        return;
+      }
+
+      if (resp.status === 200 && data.success) {
+        let displayScore = data.score;
+        if ((displayScore === null || displayScore === undefined) && data.scoreData && data.scoreData.result && data.scoreData.result.quality && Array.isArray(data.scoreData.result.quality.sentences)) {
+          const sentences = data.scoreData.result.quality.sentences;
+          const targetSentence = sentences.find((s) => s && s.text && s.text !== "!SIL");
+          if (targetSentence && typeof targetSentence.score === "number") {
+            displayScore = targetSentence.score;
+          }
+        }
+        const scoreDataHtml = data.scoreData
+          ? '<details class="mt-3"><summary>scoreData 전체 보기</summary><pre style="white-space: pre-wrap; word-break: break-word;">' +
+            JSON.stringify(data.scoreData, null, 2) +
+            '</pre></details>'
+          : '';
         resultEl.innerHTML = '<div class="alert alert-success">' +
           '<h5>평가 완료!</h5>' +
-          '<p><strong>점수:</strong> ' + (data.score || "N/A") + '</p>' +
+          '<p><strong>점수:</strong> ' + (displayScore !== null && displayScore !== undefined ? displayScore : "N/A") + '</p>' +
           '<p><strong>텍스트:</strong> ' + (data.text || text) + '</p>' +
+          scoreDataHtml +
           '</div>';
         setStatus("✅ 평가 완료");
       } else {
-        setError("평가 실패: " + (data.error || "알 수 없는 오류"));
+        setError("평가 실패 (HTTP " + resp.status + "): " + (data.error || "알 수 없는 오류"));
       }
     } catch (err) {
       setError("네트워크 오류: " + err.message);
+      console.error("Error:", err);
     } finally {
-      enableButtons(true, false, false);
+      enableButtons(true, false, true, false);
     }
   });
 });
@@ -205,15 +298,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <style>
 .local-speechpro-embedded {
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  padding: 2rem;
-  border-radius: 24px;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.35);
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .local-speechpro-embedded .card {
-  max-width: 800px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   border: 1px solid #e2e8f0;
   box-shadow: 0 12px 35px rgba(15, 23, 42, 0.2);
   border-radius: 16px;
